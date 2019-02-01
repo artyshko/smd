@@ -9,7 +9,7 @@
 pip3 install -r requirements.txt
 ```
 
-### Make file executable, so it can be run from terminal
+### Make file executable
 ```
 chmod +x main.py
 ./main.py
