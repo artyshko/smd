@@ -1,0 +1,8 @@
+pyperclip==1.6.4
+lxml==4.2.3
+mutagen==1.41.0
+requests==2.18.4
+pytube==9.2.2
+spotipy==2.4.4
+moviepy==0.2.3.5
+beautifulsoup4==4.7.1
