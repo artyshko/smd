@@ -3,6 +3,10 @@
 
 <img align="center" src="https://i.ibb.co/Gd9tLMm/test.png">
 
+## **Download your music in high quality**
+
+<img align="center" src="https://i.ibb.co/BwgvL5R/result.png">
+
 ## Usage
 
 ### First you need to install all dependencies
