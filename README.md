@@ -26,7 +26,7 @@ chmod +x main.py
 
 ### Example of Spotify URI Code
 ```
-spotify:track:7lEptt4wbM0yJTvSG5EBof
+spotify:track:4tmwiN9YU7xMjh2hoqcVuI
 ```
 ![alt text](https://i.ibb.co/Z8ZcV20/Deepin-Screenshot-select-area-20190202004700.png "Spotify URI Code")
 
