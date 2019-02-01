@@ -9,6 +9,10 @@
 
 ## Usage
 
+```
+git clone https://github.com/artyshko/smd.git
+```
+
 ### First you need to install all dependencies
 ```
 pip3 install -r requirements.txt
