@@ -1,10 +1,16 @@
 #!/usr/bin/python3
 from pytube import YouTube
-import moviepy.editor as mp
 from bs4 import BeautifulSoup
 import requests
 import lxml
 import os
+
+#IMPORT WITH STDOUT REDIRECTION
+#FIX STARTUP PYGAME HELLO MESSAGE
+#THANKS @Mad Physicist FROM STACK OVERFLOW
+import contextlib
+with contextlib.redirect_stdout(None):
+    import moviepy.editor as mp
 
 
 class Youtube(object):
@@ -69,17 +75,19 @@ class Youtube(object):
 
     def convertVideoToMusic(self, filename):
 
-        fullpath = os.getcwd() + '/Downloads/'
-
-        if not os.path.exists(fullpath):
-            os.makedirs(fullpath)
-
-        clip = mp.VideoFileClip('.cache/' + str(filename) + '.mp4').subclip()
-        clip.audio.write_audiofile('Downloads/' + str(filename) + '.mp3', bitrate='3000k')
         try:
-            pass
+
+            fullpath = os.getcwd() + '/Downloads/'
+
+            if not os.path.exists(fullpath):
+                os.makedirs(fullpath)
+
+            clip = mp.VideoFileClip('.cache/' + str(filename) + '.mp4').subclip()
+            clip.audio.write_audiofile('Downloads/' + str(filename) + '.mp3', bitrate='3000k')
+
         except Exception as e:
             return -1
+
         finally:
             return 0
 

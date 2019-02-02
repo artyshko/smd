@@ -48,7 +48,9 @@ class Spotify(object):
 
 
     def getSongInfo(self, uri):
+        
         data = self.client.track(uri)
+
         return {
             'name' : data['name'],
             'artist' : [ artist['name'] for artist in data['artists']],
