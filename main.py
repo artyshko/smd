@@ -53,6 +53,7 @@ class MusicDownloader(object):
 
             fixed_name = f'{info["artist"][0]} - {info["name"]}'
             fixed_name = fixed_name.replace('.','')
+            fixed_name = fixed_name.replace(',','')
             fixed_name = fixed_name.replace("'",'')
             fixed_name = fixed_name.replace("/","")
 
@@ -67,9 +68,34 @@ class MusicDownloader(object):
             return True
         else:
             return False
-    def downloadBySpotifyUriFromFile(arg):
-        pass
-    def downloadBySpotifyUriPlaylistMode(arg):
+
+
+    def downloadBySpotifyUriFromFile(self, filename):
+        try:
+
+            with open(filename, 'r') as f:
+                data = f.readlines()
+
+        except FileNotFoundError:
+
+            print(f'No such file or directory: "{filename}"')
+            exit(2)
+
+        #normalize
+        try:data.remove('\n')
+        except:pass
+        links = [ str(item).replace('\n','') for item in data ]
+
+        for i,song in zip(range(len(links)),links):
+            print(f'[{i+1}] - {song}')
+
+            try:
+                self.downloadBySpotifyUri(song)
+            except:
+                pass
+
+
+    def downloadBySpotifyUriPlaylistMode(self, arg):
         pass
 
 
