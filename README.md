@@ -10,6 +10,24 @@
 ## Usage
 
 ```
+./main.py [without any parameters] - normal startup
+
+./main.py [parameter][argument] - startup with parameter
+
+Parameters
+
+  -h, --help       Print a help message and exit.
+
+  -s, --song       Spotify song URI.
+
+  -p, --playlist   Spotify playlist URI.
+
+  -f, --file       File with song URIs.
+
+```
+## Installation
+
+```
 git clone https://github.com/artyshko/smd.git
 ```
 
