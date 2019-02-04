@@ -72,7 +72,7 @@ Example:
 #### Create playlist and make it secret
 <img align="center" src="https://i.ibb.co/kBKtDys/image1.png">
 
-#### Then copy playlist uri
+#### Then copy playlist URI
 <img align="center" src="https://i.ibb.co/yWHHBDX/image2.png">
 
 Example:
