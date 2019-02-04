@@ -2,7 +2,7 @@
 from spotify import Spotify
 from youtube import Youtube
 from editor import TagEditor
-import sys, getopt
+import sys, getopt, shutil
 import os
 
 class MusicDownloader(object):
@@ -32,7 +32,7 @@ class MusicDownloader(object):
         )
 
         #deleting video
-        try: os.system('rm -rf .cache')
+        try: shutil.rmtree('.cache')
         except: pass
 
 

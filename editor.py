@@ -12,7 +12,7 @@ class TagEditor(object):
 
     @staticmethod
     def getImageFromSpotify(url):
-        urllib.request.urlretrieve(url,'temp.jpg')
+        urllib.request.urlretrieve(url,'.temp.jpg')
 
 
     @staticmethod
@@ -64,7 +64,7 @@ class TagEditor(object):
                 'image/jpeg',
                 3,
                 'Front cover',
-                open('temp.jpg', 'rb').read())
+                open('.temp.jpg', 'rb').read())
             )
 
             #add song name
@@ -90,7 +90,7 @@ class TagEditor(object):
             ID3(filename).save(v2_version=3)
 
             #delete downloaded picture
-            os.remove('temp.jpg')
+            os.remove('.temp.jpg')
 
             return True
         else:
