@@ -95,8 +95,28 @@ class MusicDownloader(object):
                 pass
 
 
-    def downloadBySpotifyUriPlaylistMode(self, arg):
-        pass
+    def downloadBySpotifyUriPlaylistMode(self, playlist_uri):
+
+        user = Spotify.User()
+        playlist = user.getPlaylistTracks(playlist_uri)
+
+        for track, i in zip(playlist,range(len(playlist))):
+
+            print(f'Downloading {i+1} of {len(playlist)}')
+
+            fixed_name = f'{track["artist"][0]} - {track["name"]}'
+            fixed_name = fixed_name.replace('.','')
+            fixed_name = fixed_name.replace(',','')
+            fixed_name = fixed_name.replace("'",'')
+            fixed_name = fixed_name.replace("/","")
+
+            #finding and download from YouTube and tagging
+            self.__downloadMusicFromYoutube(fixed_name)
+
+            self.__editor.setTags(
+                filename=f'Downloads/{fixed_name}.mp3',
+                data=track
+            )
 
 
 class CLI(object):
