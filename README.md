@@ -55,6 +55,7 @@ spotify:track:4tmwiN9YU7xMjh2hoqcVuI
 ```
 
 ### Song mode
+Example:
 ```
 ./main.py -s spotify:track:7ARveOiD31w2Nq0n5FsSf8
 ```
