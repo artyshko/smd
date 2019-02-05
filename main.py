@@ -14,7 +14,7 @@ class MusicDownloader(object):
         self.__editor = TagEditor()
 
 
-    def __downloadMusicFromYoutube(self, name):
+    def __downloadMusicFromYoutube(self, name, uri):
 
         #finding song on youtube
         self.__youtube.get(name)
@@ -22,18 +22,14 @@ class MusicDownloader(object):
         #downloading video from youtube
         self.__youtube.download(
             url=self.__youtube.getResult(),
-            path='',
-            filename=name
+            path=uri,
+            filename=uri
         )
 
         #converting video to mp3 file
         self.__youtube.convertVideoToMusic(
-            filename=name
+            uri=uri
         )
-
-        #deleting video
-        try: shutil.rmtree('.cache')
-        except: pass
 
 
     def __getSongInfoFromSpotify(self, uri):
@@ -58,12 +54,26 @@ class MusicDownloader(object):
             fixed_name = fixed_name.replace("/","")
 
             #finding and download from YouTube and tagging
-            self.__downloadMusicFromYoutube(fixed_name)
+            self.__downloadMusicFromYoutube(fixed_name, info['uri'])
 
             self.__editor.setTags(
-                filename=f'Downloads/{fixed_name}.mp3',
                 data=info
             )
+
+            cachepath = os.getcwd() + '/.cache'
+            fullpath = os.getcwd() + '/Downloads'
+
+            if not os.path.exists(fullpath):
+                os.makedirs(fullpath)
+
+            os.rename(
+                f"{cachepath}/{info['uri']}/{info['uri']}.mp3",
+                f"{fullpath}/{fixed_name}.mp3"
+            )
+
+            #deleting cache
+            try: shutil.rmtree(f".cache/{info['uri']}")
+            except: pass
 
             return True
         else:

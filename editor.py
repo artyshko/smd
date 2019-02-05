@@ -11,8 +11,8 @@ import urllib.request
 class TagEditor(object):
 
     @staticmethod
-    def getImageFromSpotify(url):
-        urllib.request.urlretrieve(url,'.temp.jpg')
+    def getImageFromSpotify(url, name):
+        urllib.request.urlretrieve(url, name)
 
 
     @staticmethod
@@ -21,7 +21,7 @@ class TagEditor(object):
 
 
     @staticmethod
-    def setTags(filename, data):
+    def setTags(data):
         '''
        Adding taggs to mp3 file
 
@@ -29,6 +29,7 @@ class TagEditor(object):
        :param data: dictionary with song data
                     structure of dictionary:
                     {
+                        'uri' : 'str', # Song URI id
                         'name':'str', # Name of song
                         'artist':'tuple', # List of artists
                         'album':'str', # Name of album
@@ -37,7 +38,7 @@ class TagEditor(object):
 
                     as example:
 
-                    {
+                    {   'uri' :  '4g5MorMCNI2aOwEBSov4RT',
                         'name': 'and then, it swallowed me',
                         'artist': ['Nohidea', 'killedmyself', 'Delta Sleep'],
                         'album': 'and then, it swallowed me',
@@ -46,12 +47,15 @@ class TagEditor(object):
 
        :return: boolean, in case of some errors - False, else True
        '''
-        if filename and data:
+        if data:
 
             #download image
-            TagEditor.getImageFromSpotify(data['image'])
+            TagEditor.getImageFromSpotify(data['image'], f".cache/{data['uri']}/{data['uri']}.png")
 
-            audio = MP3(filename, ID3=ID3)
+            audio = MP3(
+                f".cache/{data['uri']}/{data['uri']}.mp3",
+                ID3=ID3
+            )
 
             #handle tag errors
             try:
@@ -64,7 +68,7 @@ class TagEditor(object):
                 'image/jpeg',
                 3,
                 'Front cover',
-                open('.temp.jpg', 'rb').read())
+                open(f".cache/{data['uri']}/{data['uri']}.png", 'rb').read())
             )
 
             #add song name
@@ -87,10 +91,10 @@ class TagEditor(object):
 
             #save result
             audio.save()
-            ID3(filename).save(v2_version=3)
+            ID3(f".cache/{data['uri']}/{data['uri']}.mp3").save(v2_version=3)
 
-            #delete downloaded picture
-            os.remove('.temp.jpg')
+            # #delete downloaded picture
+            # os.remove('.temp.jpg')
 
             return True
         else:

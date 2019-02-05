@@ -155,6 +155,7 @@ class Spotify(object):
         data = self.client.track(uri)
 
         return {
+            'uri' : str(uri.split(':')[-1]),
             'name' : data['name'],
             'artist' : [ artist['name'] for artist in data['artists']],
             'album' : data['album']['name'],

@@ -63,27 +63,32 @@ class Youtube(object):
             file_extension='mp4'
         ).order_by('resolution').desc().first()
 
-        fullpath = os.getcwd() + '/.cache/' + path if not path else path
+
+        fullpath = os.getcwd() + '.cache'
 
         if not os.path.exists(fullpath):
             os.makedirs(fullpath)
 
-        yt.download(fullpath, filename=filename)
+        try:
+            os.makedirs('.cache/'+path)
+        except: pass
+
+        yt.download('.cache/'+ path, filename=filename)
 
         return filename
 
 
-    def convertVideoToMusic(self, filename):
+    def convertVideoToMusic(self, uri):
 
         try:
 
-            fullpath = os.getcwd() + '/Downloads/'
+            fullpath = os.getcwd() + f'.cache/{uri}/'
 
             if not os.path.exists(fullpath):
                 os.makedirs(fullpath)
 
-            clip = mp.VideoFileClip('.cache/' + str(filename) + '.mp4').subclip()
-            clip.audio.write_audiofile('Downloads/' + str(filename) + '.mp3', bitrate='3000k')
+            clip = mp.VideoFileClip(f'.cache/{uri}/{uri}.mp4').subclip()
+            clip.audio.write_audiofile(f'.cache/{uri}/{uri}.mp3', bitrate='3000k')
 
         except Exception as e:
             return -1
