@@ -110,23 +110,37 @@ class MusicDownloader(object):
         user = Spotify.User()
         playlist = user.getPlaylistTracks(playlist_uri)
 
-        for track, i in zip(playlist,range(len(playlist))):
+        for info, i in zip(playlist,range(len(playlist))):
 
             print(f'Downloading {i+1} of {len(playlist)}')
 
-            fixed_name = f'{track["artist"][0]} - {track["name"]}'
+            fixed_name = f'{info["artist"][0]} - {info["name"]}'
             fixed_name = fixed_name.replace('.','')
             fixed_name = fixed_name.replace(',','')
             fixed_name = fixed_name.replace("'",'')
             fixed_name = fixed_name.replace("/","")
 
             #finding and download from YouTube and tagging
-            self.__downloadMusicFromYoutube(fixed_name)
+            self.__downloadMusicFromYoutube(fixed_name, info['uri'])
 
             self.__editor.setTags(
-                filename=f'Downloads/{fixed_name}.mp3',
-                data=track
+                data=info
             )
+
+            cachepath = os.getcwd() + '/.cache'
+            fullpath = os.getcwd() + '/Downloads'
+
+            if not os.path.exists(fullpath):
+                os.makedirs(fullpath)
+
+            os.rename(
+                f"{cachepath}/{info['uri']}/{info['uri']}.mp3",
+                f"{fullpath}/{fixed_name}.mp3"
+            )
+
+            #deleting cache
+            try: shutil.rmtree(f".cache/{info['uri']}")
+            except: pass
 
 
 class CLI(object):

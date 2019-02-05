@@ -103,8 +103,8 @@ class Spotify(object):
 
                 for j, item in enumerate(playlist['items']):
                     data = item['track']
-
                     tracks.append({
+                        'uri' : str(data['uri'].split(':')[-1]),
                         'name' : data['name'],
                         'artist' : [ artist['name'] for artist in data['artists']],
                         'album' : data['album']['name'],
@@ -161,15 +161,3 @@ class Spotify(object):
             'album' : data['album']['name'],
             'image' : data['album']['images'][0]['url']
         }
-
-
-
-if __name__ == "__main__":
-
-    spotify = Spotify()
-    data = spotify.getSongInfo('spotify:track:4g5MorMCNI2aOwEBSov4RT')
-    print(data)
-
-    user = Spotify.User()
-    tracks = user.getPlaylistTracks('spotify:user:artyshko:playlist:2REWQpC2SeM5NNnbzXZ6ML')
-    print(tracks)

@@ -102,28 +102,3 @@ class Youtube(object):
         quick download and convert to mp3
         '''
         self.convertVideoToMusic(self.download(self.get(name)[0],filename=name))
-
-
-if __name__ == '__main__':
-
-    #init
-    youtube = Youtube()
-    name = 'Сemeteries - Leland'
-
-    #finding song on youtube
-    youtube.get(name)
-    print(youtube.getResult())
-
-    #download video from youtube
-    youtube.download(
-        url=youtube.getResult(),
-        path='',
-        filename=name
-    )
-
-    #converting video to mp3 file
-    youtube.convertVideoToMusic(
-        filename=name
-    )
-
-    print('done.')
