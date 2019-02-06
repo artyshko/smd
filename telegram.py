@@ -154,10 +154,12 @@ class Controller(object):
                     except:pass
 
 
-            self.offset = update_id + 1
+                self.offset = update_id + 1
 
 
 if __name__ == '__main__':
-
-    controller = Controller()
-    controller.mainloop()
+    try:
+        controller = Controller()
+        controller.mainloop()
+    except:
+        print(traceback.format_exc())
