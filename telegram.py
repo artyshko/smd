@@ -137,9 +137,10 @@ class Controller(object):
 
             if update:
 
+                update_id = update['update_id']
+                
                 print(update)
                 try:
-                    update_id = update['update_id']
                     chat_id = update['message']['chat']['id']
                     chat_name = update['message']['chat']['first_name']
 
