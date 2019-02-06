@@ -161,3 +161,19 @@ class Spotify(object):
             'album' : data['album']['name'],
             'image' : data['album']['images'][0]['url']
         }
+    def search(self, query):
+
+        result = self.client.search(q=query, type='track', limit=1)
+        data = result['tracks']['items'][0]
+
+        return ({
+            'uri' : str(data['uri'].split(':')[-1]),
+            'name' : data['name'],
+            'artist' : [ artist['name'] for artist in data['artists']],
+            'album' : data['album']['name'],
+            'image' : data['album']['images'][0]['url']
+        })
+
+if __name__ == '__main__':
+    sp = Spotify()
+    sp.search('The Neighbourhood - Afraid')

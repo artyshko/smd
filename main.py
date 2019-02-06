@@ -68,7 +68,7 @@ class MusicDownloader(object):
 
             os.rename(
                 f"{cachepath}/{info['uri']}/{info['uri']}.mp3",
-                f"{fullpath}/{fixed_name}.mp3"
+                f"{fullpath}/{info['uri']}.mp3"
             )
 
             #deleting cache
@@ -78,6 +78,49 @@ class MusicDownloader(object):
             return True
         else:
             return False
+
+    def downloadBySearchQuery(self, query):
+
+        #get info
+        info = self.__spotify.search(query=query)
+
+        if info:
+
+            fixed_name = f'{info["artist"][0]} - {info["name"]}'
+            fixed_name = fixed_name.replace('.','')
+            fixed_name = fixed_name.replace(',','')
+            fixed_name = fixed_name.replace("'",'')
+            fixed_name = fixed_name.replace("/","")
+
+            #finding and download from YouTube and tagging
+            self.__downloadMusicFromYoutube(fixed_name, info['uri'])
+
+            self.__editor.setTags(
+                data=info
+            )
+
+            cachepath = os.getcwd() + '/.cache'
+            fullpath = os.getcwd() + '/Downloads'
+
+            if not os.path.exists(fullpath):
+                os.makedirs(fullpath)
+
+            os.rename(
+                f"{cachepath}/{info['uri']}/{info['uri']}.mp3",
+                f"{fullpath}/{info['uri']}.mp3"
+            )
+
+            #deleting cache
+            try: shutil.rmtree(f".cache/{info['uri']}")
+            except: pass
+
+            return True
+        else:
+            return False
+
+
+    def search(self, query):
+        return self.__spotify.search(query=query)
 
 
     def downloadBySpotifyUriFromFile(self, filename):
