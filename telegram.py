@@ -3,6 +3,11 @@ import datetime
 import io, os
 import main
 
+import imageio
+imageio.plugins.ffmpeg.download()
+from moviepy.editor import *
+import moviepy.editor as mp
+
 class BotHandler(object):
 
     def __init__(self):
@@ -138,7 +143,7 @@ class Controller(object):
             if update:
 
                 update_id = update['update_id']
-                
+
                 print(update)
                 try:
                     chat_id = update['message']['chat']['id']
