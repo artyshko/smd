@@ -10,6 +10,9 @@ import os
 #THANKS @Mad Physicist FROM STACK OVERFLOW
 import contextlib
 with contextlib.redirect_stdout(None):
+    import imageio
+
+    imageio.plugins.ffmpeg.download()
     import moviepy.editor as mp
 
 
