@@ -1,10 +1,10 @@
-pyperclip==1.6.4
+pytube==9.2.2
 Flask==0.12.2
-spotipy==2.4.4
 moviepy==0.2.3.5
 requests==2.18.4
-pytube==9.2.2
+spotipy==2.4.4
 mutagen==1.41.0
+imageio==2.3.0
+pyperclip==1.6.4
 lxml==4.2.3
 beautifulsoup4==4.7.1
-imageio-ffmpeg-0.2.0
