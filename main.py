@@ -41,7 +41,7 @@ class MusicDownloader(object):
 
 
     def downloadBySpotifyUri(self, uri):
-
+        
         #get info
         info = self.__getSongInfoFromSpotify(uri)
 

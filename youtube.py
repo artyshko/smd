@@ -78,6 +78,7 @@ class Youtube(object):
 
         try:
             os.makedirs('.cache/'+path)
+            print("Error: download:os.makedirs('.cache/'+path)")
         except: pass
 
         yt.download('.cache/'+ path, filename=filename)
@@ -98,6 +99,7 @@ class Youtube(object):
             clip.audio.write_audiofile(f'.cache/{uri}/{uri}.mp3', bitrate='3000k')
 
         except Exception as e:
+            print('Error: convertVideoToMusic')
             return -1
 
         finally:
