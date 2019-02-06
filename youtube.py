@@ -88,11 +88,13 @@ class Youtube(object):
     def convertVideoToMusic(self, uri):
 
         try:
+            try:
+                fullpath = os.getcwd() + f'/.cache/{uri}/'
 
-            fullpath = os.getcwd() + f'.cache/{uri}/'
-
-            if not os.path.exists(fullpath):
-                os.makedirs(fullpath)
+                if not os.path.exists(fullpath):
+                    os.makedirs(fullpath)
+            except:
+                print('Error: convertVideoToMusic:os.makedirs(fullpath)')
 
             clip = mp.VideoFileClip(f'.cache/{uri}/{uri}.mp4').subclip()
             clip.audio.write_audiofile(f'.cache/{uri}/{uri}.mp3', bitrate='3000k')
