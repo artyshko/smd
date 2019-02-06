@@ -41,7 +41,7 @@ class MusicDownloader(object):
 
 
     def downloadBySpotifyUri(self, uri):
-        
+
         #get info
         info = self.__getSongInfoFromSpotify(uri)
 
@@ -61,7 +61,9 @@ class MusicDownloader(object):
             )
 
             cachepath = os.getcwd() + '/.cache'
+            print(cachepath)
             fullpath = os.getcwd() + '/Downloads'
+            print(fullpath)
 
             if not os.path.exists(fullpath):
                 os.makedirs(fullpath)
@@ -99,8 +101,8 @@ class MusicDownloader(object):
                 data=info
             )
 
-            cachepath = os.getcwd() + '/.cache'
-            fullpath = os.getcwd() + '/Downloads'
+            cachepath = os.getcwd() + '.cache'
+            fullpath = os.getcwd() + 'Downloads'
 
             if not os.path.exists(fullpath):
                 os.makedirs(fullpath)
@@ -117,11 +119,6 @@ class MusicDownloader(object):
             return True
         else:
             return False
-
-
-    def search(self, query):
-        return self.__spotify.search(query=query)
-
 
     def downloadBySpotifyUriFromFile(self, filename):
         try:

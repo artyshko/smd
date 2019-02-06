@@ -141,8 +141,8 @@ class Controller(object):
                 update_id = update['update_id']
 
                 print(update)
+                chat_id = update['message']['chat']['id']
                 try:
-                    chat_id = update['message']['chat']['id']
                     chat_name = update['message']['chat']['first_name']
 
                     message = update['message']['text']

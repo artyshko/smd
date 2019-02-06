@@ -71,12 +71,11 @@ class Youtube(object):
         ).order_by('resolution').desc().first()
 
 
-        fullpath = os.getcwd() + '.cache'
-
-        if not os.path.exists(fullpath):
-            os.makedirs(fullpath)
+        fullpath = os.getcwd() + '/.cache'
 
         try:
+            if not os.path.exists(fullpath):
+                os.makedirs(fullpath)
             os.makedirs('.cache/'+path)
             print("Error: download:os.makedirs('.cache/'+path)")
         except: pass
