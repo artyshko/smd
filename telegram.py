@@ -27,8 +27,9 @@ class BotHandler(object):
         }
 
         response = requests.get(self.api_url + method, params)
-
-        return response.json()['result']
+        try:
+            return response.json()['result']
+        except: return []
 
     def sendText(self, chat_id, text):
 
@@ -110,7 +111,10 @@ class BotHandler(object):
 
         result = self.getUpdates()
 
-        return result[-1] if len(result) > 0 else None
+        if len(result) > 0:
+            return result[-1]
+        else:
+            return False
 
 class Controller(object):
 

@@ -28,17 +28,18 @@ class MusicDownloader(object):
         self.__youtube.get(name)
 
         #downloading video from youtube
-        self.__youtube.download(
+        if self.__youtube.download(
             url=self.__youtube.getResult(),
             path=uri,
             filename=uri
-        )
-
-        #converting video to mp3 file
-        self.__youtube.convertVideoToMusic(
-            uri=uri
-        )
-
+        ):
+            #converting video to mp3 file
+            self.__youtube.convertVideoToMusic(
+                uri=uri
+            )
+            return True
+        else:
+            return False
 
     def __getSongInfoFromSpotify(self, uri):
 
@@ -67,48 +68,47 @@ class MusicDownloader(object):
             fixed_name = fixed_name.replace("/","")
 
             #finding and download from YouTube and tagging
-            self.__downloadMusicFromYoutube(fixed_name, info['uri'])
+            if self.__downloadMusicFromYoutube(fixed_name, info['uri']):
 
-            self.__editor.setTags(
-                data=info
-            )
+                self.__editor.setTags(
+                    data=info
+                )
 
-            cachepath = os.getcwd() + '/.cache'
-            fullpath = os.getcwd() + '/Downloads'
+                cachepath = os.getcwd() + '/.cache'
+                fullpath = os.getcwd() + '/Downloads'
 
-            #logging
-            logging.info(f'CACHEPATH {cachepath}')
-            logging.info(f'FULLPATH {fullpath}')
-
-            if not os.path.exists(fullpath):
-                os.makedirs(fullpath)
-
-            os.rename(
-                f"{cachepath}/{info['uri']}/{info['uri']}.png",
-                f"{fullpath}/{info['uri']}.png"
-            )
-            #logging
-            logging.info(f"MOVE TO Downloads/{info['uri']}.png")
-
-            os.rename(
-                f"{cachepath}/{info['uri']}/{info['uri']}.mp3",
-                f"{fullpath}/{fixed_name}.mp3"
-            )
-            #logging
-            logging.info(f'MOVE TO Downloads/{fixed_name}.mp3')
-
-            #deleting cache
-            try:
-                shutil.rmtree(f".cache/{info['uri']}")
                 #logging
-                logging.info(f"DELETED .cache/{info['uri']}")
-            except:
-                #logging
-                logging.error(f"DELETING .cache/{info['uri']}")
+                logging.info(f'CACHEPATH {cachepath}')
+                logging.info(f'FULLPATH {fullpath}')
 
-            return True
-        else:
-            return False
+                if not os.path.exists(fullpath):
+                    os.makedirs(fullpath)
+
+                os.rename(
+                    f"{cachepath}/{info['uri']}/{info['uri']}.png",
+                    f"{fullpath}/{info['uri']}.png"
+                )
+                #logging
+                logging.info(f"MOVE TO Downloads/{info['uri']}.png")
+
+                os.rename(
+                    f"{cachepath}/{info['uri']}/{info['uri']}.mp3",
+                    f"{fullpath}/{fixed_name}.mp3"
+                )
+                #logging
+                logging.info(f'MOVE TO Downloads/{fixed_name}.mp3')
+
+                #deleting cache
+                try:
+                    shutil.rmtree(f".cache/{info['uri']}")
+                    #logging
+                    logging.info(f"DELETED .cache/{info['uri']}")
+                except:
+                    #logging
+                    logging.error(f"DELETING .cache/{info['uri']}")
+
+                return True
+        return False
 
     def downloadBySearchQuery(self, query):
 

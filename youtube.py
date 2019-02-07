@@ -72,32 +72,33 @@ class Youtube(object):
         '''
         #logging
         logging.info(f"Start downloading")
-
-        yt = YouTube(url)
-
-        #downloading
-        yt = yt.streams.filter(
-            progressive=True,
-            file_extension='mp4'
-        ).order_by('resolution').desc().first()
-
-
-        fullpath = os.getcwd() + '/.cache'
-
         try:
-            if not os.path.exists(fullpath):
-                os.makedirs(fullpath)
-            os.makedirs('.cache/'+path)
-        except:
+            yt = YouTube(url)
+
+            #downloading
+            yt = yt.streams.filter(
+                progressive=True,
+                file_extension='mp4'
+            ).order_by('resolution').desc().first()
+
+
+            fullpath = os.getcwd() + '/.cache'
+
+            try:
+                if not os.path.exists(fullpath):
+                    os.makedirs(fullpath)
+                os.makedirs('.cache/'+path)
+            except:
+                #logging
+                logging.error(f"Youtube:os.makedirs('.cache/'+path)")
+
+            yt.download('.cache/'+ path, filename=filename)
+
             #logging
-            logging.error(f"Youtube:os.makedirs('.cache/'+path)")
+            logging.info(f"Downloading successful")
 
-        yt.download('.cache/'+ path, filename=filename)
-
-        #logging
-        logging.info(f"Downloading successful")
-
-        return filename
+            return filename
+        except: return None
 
 
     def convertVideoToMusic(self, uri):
@@ -113,7 +114,7 @@ class Youtube(object):
             logging.error(f"Youtube:os.makedirs(fullpath)")
 
         try:
-            
+
             clip = mp.VideoFileClip(f'.cache/{uri}/{uri}.mp4').subclip()
             clip.audio.write_audiofile(f'.cache/{uri}/{uri}.mp3', bitrate='3000k')
 
