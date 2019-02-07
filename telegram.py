@@ -1,6 +1,7 @@
 import requests
 import datetime
 import io, os
+import re
 import main
 
 import logging
@@ -40,6 +41,18 @@ class BotHandler(object):
 
         return requests.post(self.api_url + method, params)
 
+    def sendHTML(self, chat_id, text):
+
+        params = {
+            'chat_id': chat_id,
+            'parse_mode': 'HTML',
+            'text': text,
+        }
+
+        method = 'sendMessage'
+
+        return requests.post(self.api_url + method, params)
+
 
     def sendAudio(self, chat_id, name, artist, audio, thumb):
 
@@ -54,7 +67,32 @@ class BotHandler(object):
             'chat_id' : chat_id,
             'title': str(name),
             'performer':str(artist),
-            'caption':f'{str(name)} by {str(artist)}'
+            'caption':f'<b>{str(artist)}</b> {str(name)}',
+            'parse_mode':'HTML'
+        }
+
+        response = requests.post(
+                        self.api_url + method,
+                        files=files,
+                        data=data
+                    )
+        #logging
+        logging.info(f'SEND STATUS {response.status_code} {response.reason}')
+
+        return response.status_code
+
+    def sendPhoto(self, chat_id, photo, text):
+
+        method = 'sendPhoto'
+
+        files = {
+            'photo': photo
+        }
+
+        data = {
+            'chat_id' : chat_id,
+            'caption':text,
+            'parse_mode':'HTML'
         }
 
         response = requests.post(
@@ -101,6 +139,12 @@ class Controller(object):
     def convertToURI(self, link):
         return "spotify:track:" + str(str(link).split('/')[-1])
 
+    def isIncorrect(self, text):
+        r = re.compile("[а-яА-Я]+")
+        text = str(text).split(' ')
+
+        return True if len([w for w in filter(r.match, text)]) else False
+
 
     def controller(self, message, id):
 
@@ -115,7 +159,12 @@ class Controller(object):
             #logging
             logging.info('Sended hello message')
 
-            self.bot.sendText(id, text='Hello, just share Song from spotify, or paste URI.')
+            code = self.bot.sendPhoto(
+                chat_id=id,
+                photo=open(f"Data/header.png",'rb'),
+                text=f'<b>Just share song from the Spotify, or paste Spotify URI.</b>'
+            )
+
 
             return True
 
@@ -132,13 +181,32 @@ class Controller(object):
                 fixed_name = fixed_name.replace("'",'')
                 fixed_name = fixed_name.replace("/","")
 
-                self.bot.sendAudio(
+                if self.isIncorrect(fixed_name):
+                    #logging
+                    logging.warning(f"Detected incorrect name {fixed_name}")
+
+                    os.rename(
+                        f"Downloads/{fixed_name}.mp3",
+                        f"Downloads/{data['uri']}.mp3"
+                    )
+                    #logging
+                    logging.info(f"RENAMED TO Downloads/{data['uri']}.mp3")
+
+                    fixed_name = data['uri']
+
+                code = self.bot.sendAudio(
                     chat_id=id,
                     audio=open(f"Downloads/{fixed_name}.mp3",'rb'),
                     thumb=open(f"Downloads/{data['uri']}.png",'rb'),
                     name=f'{data["name"]}',
                     artist=f'{data["artist"][0]}'
                 )
+
+                if int(code) != 200:
+                    #logging
+                    logging.warning(f'CODE {code}')
+                    self.bot.sendText(id,text='Something went wrong:(')
+
 
                 os.remove(f"Downloads/{fixed_name}.mp3")
                 #logging
@@ -185,13 +253,33 @@ class Controller(object):
 
         if self.downlader.downloadBySpotifyUri(message):
 
-            self.bot.sendAudio(
+            if self.isIncorrect(fixed_name):
+                #logging
+                logging.warning(f"Detected incorrect name {fixed_name}")
+
+                os.rename(
+                    f"Downloads/{fixed_name}.mp3",
+                    f"Downloads/{uri}.mp3"
+                )
+                #logging
+                logging.info(f"RENAMED TO Downloads/{uri}.mp3")
+
+                fixed_name = uri
+
+            code = self.bot.sendAudio(
                 chat_id=id,
                 audio=open(f"Downloads/{fixed_name}.mp3",'rb'),
                 thumb=open(f"Downloads/{uri}.png",'rb'),
                 name=f'{data["name"]}',
                 artist=f'{data["artist"][0]}'
             )
+
+
+            if int(code) != 200:
+                #logging
+                logging.warning(f'CODE {code}')
+                self.bot.sendText(id,text='Something went wrong:(')
+
 
             os.remove(f"Downloads/{fixed_name}.mp3")
             #logging
@@ -238,6 +326,8 @@ class Controller(object):
                 self.controller(message, chat_id)
 
                 self.offset = update_id + 1
+
+
 
 
 if __name__ == '__main__':
