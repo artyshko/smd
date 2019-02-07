@@ -41,17 +41,20 @@ class BotHandler(object):
         return requests.post(self.api_url + method, params)
 
 
-    def sendAudio(self, chat_id, name, audio):
+    def sendAudio(self, chat_id, name, artist, audio, thumb):
 
         method = 'sendAudio'
 
         files = {
-            'audio': audio
+            'audio': audio,
+            'thumb':thumb
         }
 
         data = {
             'chat_id' : chat_id,
-            'caption': str(name)
+            'title': str(name),
+            'performer':str(artist),
+            'caption':f'{str(name)} by {str(artist)}'
         }
 
         response = requests.post(
@@ -132,12 +135,18 @@ class Controller(object):
                 self.bot.sendAudio(
                     chat_id=id,
                     audio=open(f"Downloads/{fixed_name}.mp3",'rb'),
-                    name=f'{data["artist"][0]} - {data["name"]}'
+                    thumb=open(f"Downloads/{data['uri']}.png",'rb'),
+                    name=f'{data["name"]}',
+                    artist=f'{data["artist"][0]}'
                 )
 
                 os.remove(f"Downloads/{fixed_name}.mp3")
                 #logging
                 logging.info(f'DELETED Downloads/{fixed_name}.mp3')
+
+                os.remove(f"Downloads/{data['uri']}.png")
+                #logging
+                logging.info(f"DELETED Downloads/{data['uri']}.png")
 
 
             else:
@@ -179,12 +188,18 @@ class Controller(object):
             self.bot.sendAudio(
                 chat_id=id,
                 audio=open(f"Downloads/{fixed_name}.mp3",'rb'),
-                name=f'{data["artist"][0]} - {data["name"]}'
+                thumb=open(f"Downloads/{uri}.png",'rb'),
+                name=f'{data["name"]}',
+                artist=f'{data["artist"][0]}'
             )
-            os.remove(f"Downloads/{fixed_name}.mp3")
 
+            os.remove(f"Downloads/{fixed_name}.mp3")
             #logging
             logging.info(f'DELETED Downloads/{fixed_name}.mp3')
+
+            os.remove(f"Downloads/{uri}.png")
+            #logging
+            logging.info(f'DELETED Downloads/{uri}.png')
 
         else:
 

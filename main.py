@@ -84,6 +84,13 @@ class MusicDownloader(object):
                 os.makedirs(fullpath)
 
             os.rename(
+                f"{cachepath}/{info['uri']}/{info['uri']}.png",
+                f"{fullpath}/{info['uri']}.png"
+            )
+            #logging
+            logging.info(f"MOVE TO Downloads/{info['uri']}.png")
+
+            os.rename(
                 f"{cachepath}/{info['uri']}/{info['uri']}.mp3",
                 f"{fullpath}/{fixed_name}.mp3"
             )
@@ -139,6 +146,13 @@ class MusicDownloader(object):
 
             if not os.path.exists(fullpath):
                 os.makedirs(fullpath)
+
+            os.rename(
+                f"{cachepath}/{info['uri']}/{info['uri']}.png",
+                f"{fullpath}/{info['uri']}.png"
+            )
+            #logging
+            logging.info(f"MOVE TO Downloads/{info['uri']}.png")
 
             os.rename(
                 f"{cachepath}/{info['uri']}/{info['uri']}.mp3",
