@@ -3,6 +3,13 @@ import datetime
 import io, os
 import main
 
+import logging
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)-2s - %(message)s')
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+
 
 class BotHandler(object):
 
@@ -52,8 +59,8 @@ class BotHandler(object):
                         files=files,
                         data=data
                     )
-
-        print(response.status_code, response.reason, response.content)
+        #logging
+        logging.info(f'SEND STATUS {response.status_code} {response.reason}')
 
         return response.status_code
 
@@ -65,7 +72,6 @@ class BotHandler(object):
         return result[-1] if len(result) > 0 else None
 
 class Controller(object):
-
 
     def __init__(self):
         self.bot = BotHandler()
@@ -82,6 +88,9 @@ class Controller(object):
         elif str(message).find(':track:') > 0:
             return 'uri'
 
+        elif str(message) == '/start':
+            return 'start'
+
         else:
             return 'text'
 
@@ -94,36 +103,95 @@ class Controller(object):
 
         type = self.classify(message)
 
-        if type == 'text':
+        #logging
+        logging.info(f'TYPE [{type}] {message}')
 
-            try:
-                data = self.downlader.search(message)
-                uri = data['uri']
-                if self.downlader.downloadBySearchQuery(message):
+        #start message
+        if type == 'start':
 
-                    self.bot.sendAudio(chat_id=id, audio=open(f"Downloads/{uri}.mp3",'rb'), name='')
-                    os.remove(f"Downloads/{uri}.mp3")
+            #logging
+            logging.info('Sended hello message')
 
-                else:
-                    self.bot.sendText(chat_id,text='Something went wrong:(')
+            self.bot.sendText(id, text='Hello, just share Song from spotify, or paste URI.')
 
-            except:
-                self.bot.sendText(id,text="Sorry, i can't find that")
             return True
 
+
+        elif type == 'text':
+
+            state, data =  self.downlader.downloadBySearchQuery(message)
+
+            if state:
+
+                fixed_name = f'{data["artist"][0]} - {data["name"]}'
+                fixed_name = fixed_name.replace('.','')
+                fixed_name = fixed_name.replace(',','')
+                fixed_name = fixed_name.replace("'",'')
+                fixed_name = fixed_name.replace("/","")
+
+                self.bot.sendAudio(
+                    chat_id=id,
+                    audio=open(f"Downloads/{fixed_name}.mp3",'rb'),
+                    name=f'{data["artist"][0]} - {data["name"]}'
+                )
+
+                os.remove(f"Downloads/{fixed_name}.mp3")
+                #logging
+                logging.info(f'DELETED Downloads/{fixed_name}.mp3')
+
+
+            else:
+                #logging
+                logging.error(f'SENDED "Couldn\'t find that" MESSAGE')
+                self.bot.sendText(id,text='Couldn\'t find that:(')
+                return False
+
+            return True
+
+
         elif type == 'link':
+
+            #logging
+            logging.info(f'Converted open.spotify.com link to spotify URI')
+
             message = self.convertToURI(message)
 
-        try:
-            print(message)
-            uri = str(message).split(':')[-1]
-            if self.downlader.downloadBySpotifyUri(message):
-                self.bot.sendAudio(chat_id=id, audio=open(f"Downloads/{uri}.mp3",'rb'), name='')
-                os.remove(f"Downloads/{uri}.mp3")
-            else:
-                self.bot.sendText(chat_id,text='Something went wrong:(')
-        except:
-            self.bot.sendText(chat_id,text="Sorry, i can't find that")
+
+        #get data
+        uri = str(message).split(':')[-1]
+        data = self.downlader.getData(message)
+
+        #logging
+        logging.info(f'SONG  {data["artist"][0]} - {data["name"]}')
+
+        #fix name
+        fixed_name = f'{data["artist"][0]} - {data["name"]}'
+        fixed_name = fixed_name.replace('.','')
+        fixed_name = fixed_name.replace(',','')
+        fixed_name = fixed_name.replace("'",'')
+        fixed_name = fixed_name.replace("/","")
+
+        #logging
+        logging.info(f'FIXED {fixed_name}')
+
+        if self.downlader.downloadBySpotifyUri(message):
+
+            self.bot.sendAudio(
+                chat_id=id,
+                audio=open(f"Downloads/{fixed_name}.mp3",'rb'),
+                name=f'{data["artist"][0]} - {data["name"]}'
+            )
+            os.remove(f"Downloads/{fixed_name}.mp3")
+
+            #logging
+            logging.info(f'DELETED Downloads/{fixed_name}.mp3')
+
+        else:
+
+            #logging
+            logging.error(f'SENDED "Something went wrong" MESSAGE')
+            self.bot.sendText(id,text='Something went wrong:(')
+            return False
 
         return True
 
@@ -140,26 +208,24 @@ class Controller(object):
 
                 update_id = update['update_id']
 
-                print(update)
-                chat_id = update['message']['chat']['id']
                 try:
+                    chat_id = update['message']['chat']['id']
                     chat_name = update['message']['chat']['first_name']
-
                     message = update['message']['text']
-                    self.controller(message, chat_id)
+
+                    #logging
+                    logging.info(f'USER [{chat_name}] {message}')
 
                 except:
-                    try:
-                        self.bot.sendText(chat_id,text='Something went wrong:(')
-                    except:pass
+                    #logging
+                    logging.error('Unsupported message')
 
+                self.controller(message, chat_id)
 
                 self.offset = update_id + 1
 
 
 if __name__ == '__main__':
-    try:
-        controller = Controller()
-        controller.mainloop()
-    except:
-        print(traceback.format_exc())
+    logging.info('Starting app')
+    controller = Controller()
+    controller.mainloop()

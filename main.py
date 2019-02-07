@@ -5,6 +5,14 @@ from editor import TagEditor
 import sys, getopt, shutil
 import os
 
+
+import logging
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)-2s - %(message)s')
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+
+
 class MusicDownloader(object):
 
 
@@ -39,6 +47,11 @@ class MusicDownloader(object):
         except:
             return None
 
+    def getData(self, uri):
+        try:
+            return self.__spotify.getSongInfo(uri)
+        except:
+            return None
 
     def downloadBySpotifyUri(self, uri):
 
@@ -61,21 +74,30 @@ class MusicDownloader(object):
             )
 
             cachepath = os.getcwd() + '/.cache'
-            print(cachepath)
             fullpath = os.getcwd() + '/Downloads'
-            print(fullpath)
+
+            #logging
+            logging.info(f'CACHEPATH {cachepath}')
+            logging.info(f'FULLPATH {fullpath}')
 
             if not os.path.exists(fullpath):
                 os.makedirs(fullpath)
 
             os.rename(
                 f"{cachepath}/{info['uri']}/{info['uri']}.mp3",
-                f"{fullpath}/{info['uri']}.mp3"
+                f"{fullpath}/{fixed_name}.mp3"
             )
+            #logging
+            logging.info(f'MOVE TO Downloads/{fixed_name}.mp3')
 
             #deleting cache
-            try: shutil.rmtree(f".cache/{info['uri']}")
-            except: pass
+            try:
+                shutil.rmtree(f".cache/{info['uri']}")
+                #logging
+                logging.info(f"DELETED .cache/{info['uri']}")
+            except:
+                #logging
+                logging.error(f"DELETING .cache/{info['uri']}")
 
             return True
         else:
@@ -88,11 +110,18 @@ class MusicDownloader(object):
 
         if info:
 
+            #logging
+            logging.info(f'SONG  {info["artist"][0]} - {info["name"]}')
+
             fixed_name = f'{info["artist"][0]} - {info["name"]}'
             fixed_name = fixed_name.replace('.','')
             fixed_name = fixed_name.replace(',','')
             fixed_name = fixed_name.replace("'",'')
             fixed_name = fixed_name.replace("/","")
+
+            #logging
+            logging.info(f'FIXED {fixed_name}')
+
 
             #finding and download from YouTube and tagging
             self.__downloadMusicFromYoutube(fixed_name, info['uri'])
@@ -101,24 +130,35 @@ class MusicDownloader(object):
                 data=info
             )
 
-            cachepath = os.getcwd() + '.cache'
-            fullpath = os.getcwd() + 'Downloads'
+            cachepath = os.getcwd() + '/.cache'
+            fullpath = os.getcwd() + '/Downloads'
+
+            #logging
+            logging.info(f'CACHEPATH {cachepath}')
+            logging.info(f'FULLPATH {fullpath}')
 
             if not os.path.exists(fullpath):
                 os.makedirs(fullpath)
 
             os.rename(
                 f"{cachepath}/{info['uri']}/{info['uri']}.mp3",
-                f"{fullpath}/{info['uri']}.mp3"
+                f"{fullpath}/{fixed_name}.mp3"
             )
+            #logging
+            logging.info(f'MOVE TO Downloads/{fixed_name}.mp3')
 
             #deleting cache
-            try: shutil.rmtree(f".cache/{info['uri']}")
-            except: pass
+            try:
+                shutil.rmtree(f".cache/{info['uri']}")
+                #logging
+                logging.info(f"DELETED .cache/{info['uri']}")
+            except:
+                #logging
+                logging.error(f"DELETING .cache/{info['uri']}")
 
-            return True
+            return True, info
         else:
-            return False
+            return False, None
 
     def downloadBySpotifyUriFromFile(self, filename):
         try:
@@ -143,7 +183,6 @@ class MusicDownloader(object):
                 self.downloadBySpotifyUri(song)
             except:
                 pass
-
 
     def downloadBySpotifyUriPlaylistMode(self, playlist_uri):
 
@@ -181,6 +220,9 @@ class MusicDownloader(object):
             #deleting cache
             try: shutil.rmtree(f".cache/{info['uri']}")
             except: pass
+
+    def search(self, query):
+        return self.__spotify.search(query=query)
 
 
 class CLI(object):

@@ -40,6 +40,7 @@ class Spotify(object):
 
             return 'Success.'
 
+
     class User(object):
 
         def __init__(
@@ -80,6 +81,7 @@ class Spotify(object):
             ).json()['access_token']
 
             self.__client = spotipy.Spotify(auth=self.__access_token)
+
 
         def getPlaylistTracks(self, playlist_uri):
 
@@ -150,6 +152,7 @@ class Spotify(object):
         #initialization of spotify client
         self.client = spotipy.Spotify(self.__access_token)
 
+
     def getSongInfo(self, uri):
 
         data = self.client.track(uri)
@@ -161,6 +164,8 @@ class Spotify(object):
             'album' : data['album']['name'],
             'image' : data['album']['images'][0]['url']
         }
+
+
     def search(self, query):
 
         result = self.client.search(q=query, type='track', limit=1)

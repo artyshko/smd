@@ -8,7 +8,7 @@ import os
 #IMPORT WITH STDOUT REDIRECTION
 #FIX STARTUP PYGAME HELLO MESSAGE
 #THANKS @Mad Physicist FROM STACK OVERFLOW
-# import contextlib
+import contextlib
 # with contextlib.redirect_stdout(None):
 #     from moviepy.editor import *
 #     import moviepy.editor as mp
@@ -18,7 +18,12 @@ imageio.plugins.ffmpeg.download()
 from moviepy.editor import *
 import moviepy.editor as mp
 
+import logging
 
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)-2s - %(message)s')
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
 
 class Youtube(object):
 
@@ -43,6 +48,9 @@ class Youtube(object):
         :param text: name of song
         :return: list of results
         '''
+
+        logging.info(f"Finding")
+
         request = self.__url + str(text).replace(' ','+')
         response = requests.get(request)
         soup = BeautifulSoup(response.text,'lxml')
@@ -62,6 +70,9 @@ class Youtube(object):
         :param filename: name of file
         :return: str, filename
         '''
+        #logging
+        logging.info(f"Start downloading")
+
         yt = YouTube(url)
 
         #downloading
@@ -77,30 +88,39 @@ class Youtube(object):
             if not os.path.exists(fullpath):
                 os.makedirs(fullpath)
             os.makedirs('.cache/'+path)
-            print("Error: download:os.makedirs('.cache/'+path)")
-        except: pass
+        except:
+            #logging
+            logging.error(f"Youtube:os.makedirs('.cache/'+path)")
 
         yt.download('.cache/'+ path, filename=filename)
+
+        #logging
+        logging.info(f"Downloading successful")
 
         return filename
 
 
     def convertVideoToMusic(self, uri):
+        #logging
+        logging.info(f"Start converting")
 
         try:
-            try:
-                fullpath = os.getcwd() + f'/.cache/{uri}/'
+            fullpath = os.getcwd() + f'/.cache/{uri}/'
+            if not os.path.exists(fullpath):
+                os.makedirs(fullpath)
+        except:
+            #logging
+            logging.error(f"Youtube:os.makedirs(fullpath)")
 
-                if not os.path.exists(fullpath):
-                    os.makedirs(fullpath)
-            except:
-                print('Error: convertVideoToMusic:os.makedirs(fullpath)')
-
+        try:
+            
             clip = mp.VideoFileClip(f'.cache/{uri}/{uri}.mp4').subclip()
             clip.audio.write_audiofile(f'.cache/{uri}/{uri}.mp3', bitrate='3000k')
 
+            logging.info(f"Converting successful")
+
         except Exception as e:
-            print('Error: convertVideoToMusic')
+            logging.error(f"Youtube.convertVideoToMusic")
             return -1
 
         finally:
