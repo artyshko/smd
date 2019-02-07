@@ -331,6 +331,9 @@ class Controller(object):
 
 
 if __name__ == '__main__':
+    try:
+        os.system('pip3 install git+https://github.com/nficano/pytube.git')
+    except:pass
     logging.info('Starting app')
     controller = Controller()
     controller.mainloop()
