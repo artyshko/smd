@@ -15,7 +15,8 @@ console.setLevel(logging.INFO)
 class BotHandler(object):
 
     def __init__(self):
-        self.token = '752979930:AAFhdyGx0CSOJ-m17wLGN0NhrxvpwCqCPoQ'
+        self.token = '738408029:AAGdU7xFXn--qtRktVnk9J8zqz3mFmTYd_0' #unstable
+        #self.token = '752979930:AAFhdyGx0CSOJ-m17wLGN0NhrxvpwCqCPoQ'
         self.api_url = "https://api.telegram.org/bot{}/".format(self.token)
 
     def getUpdates(self, offset=None, timeout=30):
@@ -107,6 +108,28 @@ class BotHandler(object):
         return response.status_code
 
 
+    def sendSticker(self, chat_id, sticker):
+
+        method = 'sendSticker'
+
+        files = {
+            'sticker': sticker
+        }
+
+        data = {
+            'chat_id' : chat_id,
+        }
+
+        response = requests.post(
+                        self.api_url + method,
+                        files=files,
+                        data=data
+                    )
+        #logging
+        logging.info(f'SEND STATUS {response.status_code} {response.reason}')
+
+        return response.status_code
+
     def checkLastUpdates(self):
 
         result = self.getUpdates()
@@ -166,9 +189,8 @@ class Controller(object):
             code = self.bot.sendPhoto(
                 chat_id=id,
                 photo=open(f"Data/header.png",'rb'),
-                text=f'<b>Just share song from the Spotify, or paste Spotify URI.</b>'
+                text=''
             )
-
 
             return True
 
@@ -224,6 +246,7 @@ class Controller(object):
             else:
                 #logging
                 logging.error(f'SENDED "Couldn\'t find that" MESSAGE')
+                self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
                 self.bot.sendText(id,text='Couldn\'t find that:(')
                 return False
 
@@ -241,19 +264,22 @@ class Controller(object):
         #get data
         uri = str(message).split(':')[-1]
         data = self.downlader.getData(message)
+        try:
+            #logging
+            logging.info(f'SONG  {data["artist"][0]} - {data["name"]}')
 
-        #logging
-        logging.info(f'SONG  {data["artist"][0]} - {data["name"]}')
+            #fix name
+            fixed_name = f'{data["artist"][0]} - {data["name"]}'
+            fixed_name = fixed_name.replace('.','')
+            fixed_name = fixed_name.replace(',','')
+            fixed_name = fixed_name.replace("'",'')
+            fixed_name = fixed_name.replace("/","")
 
-        #fix name
-        fixed_name = f'{data["artist"][0]} - {data["name"]}'
-        fixed_name = fixed_name.replace('.','')
-        fixed_name = fixed_name.replace(',','')
-        fixed_name = fixed_name.replace("'",'')
-        fixed_name = fixed_name.replace("/","")
-
-        #logging
-        logging.info(f'FIXED {fixed_name}')
+            #logging
+            logging.info(f'FIXED {fixed_name}')
+        except:
+            #logging
+            logging.error(f'self.downlader.getData return None')
 
         if self.downlader.downloadBySpotifyUri(message):
 
@@ -282,6 +308,7 @@ class Controller(object):
             if int(code) != 200:
                 #logging
                 logging.warning(f'CODE {code}')
+                self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
                 self.bot.sendText(id,text='Something went wrong:(')
 
 
@@ -297,6 +324,7 @@ class Controller(object):
 
             #logging
             logging.error(f'SENDED "Something went wrong" MESSAGE')
+            self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
             self.bot.sendText(id,text='Something went wrong:(')
             return False
 
@@ -308,30 +336,46 @@ class Controller(object):
         while True:
 
             self.bot.getUpdates(self.offset)
-
             update = self.bot.checkLastUpdates()
 
             if update:
 
                 update_id = update['update_id']
 
-                try:
+                if 'message' in list(update.keys()):
+                    #in case of new message
+
+                    #get message data
                     chat_id = update['message']['chat']['id']
                     chat_name = update['message']['chat']['first_name']
-                    message = update['message']['text']
 
-                    #logging
-                    logging.info(f'USER [{chat_name}] {message}')
+                    if 'text' in list(update['message'].keys()):
+                        #filter unsupported messages
+                        #get message
+                        message = update['message']['text']
 
-                except:
-                    #logging
-                    logging.error('Unsupported message')
+                        #logging
+                        logging.info(f'USER [{chat_name}] {message}')
 
-                self.controller(message, chat_id)
+                        try:
+                            #start controller
+                            self.controller(message, chat_id)
+
+                        except:
+                            #logging
+                            logging.error('ERROR IN CONTROLLER')
+
+                            self.bot.sendSticker(chat_id, sticker=open(f"Data/s1.webp",'rb'))
+                            self.bot.sendText(chat_id, 'Couldn\'t find that :(')
+
+                    else:
+                        #logging
+                        logging.warning('UNSUPPORTED MESSAGE')
+
+                        self.bot.sendSticker(chat_id, sticker=open(f"Data/s4.webp",'rb'))
+                        self.bot.sendText(chat_id, 'Wooops! Something went wrong.\nERROR CODE 42 - You are so funny!')
 
                 self.offset = update_id + 1
-
-
 
 
 if __name__ == '__main__':
