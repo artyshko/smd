@@ -15,7 +15,8 @@ console.setLevel(logging.INFO)
 class BotHandler(object):
 
     def __init__(self):
-        self.token = '752979930:AAFhdyGx0CSOJ-m17wLGN0NhrxvpwCqCPoQ'
+        self.token = '738408029:AAGdU7xFXn--qtRktVnk9J8zqz3mFmTYd_0' #unstable
+        #self.token = '752979930:AAFhdyGx0CSOJ-m17wLGN0NhrxvpwCqCPoQ'
         self.api_url = "https://api.telegram.org/bot{}/".format(self.token)
 
     def getUpdates(self, offset=None, timeout=30):
@@ -188,9 +189,8 @@ class Controller(object):
             code = self.bot.sendPhoto(
                 chat_id=id,
                 photo=open(f"Data/header.png",'rb'),
-                text=f'<b>Just share song from the Spotify, or paste Spotify URI.</b>'
+                text=''
             )
-
 
             return True
 
@@ -308,8 +308,8 @@ class Controller(object):
             if int(code) != 200:
                 #logging
                 logging.warning(f'CODE {code}')
-                self.bot.sendText(id,text='Something went wrong:(')
                 self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
+                self.bot.sendText(id,text='Something went wrong:(')
 
 
             os.remove(f"Downloads/{fixed_name}.mp3")
@@ -324,8 +324,8 @@ class Controller(object):
 
             #logging
             logging.error(f'SENDED "Something went wrong" MESSAGE')
-            self.bot.sendText(id,text='Something went wrong:(')
             self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
+            self.bot.sendText(id,text='Something went wrong:(')
             return False
 
         return True
@@ -365,8 +365,8 @@ class Controller(object):
                             #logging
                             logging.error('ERROR IN CONTROLLER')
 
-                            self.bot.sendText(chat_id, 'Couldn\'t find that :(')
                             self.bot.sendSticker(chat_id, sticker=open(f"Data/s1.webp",'rb'))
+                            self.bot.sendText(chat_id, 'Couldn\'t find that :(')
 
                     else:
                         #logging
