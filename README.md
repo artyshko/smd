@@ -1,4 +1,4 @@
-<img align="left" height="50" wigth="50" src="https://i.ibb.co/6sLhjBk/telegram-logo-ad3d08a014-seeklogo-com-by-yagorocha-dbyy26q.png">
+<img align="left" height="40" wigth="40" src="https://i.ibb.co/6sLhjBk/telegram-logo-ad3d08a014-seeklogo-com-by-yagorocha-dbyy26q.png">
 
 # **<a href="https://telegram.me/SpotifyMusicDownloaderBot"><b>Spotify Music Downloader Telegram Bot</b></a>**
 
