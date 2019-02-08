@@ -144,7 +144,7 @@ class Controller(object):
         self.bot = BotHandler()
         self.offset = None
 
-        self.downlader = main.MusicDownloader()
+        self.downloader = main.MusicDownloader()
 
 
     def classify(self, message):
@@ -163,7 +163,7 @@ class Controller(object):
 
 
     def convertToURI(self, link):
-        return "spotify:track:" + str(str(link).split('/')[-1])
+        return "spotify:track:" + str(str(link).split('/')[-1]).split('?')[0]
 
     def isIncorrect(self, text):
         r = re.compile("[а-яА-Я]+")
@@ -196,7 +196,7 @@ class Controller(object):
 
         elif type == 'text':
 
-            state, data =  self.downlader.downloadBySearchQuery(message)
+            state, data =  self.downloader.downloadBySearchQuery(message)
 
             if state:
 
@@ -262,7 +262,7 @@ class Controller(object):
 
         #get data
         uri = str(message).split(':')[-1]
-        data = self.downlader.getData(message)
+        data = self.downloader.getData(message)
         try:
             #logging
             logging.info(f'SONG  {data["artist"][0]} - {data["name"]}')
@@ -278,9 +278,11 @@ class Controller(object):
             logging.info(f'FIXED {fixed_name}')
         except:
             #logging
-            logging.error(f'self.downlader.getData return None')
+            logging.error(f'self.downloader.getData return None')
+            self.downloader = main.MusicDownloader()
+            logging.error(f'Restarting downloader')
 
-        if self.downlader.downloadBySpotifyUri(message):
+        if self.downloader.downloadBySpotifyUri(message):
 
             if self.isIncorrect(fixed_name):
                 #logging

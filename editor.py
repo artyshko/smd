@@ -57,13 +57,13 @@ class TagEditor(object):
         if data:
 
             #download image
-            TagEditor.getImageFromSpotify(data['image'], f".cache/{data['uri']}/{data['uri']}.png")
+            TagEditor.getImageFromSpotify(data['image'], f"cache/{data['uri']}/{data['uri']}.png")
 
             #logging
-            logging.info(f"IMAGE .cache/{data['uri']}/{data['uri']}.png")
+            logging.info(f"IMAGE cache/{data['uri']}/{data['uri']}.png")
 
             audio = MP3(
-                f".cache/{data['uri']}/{data['uri']}.mp3",
+                f"cache/{data['uri']}/{data['uri']}.mp3",
                 ID3=ID3
             )
 
@@ -78,7 +78,7 @@ class TagEditor(object):
                 'image/jpeg',
                 3,
                 'Front cover',
-                open(f".cache/{data['uri']}/{data['uri']}.png", 'rb').read())
+                open(f"cache/{data['uri']}/{data['uri']}.png", 'rb').read())
             )
 
             #add song name
@@ -101,10 +101,10 @@ class TagEditor(object):
 
             #save result
             audio.save()
-            ID3(f".cache/{data['uri']}/{data['uri']}.mp3").save(v2_version=3)
+            ID3(f"cache/{data['uri']}/{data['uri']}.mp3").save(v2_version=3)
 
             #logging
-            logging.info(f"SAVED .cache/{data['uri']}/{data['uri']}.mp3")
+            logging.info(f"SAVED cache/{data['uri']}/{data['uri']}.mp3")
 
             # #delete downloaded picture
             # os.remove('.temp.jpg')

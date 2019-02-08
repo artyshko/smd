@@ -74,7 +74,7 @@ class MusicDownloader(object):
                     data=info
                 )
 
-                cachepath = os.getcwd() + '/.cache'
+                cachepath = os.getcwd() + '/cache'
                 fullpath = os.getcwd() + '/Downloads'
 
                 #logging
@@ -100,12 +100,12 @@ class MusicDownloader(object):
 
                 #deleting cache
                 try:
-                    shutil.rmtree(f".cache/{info['uri']}")
+                    shutil.rmtree(f"cache/{info['uri']}")
                     #logging
-                    logging.info(f"DELETED .cache/{info['uri']}")
+                    logging.info(f"DELETED cache/{info['uri']}")
                 except:
                     #logging
-                    logging.error(f"DELETING .cache/{info['uri']}")
+                    logging.error(f"DELETING cache/{info['uri']}")
 
                 return True
         return False
@@ -137,7 +137,7 @@ class MusicDownloader(object):
                 data=info
             )
 
-            cachepath = os.getcwd() + '/.cache'
+            cachepath = os.getcwd() + '/cache'
             fullpath = os.getcwd() + '/Downloads'
 
             #logging
@@ -163,12 +163,12 @@ class MusicDownloader(object):
 
             #deleting cache
             try:
-                shutil.rmtree(f".cache/{info['uri']}")
+                shutil.rmtree(f"cache/{info['uri']}")
                 #logging
-                logging.info(f"DELETED .cache/{info['uri']}")
+                logging.info(f"DELETED cache/{info['uri']}")
             except:
                 #logging
-                logging.error(f"DELETING .cache/{info['uri']}")
+                logging.error(f"DELETING cache/{info['uri']}")
 
             return True, info
         else:
@@ -220,7 +220,7 @@ class MusicDownloader(object):
                 data=info
             )
 
-            cachepath = os.getcwd() + '/.cache'
+            cachepath = os.getcwd() + '/cache'
             fullpath = os.getcwd() + '/Downloads'
 
             if not os.path.exists(fullpath):
@@ -232,7 +232,7 @@ class MusicDownloader(object):
             )
 
             #deleting cache
-            try: shutil.rmtree(f".cache/{info['uri']}")
+            try: shutil.rmtree(f"cache/{info['uri']}")
             except: pass
 
     def search(self, query):

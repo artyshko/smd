@@ -31,6 +31,10 @@ class Youtube(object):
         self.__query = ''
         self.__host = 'https://www.youtube.com/'
         self.__url = self.__host + 'results?search_query='
+        self.headers = {
+            'User-Agent':
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
+        }
         self.__result = []
 
 
@@ -40,6 +44,13 @@ class Youtube(object):
 
     def getFullResult(self):
         return self.__result
+
+    def removeInvallidLinks(self):
+        temp = []
+        for item in self.getFullResult():
+            if 40 < len(item) < 50:
+                temp.append(item)
+        self.__result = temp
 
 
     def get(self,text):
@@ -52,13 +63,14 @@ class Youtube(object):
         logging.info(f"Finding")
 
         request = self.__url + str(text).replace(' ','+')
-        response = requests.get(request)
+        response = requests.get(request, headers=self.headers)
         soup = BeautifulSoup(response.text,'lxml')
         self.__result = []
 
         for link in soup.findAll(attrs={'class': 'yt-uix-tile-link'}):
             self.__result.append(self.__host + link['href'])
 
+        self.removeInvallidLinks()
         return self.__result
 
 
@@ -73,26 +85,39 @@ class Youtube(object):
         #logging
         logging.info(f"Start downloading")
         try:
+            #logging
+            logging.info(f"Init YouTube")
+            logging.info(f"URL {url}")
             yt = YouTube(url)
-
+            #logging
+            logging.info(f"Get Data")
             #downloading
             yt = yt.streams.filter(
                 progressive=True,
                 file_extension='mp4'
             ).order_by('resolution').desc().first()
 
+            #logging
+            logging.info(f"Create Directory")
 
-            fullpath = os.getcwd() + '/.cache'
+
+            fullpath = os.getcwd() + '/cache'
 
             try:
-                if not os.path.exists(fullpath):
-                    os.makedirs(fullpath)
-                os.makedirs('.cache/'+path)
+                # if not os.path.exists(fullpath):
+                #     os.makedirs(fullpath)
+                os.makedirs('cache/'+path)
+                #logging
+                logging.info(f"Created")
             except:
                 #logging
-                logging.error(f"Youtube:os.makedirs('.cache/'+path)")
+                logging.error(f"Youtube:os.makedirs('cache/'+path)")
 
-            yt.download('.cache/'+ path, filename=filename)
+            #logging
+            logging.info(f"Start downloading")
+
+
+            yt.download('cache/'+ path, filename=filename)
 
             #logging
             logging.info(f"Downloading successful")
@@ -106,7 +131,7 @@ class Youtube(object):
         logging.info(f"Start converting")
 
         try:
-            fullpath = os.getcwd() + f'/.cache/{uri}/'
+            fullpath = os.getcwd() + f'/cache/{uri}/'
             if not os.path.exists(fullpath):
                 os.makedirs(fullpath)
         except:
@@ -115,8 +140,8 @@ class Youtube(object):
 
         try:
 
-            clip = mp.VideoFileClip(f'.cache/{uri}/{uri}.mp4').subclip()
-            clip.audio.write_audiofile(f'.cache/{uri}/{uri}.mp3', bitrate='3000k')
+            clip = mp.VideoFileClip(f'cache/{uri}/{uri}.mp4').subclip()
+            clip.audio.write_audiofile(f'cache/{uri}/{uri}.mp3', bitrate='3000k')
 
             logging.info(f"Converting successful")
 
