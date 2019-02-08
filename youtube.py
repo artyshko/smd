@@ -73,24 +73,36 @@ class Youtube(object):
         #logging
         logging.info(f"Start downloading")
         try:
+            #logging
+            logging.info(f"Init YouTube")
             yt = YouTube(url)
-
+            #logging
+            logging.info(f"Get Data")
             #downloading
             yt = yt.streams.filter(
                 progressive=True,
                 file_extension='mp4'
             ).order_by('resolution').desc().first()
 
+            #logging
+            logging.info(f"Create Directory")
+
 
             fullpath = os.getcwd() + '/.cache'
 
             try:
-                if not os.path.exists(fullpath):
-                    os.makedirs(fullpath)
+                # if not os.path.exists(fullpath):
+                #     os.makedirs(fullpath)
                 os.makedirs('.cache/'+path)
+                #logging
+                logging.info(f"Created")
             except:
                 #logging
                 logging.error(f"Youtube:os.makedirs('.cache/'+path)")
+
+            #logging
+            logging.info(f"Start downloading")
+
 
             yt.download('.cache/'+ path, filename=filename)
 
