@@ -75,6 +75,7 @@ class Youtube(object):
         try:
             #logging
             logging.info(f"Init YouTube")
+            logging.info(f"URL {url}")
             yt = YouTube(url)
             #logging
             logging.info(f"Get Data")
@@ -88,23 +89,23 @@ class Youtube(object):
             logging.info(f"Create Directory")
 
 
-            fullpath = os.getcwd() + '/.cache'
+            fullpath = os.getcwd() + '/cache'
 
             try:
                 # if not os.path.exists(fullpath):
                 #     os.makedirs(fullpath)
-                os.makedirs('.cache/'+path)
+                os.makedirs('cache/'+path)
                 #logging
                 logging.info(f"Created")
             except:
                 #logging
-                logging.error(f"Youtube:os.makedirs('.cache/'+path)")
+                logging.error(f"Youtube:os.makedirs('cache/'+path)")
 
             #logging
             logging.info(f"Start downloading")
 
 
-            yt.download('.cache/'+ path, filename=filename)
+            yt.download('cache/'+ path, filename=filename)
 
             #logging
             logging.info(f"Downloading successful")
@@ -118,7 +119,7 @@ class Youtube(object):
         logging.info(f"Start converting")
 
         try:
-            fullpath = os.getcwd() + f'/.cache/{uri}/'
+            fullpath = os.getcwd() + f'/cache/{uri}/'
             if not os.path.exists(fullpath):
                 os.makedirs(fullpath)
         except:
@@ -127,8 +128,8 @@ class Youtube(object):
 
         try:
 
-            clip = mp.VideoFileClip(f'.cache/{uri}/{uri}.mp4').subclip()
-            clip.audio.write_audiofile(f'.cache/{uri}/{uri}.mp3', bitrate='3000k')
+            clip = mp.VideoFileClip(f'cache/{uri}/{uri}.mp4').subclip()
+            clip.audio.write_audiofile(f'cache/{uri}/{uri}.mp3', bitrate='3000k')
 
             logging.info(f"Converting successful")
 
