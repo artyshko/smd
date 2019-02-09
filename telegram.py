@@ -185,9 +185,19 @@ class Controller(object):
             #logging
             logging.info('Sended hello message')
 
-            code = self.bot.sendPhoto(
+            self.bot.sendPhoto(
                 chat_id=id,
-                photo=open(f"Data/header.png",'rb'),
+                photo=open(f"Data/header1.png",'rb'),
+                text=''
+            )
+            self.bot.sendPhoto(
+                chat_id=id,
+                photo=open(f"Data/header2.png",'rb'),
+                text=''
+            )
+            self.bot.sendPhoto(
+                chat_id=id,
+                photo=open(f"Data/header3.png",'rb'),
                 text=''
             )
 
@@ -206,18 +216,14 @@ class Controller(object):
                 fixed_name = fixed_name.replace("'",'')
                 fixed_name = fixed_name.replace("/","")
 
-                if self.isIncorrect(fixed_name):
-                    #logging
-                    logging.warning(f"Detected incorrect name {fixed_name}")
+                os.rename(
+                    f"Downloads/{fixed_name}.mp3",
+                    f"Downloads/{data['uri']}.mp3"
+                )
+                #logging
+                logging.info(f"RENAMED TO Downloads/{data['uri']}.mp3")
 
-                    os.rename(
-                        f"Downloads/{fixed_name}.mp3",
-                        f"Downloads/{data['uri']}.mp3"
-                    )
-                    #logging
-                    logging.info(f"RENAMED TO Downloads/{data['uri']}.mp3")
-
-                    fixed_name = data['uri']
+                fixed_name = data['uri']
 
                 code = self.bot.sendAudio(
                     chat_id=id,
@@ -280,22 +286,34 @@ class Controller(object):
             #logging
             logging.error(f'self.downloader.getData return None')
             self.downloader = main.MusicDownloader()
-            logging.error(f'Restarting downloader')
+            logging.warning(f'Restarting downloader')
+            logging.warning(f'Trying do the same')
+            #get data
+            uri = str(message).split(':')[-1]
+            data = self.downloader.getData(message)
+            #logging
+            logging.info(f'SONG  {data["artist"][0]} - {data["name"]}')
+            #fix name
+            fixed_name = f'{data["artist"][0]} - {data["name"]}'
+            fixed_name = fixed_name.replace('.','')
+            fixed_name = fixed_name.replace(',','')
+            fixed_name = fixed_name.replace("'",'')
+            fixed_name = fixed_name.replace("/","")
+            #logging
+            logging.info(f'FIXED {fixed_name}')
+
+
 
         if self.downloader.downloadBySpotifyUri(message):
 
-            if self.isIncorrect(fixed_name):
-                #logging
-                logging.warning(f"Detected incorrect name {fixed_name}")
+            os.rename(
+                f"Downloads/{fixed_name}.mp3",
+                f"Downloads/{uri}.mp3"
+            )
+            #logging
+            logging.info(f"RENAMED TO Downloads/{uri}.mp3")
 
-                os.rename(
-                    f"Downloads/{fixed_name}.mp3",
-                    f"Downloads/{uri}.mp3"
-                )
-                #logging
-                logging.info(f"RENAMED TO Downloads/{uri}.mp3")
-
-                fixed_name = uri
+            fixed_name = uri
 
             code = self.bot.sendAudio(
                 chat_id=id,
