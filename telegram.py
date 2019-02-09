@@ -216,18 +216,14 @@ class Controller(object):
                 fixed_name = fixed_name.replace("'",'')
                 fixed_name = fixed_name.replace("/","")
 
-                if self.isIncorrect(fixed_name):
-                    #logging
-                    logging.warning(f"Detected incorrect name {fixed_name}")
+                os.rename(
+                    f"Downloads/{fixed_name}.mp3",
+                    f"Downloads/{data['uri']}.mp3"
+                )
+                #logging
+                logging.info(f"RENAMED TO Downloads/{data['uri']}.mp3")
 
-                    os.rename(
-                        f"Downloads/{fixed_name}.mp3",
-                        f"Downloads/{data['uri']}.mp3"
-                    )
-                    #logging
-                    logging.info(f"RENAMED TO Downloads/{data['uri']}.mp3")
-
-                    fixed_name = data['uri']
+                fixed_name = data['uri']
 
                 code = self.bot.sendAudio(
                     chat_id=id,
@@ -310,18 +306,14 @@ class Controller(object):
 
         if self.downloader.downloadBySpotifyUri(message):
 
-            if self.isIncorrect(fixed_name):
-                #logging
-                logging.warning(f"Detected incorrect name {fixed_name}")
+            os.rename(
+                f"Downloads/{fixed_name}.mp3",
+                f"Downloads/{uri}.mp3"
+            )
+            #logging
+            logging.info(f"RENAMED TO Downloads/{uri}.mp3")
 
-                os.rename(
-                    f"Downloads/{fixed_name}.mp3",
-                    f"Downloads/{uri}.mp3"
-                )
-                #logging
-                logging.info(f"RENAMED TO Downloads/{uri}.mp3")
-
-                fixed_name = uri
+            fixed_name = uri
 
             code = self.bot.sendAudio(
                 chat_id=id,
