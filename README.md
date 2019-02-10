@@ -7,7 +7,7 @@
 
 # **Get it on Telegram <a href="https://telegram.me/SpotifyMusicDownloaderBot"><b>@SpotifyMusicDownloaderBot</b></a>**
 
-<img align="center" src="https://github.com/artyshko/smd/blob/telegram/Data/header.png">
+<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram/Data/header1.png">
 
 ## **Download your music in high quality**
 
