@@ -22,10 +22,10 @@ class MusicDownloader(object):
         self.__editor = TagEditor()
 
 
-    def __downloadMusicFromYoutube(self, name, uri):
+    def __downloadMusicFromYoutube(self, name, uri, dur):
 
         #finding song on youtube
-        self.__youtube.get(name)
+        self.__youtube.get(name, dur)
 
         #downloading video from youtube
         if self.__youtube.download(
@@ -68,7 +68,7 @@ class MusicDownloader(object):
             fixed_name = fixed_name.replace("/","")
 
             #finding and download from YouTube and tagging
-            if self.__downloadMusicFromYoutube(fixed_name, info['uri']):
+            if self.__downloadMusicFromYoutube(fixed_name, info['uri'], info['duration_ms']):
 
                 self.__editor.setTags(
                     data=info
@@ -131,7 +131,7 @@ class MusicDownloader(object):
 
 
             #finding and download from YouTube and tagging
-            self.__downloadMusicFromYoutube(fixed_name, info['uri'])
+            self.__downloadMusicFromYoutube(fixed_name, info['uri'], info['duration_ms'])
 
             self.__editor.setTags(
                 data=info

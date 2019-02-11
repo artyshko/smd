@@ -52,8 +52,17 @@ class Youtube(object):
                 temp.append(item)
         self.__result = temp
 
+    def get(self, text, dur):
 
-    def get(self,text):
+        data1 = self.getVideoFromYoutube(text)
+        data2 = self.getVideoFromYoutube(text + ' Audio')
+
+        self.__result = self.classify(data1, data2, dur)
+
+        return self.__result
+
+
+    def getVideoFromYoutube(self,text):
         '''
         Getting song url from YouTube
         :param text: name of song
@@ -157,4 +166,41 @@ class Youtube(object):
         '''
         quick download and convert to mp3
         '''
-        self.convertVideoToMusic(self.download(self.get(name)[0],filename=name))
+        #self.convertVideoToMusic(self.download(self.get(name)[0],filename=name))
+        return None
+
+    def classify(self, data1, data2, duration=229486):
+
+        data1 = data1[:2] if len(data1) >= 2 else data1
+        data2 = data2[:2] if len(data2) >= 2 else data2
+
+        research = data2 + data1
+
+        result = -1
+        link = None
+
+        #logging
+        logging.info(f"{len(research)} research objects")
+
+        for item in research:
+            try:
+
+                y = YouTube(item)
+
+                item_duration = int(y.length)*1000
+                diff = duration - item_duration
+                diff = diff * -1 if diff < 0 else diff
+
+                if result == -1 or diff < result:
+                    result, link = diff, item
+
+            except:
+                #logging
+                logging.error(f"Some problems on classify loop")
+
+        if link:
+            _result = [link] + data1 + data2
+        else:
+            _result = data1 + data2
+
+        return _result
