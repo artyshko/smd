@@ -161,6 +161,36 @@ class Controller(object):
         else:
             return 'text'
 
+    def getTrackFromShazam(self, message):
+
+        slug = str(message).split('/')[-1].split('-')
+
+        message = str(message).split('I used Shazam to discover ')[1]
+        message = str(message).split('. https://www.shazam.com/track/')[0]
+        message = message.replace("'",'')
+
+        song, artist, title = message, [], []
+        message = str(message).split(' ')
+
+        try:
+
+            for word in message:
+                try:
+                    if str(word).lower().find(slug[0]) > -1:
+                        title.append(word)
+                        slug.pop(0)
+
+                    else:
+                        artist.append(word)
+                except:
+                    artist.append(word)
+
+            artist = " ".join(artist[1:])
+            title = " ".join(title)
+            song = f"{artist} - {title}"
+
+        except:pass
+        return str(song).replace('&','')
 
     def convertToURI(self, link):
         return "spotify:track:" + str(str(link).split('/')[-1]).split('?')[0]
@@ -205,6 +235,14 @@ class Controller(object):
 
 
         elif type == 'text':
+
+            if str(message).find('I used Shazam to discover') > -1:
+                #logging
+                logging.info(f"SHAZAM SONG DETECTED")
+
+                message = self.getTrackFromShazam(message)
+
+                logging.info(f"NAME {message}")
 
             state, data =  self.downloader.downloadBySearchQuery(message)
 
@@ -366,7 +404,9 @@ class Controller(object):
 
                     #get message data
                     chat_id = update['message']['chat']['id']
-                    chat_name = update['message']['chat']['first_name']
+                    chat_f_name = update['message']['chat']['first_name']
+                    chat_l_name = update['message']['chat']['last_name']
+                    username = update['message']['chat']['username']
 
                     if 'text' in list(update['message'].keys()):
                         #filter unsupported messages
@@ -374,7 +414,8 @@ class Controller(object):
                         message = update['message']['text']
 
                         #logging
-                        logging.info(f'USER [{chat_name}] {message}')
+                        logging.info(f'USER [{username}] {chat_f_name} {chat_l_name}')
+                        logging.info(f'MESSAGE {message}')
 
                         try:
                             #start controller
@@ -395,6 +436,7 @@ class Controller(object):
                         self.bot.sendText(chat_id, 'Wooops! Something went wrong.\nERROR CODE 42 - You are so funny!')
 
                 self.offset = update_id + 1
+
 
 
 if __name__ == '__main__':
