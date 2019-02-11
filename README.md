@@ -9,9 +9,9 @@
 
 <img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram/Data/header1.png">
 
-## **Download your music in high quality**
+## **Now with Shazam support**
 
-<img align="center" src="https://i.ibb.co/BwgvL5R/result.png">
+<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram-unstable/Data/header3.png">
 
 ## Usage
 
