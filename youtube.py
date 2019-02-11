@@ -191,7 +191,7 @@ class Youtube(object):
                 diff = duration - item_duration
                 diff = diff * -1 if diff < 0 else diff
 
-                if result == -1 or diff < result:
+                if (result == -1 or diff < result) and not str(y.title).find('8D') > -1:
                     result, link = diff, item
 
             except:
