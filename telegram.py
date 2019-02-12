@@ -246,6 +246,15 @@ class Controller(object):
 
             state, data =  self.downloader.downloadBySearchQuery(message)
 
+            #FIX
+            if not state:
+                #logging
+                self.downloader = main.MusicDownloader()
+                logging.warning(f'Restarting downloader')
+                logging.warning(f'Trying do the same')
+
+                state, data =  self.downloader.downloadBySearchQuery(message)
+
             if state:
 
                 fixed_name = f'{data["artist"][0]} - {data["name"]}'
@@ -399,39 +408,47 @@ class Controller(object):
 
                 update_id = update['update_id']
 
-                if 'message' in list(update.keys()):
-                    #in case of new message
+                try:
 
-                    #get message data
-                    chat_id = update['message']['chat']['id']
-                    username = update['message']['chat']['username']
+                    if 'message' in list(update.keys()):
+                        #in case of new message
 
-                    if 'text' in list(update['message'].keys()):
-                        #filter unsupported messages
-                        #get message
-                        message = update['message']['text']
+                        #get message data
+                        chat_id = update['message']['chat']['id']
+                        username = update['message']['chat']['username']
 
-                        #logging
-                        logging.info(f'USER [{username}]')
-                        logging.info(f'MESSAGE {message}')
+                        if 'text' in list(update['message'].keys()):
+                            #filter unsupported messages
+                            #get message
+                            message = update['message']['text']
 
-                        try:
-                            #start controller
-                            self.controller(message, chat_id)
-
-                        except:
                             #logging
-                            logging.error('ERROR IN CONTROLLER')
+                            logging.info(f'USER [{username}]')
+                            logging.info(f'MESSAGE {message}')
 
-                            self.bot.sendSticker(chat_id, sticker=open(f"Data/s1.webp",'rb'))
-                            self.bot.sendText(chat_id, 'Couldn\'t find that :(')
+                            try:
+                                #start controller
+                                self.controller(message, chat_id)
 
-                    else:
-                        #logging
-                        logging.warning('UNSUPPORTED MESSAGE')
+                            except:
+                                #logging
+                                logging.error('ERROR IN CONTROLLER')
+                                self.downloader = main.MusicDownloader()
 
-                        self.bot.sendSticker(chat_id, sticker=open(f"Data/s4.webp",'rb'))
-                        self.bot.sendText(chat_id, 'Wooops! Something went wrong.\nERROR CODE 42 - You are so funny!')
+                                self.bot.sendSticker(chat_id, sticker=open(f"Data/s1.webp",'rb'))
+                                self.bot.sendText(chat_id, 'Couldn\'t find that :(')
+
+                        else:
+                            #logging
+                            logging.warning('UNSUPPORTED MESSAGE')
+
+                            self.bot.sendSticker(chat_id, sticker=open(f"Data/s4.webp",'rb'))
+                            self.bot.sendText(chat_id, 'Wooops! Something went wrong.\nERROR CODE 42 - You are so funny!')
+                except:
+                    #FIX
+                    #logging
+                    logging.warning('ERROR IN MAIN LOOP')
+                    self.downloader = main.MusicDownloader()
 
                 self.offset = update_id + 1
 
