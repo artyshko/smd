@@ -404,8 +404,6 @@ class Controller(object):
 
                     #get message data
                     chat_id = update['message']['chat']['id']
-                    chat_f_name = update['message']['chat']['first_name']
-                    chat_l_name = update['message']['chat']['last_name']
                     username = update['message']['chat']['username']
 
                     if 'text' in list(update['message'].keys()):
@@ -414,7 +412,7 @@ class Controller(object):
                         message = update['message']['text']
 
                         #logging
-                        logging.info(f'USER [{username}] {chat_f_name} {chat_l_name}')
+                        logging.info(f'USER [{username}]')
                         logging.info(f'MESSAGE {message}')
 
                         try:
