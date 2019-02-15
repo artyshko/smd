@@ -1,3 +1,6 @@
+from celery import Celery
+import redis
+
 import requests
 import datetime
 import io, os
@@ -11,11 +14,15 @@ logging.basicConfig(level=logging.INFO,
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 
+manager = Celery('telegram',broker='redis://localhost:6379/0')
+
+
 
 class BotHandler(object):
 
     def __init__(self):
         self.token = '752979930:AAFhdyGx0CSOJ-m17wLGN0NhrxvpwCqCPoQ'
+        self.token = '738408029:AAGdU7xFXn--qtRktVnk9J8zqz3mFmTYd_0' #unstable
         self.api_url = "https://api.telegram.org/bot{}/".format(self.token)
 
     def getUpdates(self, offset=None, timeout=30):
@@ -389,6 +396,48 @@ class Controller(object):
 
         return True
 
+    def worker(self,update):
+
+        print(update)
+
+        if 'message' in list(update.keys()):
+            #in case of new message
+
+            #get message data
+            chat_id = update['message']['chat']['id']
+
+            try:
+                username = update['message']['chat']['username']
+            except:
+                username = 'unknown'
+
+            if 'text' in list(update['message'].keys()):
+                #skipping unsupported messages
+                #get message
+                message = update['message']['text']
+
+                #logging
+                logging.info(f'USER [{username}]')
+                logging.info(f'MESSAGE {message}')
+
+                try:
+                    #start controller
+                    self.controller(message, chat_id)
+
+                except:
+                    #logging
+                    logging.error('ERROR IN CONTROLLER')
+                    self.downloader = main.MusicDownloader()
+
+                    self.bot.sendSticker(chat_id, sticker=open(f"Data/s1.webp",'rb'))
+                    self.bot.sendText(chat_id, 'Couldn\'t find that :(')
+
+            else:
+                #logging
+                logging.warning('UNSUPPORTED MESSAGE')
+
+                self.bot.sendSticker(chat_id, sticker=open(f"Data/s4.webp",'rb'))
+                self.bot.sendText(chat_id, 'Wooops! Something went wrong.\nERROR CODE 42 - You are so funny!')
 
 
     def mainloop(self):
@@ -398,53 +447,39 @@ class Controller(object):
             update = self.bot.checkLastUpdates()
 
             if update:
-
                 update_id = update['update_id']
 
-                if 'message' in list(update.keys()):
-                    #in case of new message
+                self.worker.delay(update=update)
 
-                    #get message data
-                    chat_id = update['message']['chat']['id']
-
-                    try:
-                        username = update['message']['chat']['username']
-                    except:
-                        username = 'unknown'
-
-                    if 'text' in list(update['message'].keys()):
-                        #skipping unsupported messages
-                        #get message
-                        message = update['message']['text']
-
-                        #logging
-                        logging.info(f'USER [{username}]')
-                        logging.info(f'MESSAGE {message}')
-
-                        try:
-                            #start controller
-                            self.controller(message, chat_id)
-
-                        except:
-                            #logging
-                            logging.error('ERROR IN CONTROLLER')
-                            self.downloader = main.MusicDownloader()
-
-                            self.bot.sendSticker(chat_id, sticker=open(f"Data/s1.webp",'rb'))
-                            self.bot.sendText(chat_id, 'Couldn\'t find that :(')
-
-                    else:
-                        #logging
-                        logging.warning('UNSUPPORTED MESSAGE')
-
-                        self.bot.sendSticker(chat_id, sticker=open(f"Data/s4.webp",'rb'))
-                        self.bot.sendText(chat_id, 'Wooops! Something went wrong.\nERROR CODE 42 - You are so funny!')
 
                 self.offset = update_id + 1
 
+@manager.task
+def do(update):
+    controller = Controller()
+    controller.worker(update)
+    del controller
+
+def mainloop():
+
+    offset = None
+    bot = BotHandler()
+
+    while True:
+
+        bot.getUpdates(offset)
+        update = bot.checkLastUpdates()
+
+        if update:
+            update_id = update['update_id']
+
+            #celery task
+            do.delay(update)
+
+            offset = update_id + 1
 
 
 if __name__ == '__main__':
+
     logging.info('Starting app')
-    controller = Controller()
-    controller.mainloop()
+    mainloop()
