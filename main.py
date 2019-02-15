@@ -93,10 +93,10 @@ class MusicDownloader(object):
 
                 os.rename(
                     f"{cachepath}/{info['uri']}/{info['uri']}.mp3",
-                    f"{fullpath}/{fixed_name}.mp3"
+                    f"{fullpath}/{info['uri']}.mp3"
                 )
                 #logging
-                logging.info(f'MOVE TO Downloads/{fixed_name}.mp3')
+                logging.info(f"MOVE TO Downloads/{info['uri']}.mp3")
 
                 #deleting cache
                 try:
@@ -156,10 +156,10 @@ class MusicDownloader(object):
 
             os.rename(
                 f"{cachepath}/{info['uri']}/{info['uri']}.mp3",
-                f"{fullpath}/{fixed_name}.mp3"
+                f"{fullpath}/{info['uri']}.mp3"
             )
             #logging
-            logging.info(f'MOVE TO Downloads/{fixed_name}.mp3')
+            logging.info(f"MOVE TO Downloads/{info['uri']}.mp3")
 
             #deleting cache
             try:
@@ -228,7 +228,7 @@ class MusicDownloader(object):
 
             os.rename(
                 f"{cachepath}/{info['uri']}/{info['uri']}.mp3",
-                f"{fullpath}/{fixed_name}.mp3"
+                f"{fullpath}/{info['uri']}.mp3"
             )
 
             #deleting cache

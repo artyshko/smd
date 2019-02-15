@@ -201,7 +201,6 @@ class Controller(object):
 
         return True if len([w for w in filter(r.match, text)]) else False
 
-
     def controller(self, message, id):
 
         type = self.classify(message)
@@ -263,18 +262,18 @@ class Controller(object):
                 fixed_name = fixed_name.replace("'",'')
                 fixed_name = fixed_name.replace("/","")
 
-                os.rename(
-                    f"Downloads/{fixed_name}.mp3",
-                    f"Downloads/{data['uri']}.mp3"
-                )
-                #logging
-                logging.info(f"RENAMED TO Downloads/{data['uri']}.mp3")
+                # os.rename(
+                #     f"Downloads/{fixed_name}.mp3",
+                #     f"Downloads/{data['uri']}.mp3"
+                # )
+                # #logging
+                # logging.info(f"RENAMED TO Downloads/{data['uri']}.mp3")
 
                 fixed_name = data['uri']
 
                 code = self.bot.sendAudio(
                     chat_id=id,
-                    audio=open(f"Downloads/{fixed_name}.mp3",'rb'),
+                    audio=open(f"Downloads/{data['uri']}.mp3",'rb'),
                     thumb=open(f"Downloads/{data['uri']}.png",'rb'),
                     name=f'{data["name"]}',
                     artist=f'{data["artist"][0]}'
@@ -286,9 +285,9 @@ class Controller(object):
                     self.bot.sendText(id,text='Something went wrong:(')
 
 
-                os.remove(f"Downloads/{fixed_name}.mp3")
+                os.remove(f"Downloads/{data['uri']}.mp3")
                 #logging
-                logging.info(f'DELETED Downloads/{fixed_name}.mp3')
+                logging.info(f"DELETED Downloads/{data['uri']}.mp3")
 
                 os.remove(f"Downloads/{data['uri']}.png")
                 #logging
@@ -301,7 +300,6 @@ class Controller(object):
                 self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
                 self.bot.sendText(id,text='Couldn\'t find that:(')
                 return False
-
             return True
 
 
@@ -353,18 +351,18 @@ class Controller(object):
 
         if self.downloader.downloadBySpotifyUri(message):
 
-            os.rename(
-                f"Downloads/{fixed_name}.mp3",
-                f"Downloads/{uri}.mp3"
-            )
-            #logging
-            logging.info(f"RENAMED TO Downloads/{uri}.mp3")
-
-            fixed_name = uri
+            # os.rename(
+            #     f"Downloads/{fixed_name}.mp3",
+            #     f"Downloads/{uri}.mp3"
+            # )
+            # #logging
+            # logging.info(f"RENAMED TO Downloads/{uri}.mp3")
+            #
+            # fixed_name = uri
 
             code = self.bot.sendAudio(
                 chat_id=id,
-                audio=open(f"Downloads/{fixed_name}.mp3",'rb'),
+                audio=open(f"Downloads/{uri}.mp3",'rb'),
                 thumb=open(f"Downloads/{uri}.png",'rb'),
                 name=f'{data["name"]}',
                 artist=f'{data["artist"][0]}'
@@ -378,9 +376,9 @@ class Controller(object):
                 self.bot.sendText(id,text='Something went wrong:(')
 
 
-            os.remove(f"Downloads/{fixed_name}.mp3")
+            os.remove(f"Downloads/{uri}.mp3")
             #logging
-            logging.info(f'DELETED Downloads/{fixed_name}.mp3')
+            logging.info(f'DELETED Downloads/{uri}.mp3')
 
             os.remove(f"Downloads/{uri}.png")
             #logging
