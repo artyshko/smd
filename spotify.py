@@ -189,7 +189,3 @@ class Spotify(object):
 
         data = self.client.track(uri)
         return data['duration_ms']
-
-if __name__ == '__main__':
-    sp = Spotify()
-    print('Time in ms: ', sp.getDuration(sp.search('O.Torvald Лише у моїх снах')['uri']))
