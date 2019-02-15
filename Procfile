@@ -1,2 +1,1 @@
-worker: celery worker --app=telegram
-worker: python3 telegram.py
+worker: python3 telegram.py celery worker --loglevel=info
