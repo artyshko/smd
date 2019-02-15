@@ -406,7 +406,11 @@ class Controller(object):
 
                     #get message data
                     chat_id = update['message']['chat']['id']
-                    username = update['message']['chat']['username']
+
+                    try:
+                        username = update['message']['chat']['username']
+                    except:
+                        username = 'unknown'
 
                     if 'text' in list(update['message'].keys()):
                         #skipping unsupported messages
