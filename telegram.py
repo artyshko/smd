@@ -146,7 +146,6 @@ class Controller(object):
 
         self.downloader = main.MusicDownloader()
 
-
     def classify(self, message):
 
         if str(message).find('open.spotify.com') > 0:
@@ -262,12 +261,6 @@ class Controller(object):
                 fixed_name = fixed_name.replace("'",'')
                 fixed_name = fixed_name.replace("/","")
 
-                # os.rename(
-                #     f"Downloads/{fixed_name}.mp3",
-                #     f"Downloads/{data['uri']}.mp3"
-                # )
-                # #logging
-                # logging.info(f"RENAMED TO Downloads/{data['uri']}.mp3")
 
                 fixed_name = data['uri']
 
@@ -314,7 +307,9 @@ class Controller(object):
         #get data
         uri = str(message).split(':')[-1]
         data = self.downloader.getData(message)
+
         try:
+
             #logging
             logging.info(f'SONG  {data["artist"][0]} - {data["name"]}')
 
@@ -328,22 +323,30 @@ class Controller(object):
             #logging
             logging.info(f'FIXED {fixed_name}')
         except:
+
             #logging
             logging.error(f'self.downloader.getData return None')
+
             self.downloader = main.MusicDownloader()
+
+            #logging
             logging.warning(f'Restarting downloader')
             logging.warning(f'Trying do the same')
+
             #get data
             uri = str(message).split(':')[-1]
             data = self.downloader.getData(message)
+
             #logging
             logging.info(f'SONG  {data["artist"][0]} - {data["name"]}')
+
             #fix name
             fixed_name = f'{data["artist"][0]} - {data["name"]}'
             fixed_name = fixed_name.replace('.','')
             fixed_name = fixed_name.replace(',','')
             fixed_name = fixed_name.replace("'",'')
             fixed_name = fixed_name.replace("/","")
+
             #logging
             logging.info(f'FIXED {fixed_name}')
 
@@ -351,14 +354,6 @@ class Controller(object):
 
         if self.downloader.downloadBySpotifyUri(message):
 
-            # os.rename(
-            #     f"Downloads/{fixed_name}.mp3",
-            #     f"Downloads/{uri}.mp3"
-            # )
-            # #logging
-            # logging.info(f"RENAMED TO Downloads/{uri}.mp3")
-            #
-            # fixed_name = uri
 
             code = self.bot.sendAudio(
                 chat_id=id,
@@ -406,47 +401,40 @@ class Controller(object):
 
                 update_id = update['update_id']
 
-                try:
+                if 'message' in list(update.keys()):
+                    #in case of new message
 
-                    if 'message' in list(update.keys()):
-                        #in case of new message
+                    #get message data
+                    chat_id = update['message']['chat']['id']
+                    username = update['message']['chat']['username']
 
-                        #get message data
-                        chat_id = update['message']['chat']['id']
-                        username = update['message']['chat']['username']
+                    if 'text' in list(update['message'].keys()):
+                        #skipping unsupported messages
+                        #get message
+                        message = update['message']['text']
 
-                        if 'text' in list(update['message'].keys()):
-                            #filter unsupported messages
-                            #get message
-                            message = update['message']['text']
+                        #logging
+                        logging.info(f'USER [{username}]')
+                        logging.info(f'MESSAGE {message}')
 
+                        try:
+                            #start controller
+                            self.controller(message, chat_id)
+
+                        except:
                             #logging
-                            logging.info(f'USER [{username}]')
-                            logging.info(f'MESSAGE {message}')
+                            logging.error('ERROR IN CONTROLLER')
+                            self.downloader = main.MusicDownloader()
 
-                            try:
-                                #start controller
-                                self.controller(message, chat_id)
+                            self.bot.sendSticker(chat_id, sticker=open(f"Data/s1.webp",'rb'))
+                            self.bot.sendText(chat_id, 'Couldn\'t find that :(')
 
-                            except:
-                                #logging
-                                logging.error('ERROR IN CONTROLLER')
-                                self.downloader = main.MusicDownloader()
+                    else:
+                        #logging
+                        logging.warning('UNSUPPORTED MESSAGE')
 
-                                self.bot.sendSticker(chat_id, sticker=open(f"Data/s1.webp",'rb'))
-                                self.bot.sendText(chat_id, 'Couldn\'t find that :(')
-
-                        else:
-                            #logging
-                            logging.warning('UNSUPPORTED MESSAGE')
-
-                            self.bot.sendSticker(chat_id, sticker=open(f"Data/s4.webp",'rb'))
-                            self.bot.sendText(chat_id, 'Wooops! Something went wrong.\nERROR CODE 42 - You are so funny!')
-                except:
-                    #FIX
-                    #logging
-                    logging.warning('ERROR IN MAIN LOOP')
-                    self.downloader = main.MusicDownloader()
+                        self.bot.sendSticker(chat_id, sticker=open(f"Data/s4.webp",'rb'))
+                        self.bot.sendText(chat_id, 'Wooops! Something went wrong.\nERROR CODE 42 - You are so funny!')
 
                 self.offset = update_id + 1
 
