@@ -1,5 +1,5 @@
 from celery import Celery
-import redis
+
 
 import requests
 import datetime
@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO,
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 
-manager = Celery('telegram',broker='redis://localhost:6379/0')
+manager = Celery('telegram',broker='redis://smd:mThquQxrJbyVYVlmLLAmwzLd2t5vDWVO@redis-12274.c52.us-east-1-4.ec2.cloud.redislabs.com:12274')
 
 
 
