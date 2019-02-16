@@ -126,7 +126,7 @@ class Youtube(object):
             logging.info(f"Start downloading")
 
 
-            yt.download('cache/'+ path, filename=filename)
+            yt.download('cache/'+ path, filename=path)
 
             #logging
             logging.info(f"Downloading successful")
@@ -175,6 +175,9 @@ class Youtube(object):
         data2 = data2[:2] if len(data2) >= 2 else data2
 
         research = data2 + data1
+
+        if duration == 0:
+            return research
 
         result = -1
         link = None

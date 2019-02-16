@@ -171,25 +171,37 @@ class Controller(object):
         song, artist, title = message, [], []
         message = str(message).split(' ')
 
-        try:
+        count = 0
+        for word in message:
+            if str(word) == 'by':
+                count+=1
+        if count != 1:
+            try:
 
-            for word in message:
-                try:
-                    if str(word).lower().find(slug[0]) > -1:
-                        title.append(word)
-                        slug.pop(0)
+                for word in message:
+                    try:
+                        if str(word).lower().find(slug[0]) > -1:
+                            title.append(word)
+                            slug.pop(0)
 
-                    else:
+                        else:
+                            artist.append(word)
+                    except:
                         artist.append(word)
-                except:
-                    artist.append(word)
 
-            artist = " ".join(artist[1:])
-            title = " ".join(title)
-            song = f"{artist} - {title}"
+                artist = " ".join(artist[1:])
+                title = " ".join(title)
+                song = f"{artist} - {title}"
 
-        except:pass
-        return str(song).replace('&','')
+            except:pass
+            return str(song).replace('&','')
+        else:
+            song = " ".join(message)
+            song = str(song).replace('by','-')
+            song = str(song).replace('&','')
+            return str(song)
+
+
 
     def convertToURI(self, link):
         return "spotify:track:" + str(str(link).split('/')[-1]).split('?')[0]
@@ -253,6 +265,7 @@ class Controller(object):
 
                 state, data =  self.downloader.downloadBySearchQuery(message)
 
+
             if state:
 
                 fixed_name = f'{data["artist"][0]} - {data["name"]}'
@@ -308,34 +321,13 @@ class Controller(object):
         uri = str(message).split(':')[-1]
         data = self.downloader.getData(message)
 
-        try:
-
-            #logging
-            logging.info(f'SONG  {data["artist"][0]} - {data["name"]}')
-
-            #fix name
-            fixed_name = f'{data["artist"][0]} - {data["name"]}'
-            fixed_name = fixed_name.replace('.','')
-            fixed_name = fixed_name.replace(',','')
-            fixed_name = fixed_name.replace("'",'')
-            fixed_name = fixed_name.replace("/","")
-
-            #logging
-            logging.info(f'FIXED {fixed_name}')
-        except:
-
-            #logging
-            logging.error(f'self.downloader.getData return None')
-
-            self.downloader = main.MusicDownloader()
-
+        if not data:
             #logging
             logging.warning(f'Restarting downloader')
             logging.warning(f'Trying do the same')
-
-            #get data
-            uri = str(message).split(':')[-1]
+            self.downloader = main.MusicDownloader()
             data = self.downloader.getData(message)
+        if data:
 
             #logging
             logging.info(f'SONG  {data["artist"][0]} - {data["name"]}')
@@ -351,43 +343,42 @@ class Controller(object):
             logging.info(f'FIXED {fixed_name}')
 
 
-
-        if self.downloader.downloadBySpotifyUri(message):
-
-
-            code = self.bot.sendAudio(
-                chat_id=id,
-                audio=open(f"Downloads/{uri}.mp3",'rb'),
-                thumb=open(f"Downloads/{uri}.png",'rb'),
-                name=f'{data["name"]}',
-                artist=f'{data["artist"][0]}'
-            )
+            if self.downloader.downloadBySpotifyUri(message):
 
 
-            if int(code) != 200:
+                code = self.bot.sendAudio(
+                    chat_id=id,
+                    audio=open(f"Downloads/{uri}.mp3",'rb'),
+                    thumb=open(f"Downloads/{uri}.png",'rb'),
+                    name=f'{data["name"]}',
+                    artist=f'{data["artist"][0]}'
+                )
+
+
+                if int(code) != 200:
+                    #logging
+                    logging.warning(f'CODE {code}')
+                    self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
+                    self.bot.sendText(id,text='Something went wrong:(')
+
+
+                os.remove(f"Downloads/{uri}.mp3")
                 #logging
-                logging.warning(f'CODE {code}')
-                self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
-                self.bot.sendText(id,text='Something went wrong:(')
+                logging.info(f'DELETED Downloads/{uri}.mp3')
 
+                os.remove(f"Downloads/{uri}.png")
+                #logging
+                logging.info(f'DELETED Downloads/{uri}.png')
 
-            os.remove(f"Downloads/{uri}.mp3")
-            #logging
-            logging.info(f'DELETED Downloads/{uri}.mp3')
-
-            os.remove(f"Downloads/{uri}.png")
-            #logging
-            logging.info(f'DELETED Downloads/{uri}.png')
+                return True
 
         else:
 
             #logging
             logging.error(f'SENDED "Something went wrong" MESSAGE')
             self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
-            self.bot.sendText(id,text='Something went wrong:(')
+            self.bot.sendText(id,text='Couldn\'t find that:(')
             return False
-
-        return True
 
 
 

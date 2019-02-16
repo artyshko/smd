@@ -1,4 +1,5 @@
 import requests
+import random
 
 class LastFM(object):
 
@@ -30,16 +31,12 @@ class LastFM(object):
             _url = f'http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key={self.__api_key }&artist={artist}&track={track}&format=json'
             response = requests.post(_url).json()
 
-            uri = '1000010000100001000010000010000101'
-
-            try:
-                uri = str(response['track']['album']['image'][-1]['#text']).split('/')[-1].split('.')[0]
-            except:
-                pass
+            uri = random.randint(1000000000,10000000000)
+            uri = 's' + str(uri) + 't'
 
             try:
 
-                data =  {
+                info =  {
                     'uri' : uri,
                     'name' : response['track']['name'],
                     'artist' : [response['track']['artist']['name']],
@@ -48,11 +45,28 @@ class LastFM(object):
                     'duration_ms' : response['track']['duration']
                 }
 
-                return data
+                return info
 
             except:
-                pass
 
+                try:
+
+                    dur = 0
+                    try: dur = data[0]['duration']
+                    except:pass
+
+                    info =  {
+                        'uri' : uri,
+                        'name' : data[0]['name'],
+                        'artist'  : [data[0]['artist']],
+                        'album' : data[0]['name'],
+                        'image' : data[0]['image'][-1]['#text'],
+                        'duration_ms' : dur
+                    }
+                    return info
+
+                except:
+                    pass
         return None
 
     def get(self, text):
@@ -62,5 +76,5 @@ class LastFM(object):
 if __name__ == '__main__':
 
     last = LastFM()
-    data = last.get('Friendships (Original Mix) - Pascal')
+    data = last.get('Ljubimaja Pesnja Tvoey Sestry - Poshlaja Molli')
     print(data)

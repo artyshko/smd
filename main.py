@@ -2,6 +2,7 @@
 from spotify import Spotify
 from youtube import Youtube
 from editor import TagEditor
+from lastfm import LastFM
 import sys, getopt, shutil
 import os
 
@@ -20,6 +21,7 @@ class MusicDownloader(object):
         self.__youtube = Youtube()
         self.__spotify = Spotify()
         self.__editor = TagEditor()
+        self.__last = LastFM()
 
 
     def __downloadMusicFromYoutube(self, name, uri, dur):
@@ -115,6 +117,9 @@ class MusicDownloader(object):
         #get info
         info = self.__spotify.search(query=query)
 
+        if not info:
+            info = self.__last.get(query)
+
         if info:
 
             #logging
@@ -128,7 +133,6 @@ class MusicDownloader(object):
 
             #logging
             logging.info(f'FIXED {fixed_name}')
-
 
             #finding and download from YouTube and tagging
             self.__downloadMusicFromYoutube(fixed_name, info['uri'], info['duration_ms'])
@@ -173,6 +177,8 @@ class MusicDownloader(object):
             return True, info
         else:
             return False, None
+
+
 
     def downloadBySpotifyUriFromFile(self, filename):
         try:
