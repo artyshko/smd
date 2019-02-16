@@ -1,1 +1,1 @@
-worker: python3 telegram.py & celery worker -A telegram --loglevel=info
+worker: bash worker.sh
