@@ -202,8 +202,6 @@ class Controller(object):
             song = str(song).replace('&','')
             return str(song)
 
-
-
     def convertToURI(self, link):
         return "spotify:track:" + str(str(link).split('/')[-1]).split('?')[0]
 
@@ -397,10 +395,11 @@ class Controller(object):
                         logging.info(f'USER [{username}]')
                         logging.info(f'MESSAGE {message}')
 
-                        #start controller
-                        self.controller(message, chat_id)
+
                         try:
-                            pass
+                            
+                            #start controller
+                            self.controller(message, chat_id)
 
                         except:
                             #logging
