@@ -270,12 +270,6 @@ class Controller(object):
             if state:
 
                 fixed_name = f'{data["artist"][0]} - {data["name"]}'
-                fixed_name = fixed_name.replace('.','')
-                fixed_name = fixed_name.replace(',','')
-                fixed_name = fixed_name.replace("'",'')
-                fixed_name = fixed_name.replace("/","")
-
-
                 fixed_name = data['uri']
 
                 code = self.bot.sendAudio(
@@ -328,21 +322,11 @@ class Controller(object):
             logging.warning(f'Trying do the same')
             self.downloader = main.MusicDownloader()
             data = self.downloader.getData(message)
+
         if data:
 
             #logging
             logging.info(f'SONG  {data["artist"][0]} - {data["name"]}')
-
-            #fix name
-            fixed_name = f'{data["artist"][0]} - {data["name"]}'
-            fixed_name = fixed_name.replace('.','')
-            fixed_name = fixed_name.replace(',','')
-            fixed_name = fixed_name.replace("'",'')
-            fixed_name = fixed_name.replace("/","")
-
-            #logging
-            logging.info(f'FIXED {fixed_name}')
-
 
             if self.downloader.downloadBySpotifyUri(message):
 
