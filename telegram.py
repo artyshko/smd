@@ -196,8 +196,9 @@ class Controller(object):
             except:pass
             return str(song).replace('&','')
         else:
-            song = " ".join(message)
-            song = str(song).replace('by','-')
+            new = []
+            [new.append(word if str(word) != 'by' else '-') for word in message]
+            song = " ".join(new)
             song = str(song).replace('&','')
             return str(song)
 
@@ -396,18 +397,25 @@ class Controller(object):
                         logging.info(f'USER [{username}]')
                         logging.info(f'MESSAGE {message}')
 
-
+                        #start controller
+                        self.controller(message, chat_id)
                         try:
-                            #start controller
-                            self.controller(message, chat_id)
+                            pass
 
                         except:
                             #logging
                             logging.error('ERROR IN CONTROLLER')
-                            self.downloader = main.MusicDownloader()
 
-                            self.bot.sendSticker(chat_id, sticker=open(f"Data/s1.webp",'rb'))
-                            self.bot.sendText(chat_id, 'Couldn\'t find that :(')
+                            try:
+
+                                self.downloader = main.MusicDownloader()
+                                #restart controller
+                                self.controller(message, chat_id)
+
+                            except:
+
+                                self.bot.sendSticker(chat_id, sticker=open(f"Data/s1.webp",'rb'))
+                                self.bot.sendText(chat_id, 'Couldn\'t find that :(')
 
                     else:
                         #logging
