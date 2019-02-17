@@ -19,6 +19,8 @@ class TagEditor(object):
 
     @staticmethod
     def getImageFromSpotify(url, name):
+        if not len(url):
+            url='https://lastfm-img2.akamaized.net/i/u/300x300/f1f47c8115cdfd5d58a0631591e8cbcc.png'
         urllib.request.urlretrieve(url, name)
 
 

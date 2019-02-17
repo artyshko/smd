@@ -76,5 +76,5 @@ class LastFM(object):
 if __name__ == '__main__':
 
     last = LastFM()
-    data = last.get('Ljubimaja Pesnja Tvoey Sestry - Poshlaja Molli')
+    data = last.get('bladetrinity16 - Linkin Park - Carousel Lyrics')
     print(data)
