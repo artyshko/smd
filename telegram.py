@@ -253,6 +253,14 @@ class Controller(object):
 
                 logging.info(f"NAME {message}")
 
+            elif str(message).find('Мое открытие на Shazam:') > -1:
+                #fix for russian lang
+                new = str(message).split('Мое открытие на Shazam: ')[1]
+                new = str(new).split('. https')[0]
+                message = new
+                #logging
+                logging.info(f"NAME {message}")
+
             state, data =  self.downloader.downloadBySearchQuery(message)
 
             #FIX
