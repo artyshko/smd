@@ -311,14 +311,15 @@ class Controller(object):
                             logging.warning(f"This video is unavailable.")
                             self.bot.sendSticker(id,sticker=open(f"Data/s2.webp",'rb'),)
                             self.bot.sendText(id,text='This video is unavailable for me(')
-
+                            self.bot.sendText(id,text="I'm trying to find the same one")
+                            self.controller(name, id)
                             return False
 
                     except:
 
                         logging.warning(f"This video is unavailable.")
-                        self.bot.sendSticker(id,sticker=open(f"Data/s2.webp",'rb'),)
-                        self.bot.sendText(id,text='This video is unavailable for me(')
+                        self.bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
+                        self.bot.sendText(id,text='Couldn\'t find that:(')
 
                         return False
 
