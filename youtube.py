@@ -222,10 +222,8 @@ class Youtube(object):
             for link in soup.findAll('meta', attrs={'property': 'og:video:tag'}):
                 _result.append(link.get('content'))
 
-            if len(_result) == 3:
-                name = ' '.join(_result)
-            elif _result:
-                name = f'{_result[0]} - {_title}'
+            if len(_result) > 1:
+                name = f"{_result[0]} - {_title}"
             else:
                 name = _title
         else:
@@ -234,7 +232,7 @@ class Youtube(object):
         return name
 
 if __name__ == "__main__":
-    
+
     y = Youtube()
     name = y.getNameFromYoutube('https://youtube.com/watch?v=bShFqyt6Ad8')
     print(name)
