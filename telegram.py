@@ -271,7 +271,7 @@ class Controller(object):
 
                 if str(message).find('music.') > -1:
 
-                    self.downloader = MusicDownloader()
+                    self.downloader = main.MusicDownloader()
 
                     link = ''.join(str(link).split('music.')).split('&')[0]
                     name = self.downloader.getYoutubeMusicInfo(link)
@@ -477,7 +477,7 @@ class Controller(object):
 
                         #start controller
                         self.controller(message, chat_id)
-                        
+
                         try:
 
                             pass
