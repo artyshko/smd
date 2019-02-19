@@ -475,10 +475,12 @@ class Controller(object):
                         logging.info(f'MESSAGE {message}')
 
 
+                        #start controller
+                        self.controller(message, chat_id)
+                        
                         try:
 
-                            #start controller
-                            self.controller(message, chat_id)
+                            pass
 
                         except:
                             #logging
