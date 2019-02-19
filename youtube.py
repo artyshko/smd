@@ -210,15 +210,17 @@ class Youtube(object):
 
     def getNameFromYoutube(self, url):
 
-        y = YouTube(url)
+        response = requests.get(url, headers=self.headers)
+        soup = BeautifulSoup(response.text,'lxml')
+
+        _title = soup.find('title').text
+        _title = str(_title).replace(' - YouTube', '')
 
         _result = []
-        _title = y.title
         __name = None
 
         if not str(_title).find('-') > -1:
 
-            soup = BeautifulSoup(y.watch_html,'lxml')
             for link in soup.findAll('meta', attrs={'property': 'og:video:tag'}):
                 _result.append(link.get('content'))
 
@@ -234,5 +236,5 @@ class Youtube(object):
 if __name__ == "__main__":
 
     y = Youtube()
-    name = y.getNameFromYoutube('https://youtube.com/watch?v=bShFqyt6Ad8')
+    name = y.getNameFromYoutube('https://youtube.com/watch?v=H4buRu9-Wb4')
     print(name)
