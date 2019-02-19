@@ -275,51 +275,51 @@ class Controller(object):
 
                     link = ''.join(str(link).split('music.')).split('&')[0]
                     try:
-                        
+
                         name = self.downloader.getYoutubeMusicInfo(link)
                         tags = self.downloader.getLastFMTags(name)
+
+                        state, data = self.downloader.downloadFromYoutubeMusic(url=link, info=tags)
+
+                        if state:
+
+                            code = self.bot.sendAudio(
+                                chat_id=id,
+                                audio=open(f"Downloads/{data['uri']}.mp3",'rb'),
+                                thumb=open(f"Downloads/{data['uri']}.png",'rb'),
+                                name=f'{data["name"]}',
+                                artist=f'{data["artist"][0]}'
+                            )
+
+                            if int(code) != 200:
+                                #logging
+                                logging.warning(f'CODE {code}')
+                                self.bot.sendText(id,text='Something went wrong:(')
+
+
+                            os.remove(f"Downloads/{data['uri']}.mp3")
+                            #logging
+                            logging.info(f"DELETED Downloads/{data['uri']}.mp3")
+
+                            os.remove(f"Downloads/{data['uri']}.png")
+                            #logging
+                            logging.info(f"DELETED Downloads/{data['uri']}.png")
+
+
+                        else:
+                            #logging
+                            logging.error(f'SENDED "Couldn\'t find that" MESSAGE')
+                            self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
+                            self.bot.sendText(id,text='Couldn\'t find that:(')
+
+                            return False
 
                     except:
 
                         logging.warning(f"This video is unavailable.")
                         self.bot.sendSticker(id,sticker=open(f"Data/s2.webp",'rb'),)
                         self.bot.sendText(id,text='This video is unavailable for me(')
-
-                        return False
-
-                    state, data = self.downloader.downloadFromYoutubeMusic(url=link, info=tags)
-
-                    if state:
-
-                        code = self.bot.sendAudio(
-                            chat_id=id,
-                            audio=open(f"Downloads/{data['uri']}.mp3",'rb'),
-                            thumb=open(f"Downloads/{data['uri']}.png",'rb'),
-                            name=f'{data["name"]}',
-                            artist=f'{data["artist"][0]}'
-                        )
-
-                        if int(code) != 200:
-                            #logging
-                            logging.warning(f'CODE {code}')
-                            self.bot.sendText(id,text='Something went wrong:(')
-
-
-                        os.remove(f"Downloads/{data['uri']}.mp3")
-                        #logging
-                        logging.info(f"DELETED Downloads/{data['uri']}.mp3")
-
-                        os.remove(f"Downloads/{data['uri']}.png")
-                        #logging
-                        logging.info(f"DELETED Downloads/{data['uri']}.png")
-
-
-                    else:
-                        #logging
-                        logging.error(f'SENDED "Couldn\'t find that" MESSAGE')
-                        self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
-                        self.bot.sendText(id,text='Couldn\'t find that:(')
-
+                        
                         return False
 
                     return True
