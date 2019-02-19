@@ -271,6 +271,8 @@ class Controller(object):
 
                 if str(message).find('music.') > -1:
 
+                    self.downloader = MusicDownloader()
+
                     link = ''.join(str(link).split('music.')).split('&')[0]
                     name = self.downloader.getYoutubeMusicInfo(link)
                     tags = self.downloader.getLastFMTags(name)
@@ -309,7 +311,7 @@ class Controller(object):
                         self.bot.sendText(id,text='Couldn\'t find that:(')
 
                         return False
-                        
+
                     return True
 
 
