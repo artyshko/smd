@@ -56,6 +56,12 @@ class MusicDownloader(object):
         except:
             return None
 
+    def getLastFMTags(self, name):
+        return self.__last.get(name)
+
+    def getYoutubeMusicInfo(self, url):
+        return self.__youtube.getNameFromYoutube(url)
+
     def downloadBySpotifyUri(self, uri):
 
         #get info
@@ -178,8 +184,6 @@ class MusicDownloader(object):
         else:
             return False, None
 
-
-
     def downloadBySpotifyUriFromFile(self, filename):
         try:
 
@@ -241,8 +245,66 @@ class MusicDownloader(object):
             try: shutil.rmtree(f"cache/{info['uri']}")
             except: pass
 
+    def downloadFromYoutubeMusic(self, url, info):
+
+        uri = info['uri']
+
+        #downloading video from youtube
+        if self.__youtube.download(
+            url=url,
+            path=uri,
+            filename=uri
+        ):
+
+            #converting video to mp3 file
+            self.__youtube.convertVideoToMusic(
+                uri=uri
+            )
+
+            self.__editor.setTags(
+                data=info
+            )
+
+            cachepath = os.getcwd() + '/cache'
+            fullpath = os.getcwd() + '/Downloads'
+
+            #logging
+            logging.info(f'CACHEPATH {cachepath}')
+            logging.info(f'FULLPATH {fullpath}')
+
+            if not os.path.exists(fullpath):
+                os.makedirs(fullpath)
+
+            os.rename(
+                f"{cachepath}/{info['uri']}/{info['uri']}.png",
+                f"{fullpath}/{info['uri']}.png"
+            )
+            #logging
+            logging.info(f"MOVE TO Downloads/{info['uri']}.png")
+
+            os.rename(
+                f"{cachepath}/{info['uri']}/{info['uri']}.mp3",
+                f"{fullpath}/{info['uri']}.mp3"
+            )
+            #logging
+            logging.info(f"MOVE TO Downloads/{info['uri']}.mp3")
+
+            #deleting cache
+            try:
+                shutil.rmtree(f"cache/{info['uri']}")
+                #logging
+                logging.info(f"DELETED cache/{info['uri']}")
+            except:
+                #logging
+                logging.error(f"DELETING cache/{info['uri']}")
+
+            return True, info
+        else:
+            return False, None
+
     def search(self, query):
         return self.__spotify.search(query=query)
+
 
 
 class CLI(object):

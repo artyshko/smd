@@ -15,7 +15,7 @@ console.setLevel(logging.INFO)
 class BotHandler(object):
 
     def __init__(self):
-        self.token = '752979930:AAFhdyGx0CSOJ-m17wLGN0NhrxvpwCqCPoQ'
+        self.token = '738408029:AAGdU7xFXn--qtRktVnk9J8zqz3mFmTYd_0' #unstable
         self.api_url = "https://api.telegram.org/bot{}/".format(self.token)
 
     def getUpdates(self, offset=None, timeout=30):
@@ -261,6 +261,75 @@ class Controller(object):
                 #logging
                 logging.info(f"NAME {message}")
 
+            elif str(message).find('youtube.com/watch') > -1:
+                #logging
+                logging.info(f"YOUTUBE MUSIC DETECTED")
+
+                link = 'http' + str(message).split('http')[-1]
+                #logging
+                logging.info(f"LINK {link}")
+
+                if str(message).find('music.') > -1:
+
+                    link = ''.join(str(link).split('music.')).split('&')[0]
+                    name = self.downloader.getYoutubeMusicInfo(link)
+                    tags = self.downloader.getLastFMTags(name)
+
+                    state, data = self.downloader.downloadFromYoutubeMusic(url=link, info=tags)
+
+                    if state:
+
+                        code = self.bot.sendAudio(
+                            chat_id=id,
+                            audio=open(f"Downloads/{data['uri']}.mp3",'rb'),
+                            thumb=open(f"Downloads/{data['uri']}.png",'rb'),
+                            name=f'{data["name"]}',
+                            artist=f'{data["artist"][0]}'
+                        )
+
+                        if int(code) != 200:
+                            #logging
+                            logging.warning(f'CODE {code}')
+                            self.bot.sendText(id,text='Something went wrong:(')
+
+
+                        os.remove(f"Downloads/{data['uri']}.mp3")
+                        #logging
+                        logging.info(f"DELETED Downloads/{data['uri']}.mp3")
+
+                        os.remove(f"Downloads/{data['uri']}.png")
+                        #logging
+                        logging.info(f"DELETED Downloads/{data['uri']}.png")
+
+
+                    else:
+                        #logging
+                        logging.error(f'SENDED "Couldn\'t find that" MESSAGE')
+                        self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
+                        self.bot.sendText(id,text='Couldn\'t find that:(')
+
+                        return False
+                        
+                    return True
+
+
+
+
+
+                else:
+                    logging.warning(f"YOUTUBE SONG DETECTED")
+                    self.bot.sendSticker(id,sticker=open(f"Data/s5.webp",'rb'),)
+                    self.bot.sendText(id,text='You need to use YouTube Music instead of YouTube.')
+
+                return True
+
+            elif str(message).find('youtu.be') > -1:
+                logging.warning(f"YOUTUBE SONG DETECTED")
+                self.bot.sendSticker(id,sticker=open(f"Data/s5.webp",'rb'),)
+                self.bot.sendText(id,text='You need to use YouTube Music instead of YouTube.')
+                return True
+
+
             state, data =  self.downloader.downloadBySearchQuery(message)
 
             #FIX
@@ -405,7 +474,7 @@ class Controller(object):
 
 
                         try:
-                            
+
                             #start controller
                             self.controller(message, chat_id)
 
