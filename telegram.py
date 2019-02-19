@@ -308,9 +308,9 @@ class Controller(object):
 
                         else:
                             #logging
-                            logging.error(f'SENDED "Couldn\'t find that" MESSAGE')
-                            self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
-                            self.bot.sendText(id,text='Couldn\'t find that:(')
+                            logging.warning(f"This video is unavailable.")
+                            self.bot.sendSticker(id,sticker=open(f"Data/s2.webp",'rb'),)
+                            self.bot.sendText(id,text='This video is unavailable for me(')
 
                             return False
 
@@ -319,14 +319,10 @@ class Controller(object):
                         logging.warning(f"This video is unavailable.")
                         self.bot.sendSticker(id,sticker=open(f"Data/s2.webp",'rb'),)
                         self.bot.sendText(id,text='This video is unavailable for me(')
-                        
+
                         return False
 
                     return True
-
-
-
-
 
                 else:
                     logging.warning(f"YOUTUBE SONG DETECTED")
