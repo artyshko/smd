@@ -274,8 +274,18 @@ class Controller(object):
                     self.downloader = main.MusicDownloader()
 
                     link = ''.join(str(link).split('music.')).split('&')[0]
-                    name = self.downloader.getYoutubeMusicInfo(link)
-                    tags = self.downloader.getLastFMTags(name)
+                    try:
+                        
+                        name = self.downloader.getYoutubeMusicInfo(link)
+                        tags = self.downloader.getLastFMTags(name)
+
+                    except:
+
+                        logging.warning(f"This video is unavailable.")
+                        self.bot.sendSticker(id,sticker=open(f"Data/s2.webp",'rb'),)
+                        self.bot.sendText(id,text='This video is unavailable for me(')
+
+                        return False
 
                     state, data = self.downloader.downloadFromYoutubeMusic(url=link, info=tags)
 
