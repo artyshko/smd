@@ -15,7 +15,7 @@ console.setLevel(logging.INFO)
 class BotHandler(object):
 
     def __init__(self):
-        self.token = '738408029:AAGdU7xFXn--qtRktVnk9J8zqz3mFmTYd_0' #unstable
+        self.token = '752979930:AAFhdyGx0CSOJ-m17wLGN0NhrxvpwCqCPoQ'
         self.api_url = "https://api.telegram.org/bot{}/".format(self.token)
 
     def getUpdates(self, offset=None, timeout=30):
@@ -482,12 +482,10 @@ class Controller(object):
                         logging.info(f'MESSAGE {message}')
 
 
-                        #start controller
-                        self.controller(message, chat_id)
-
                         try:
 
-                            pass
+                            #start controller
+                            self.controller(message, chat_id)
 
                         except:
                             #logging
