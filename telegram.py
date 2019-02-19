@@ -231,12 +231,12 @@ class Controller(object):
             )
             self.bot.sendPhoto(
                 chat_id=id,
-                photo=open(f"Data/header2.png",'rb'),
+                photo=open(f"Data/header3.png",'rb'),
                 text=''
             )
             self.bot.sendPhoto(
                 chat_id=id,
-                photo=open(f"Data/header3.png",'rb'),
+                photo=open(f"Data/header5.png",'rb'),
                 text=''
             )
 
@@ -266,8 +266,6 @@ class Controller(object):
                 logging.info(f"YOUTUBE MUSIC DETECTED")
 
                 link = 'http' + str(message).split('http')[-1]
-                #logging
-                logging.info(f"LINK {link}")
 
                 if str(message).find('music.') > -1:
 
@@ -275,8 +273,14 @@ class Controller(object):
 
                     link = ''.join(str(link).split('music.')).split('&')[0]
 
+                    #logging
+                    logging.info(f"LINK {link}")
+
                     name = self.downloader.getYoutubeMusicInfo(link)
                     tags = self.downloader.getLastFMTags(name)
+
+                    #logging
+                    logging.info(f"NAME {name}")
 
                     try:
                         state, data = self.downloader.downloadFromYoutubeMusic(url=link, info=tags)
