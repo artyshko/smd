@@ -3,6 +3,7 @@ import datetime
 import io, os
 import re
 import main
+import apple
 
 import logging
 
@@ -145,6 +146,7 @@ class Controller(object):
         self.offset = None
 
         self.downloader = main.MusicDownloader()
+        self.apple = apple.AppleMusic()
 
     def classify(self, message):
 
@@ -344,6 +346,16 @@ class Controller(object):
                 self.bot.sendText(id,text='You need to use YouTube Music instead of YouTube.')
                 return True
 
+            elif str(message).find('itunes.apple.com') > 1:
+
+                name = self.apple.getName(message)
+                message = name
+                if not name:
+                    #logging
+                    logging.error(f'SENDED "Couldn\'t find that" MESSAGE')
+                    self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
+                    self.bot.sendText(id,text='Couldn\'t find that:(')
+                    return False
 
             state, data =  self.downloader.downloadBySearchQuery(message)
 
