@@ -5,4 +5,5 @@
 <img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram-unstable/Data/header1.png">
 <img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram-unstable/Data/header2.png">
 <img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram-unstable/Data/header3.png">
+<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram-unstable/Data/header3.png">
 <img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram-unstable/Data/header4.png">
