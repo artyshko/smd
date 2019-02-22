@@ -77,6 +77,30 @@ Example:
 ./main.py -s spotify:track:7ARveOiD31w2Nq0n5FsSf8
 ```
 
+### Query mode
+Example:
+```
+./main.py -q "The XX - Intro"
+```
+
+### YouTube Music mode
+Example:
+```
+./main.py -y "https://music.youtube.com/watch?v=HnXzzTIFu_U&list=RDAMVMHnXzzTIFu_U"
+```
+
+### YouTube video mode
+Example:
+```
+./main.py -v "https://www.youtube.com/watch?v=JHi-WGFGWek"
+```
+
+### Apple Music mode
+Example:
+```
+./main.py -a "https://itunes.apple.com/us/album/i-wanna-be-yours/663097964?i=663098065"
+```
+
 ### File mode
 #### Create file with songs
 <img align="center" src="https://i.ibb.co/JQsMCYV/image3.png">
