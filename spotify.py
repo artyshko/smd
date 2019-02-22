@@ -110,7 +110,8 @@ class Spotify(object):
                         'name' : data['name'],
                         'artist' : [ artist['name'] for artist in data['artists']],
                         'album' : data['album']['name'],
-                        'image' : data['album']['images'][0]['url']
+                        'image' : data['album']['images'][0]['url'],
+                        'duration_ms':data['duration_ms']
                     })
 
             return tracks

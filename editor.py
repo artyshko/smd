@@ -9,13 +9,6 @@ from mutagen.id3 import ID3, APIC, error
 import urllib.request
 
 
-import logging
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(levelname)-2s - %(message)s')
-console = logging.StreamHandler()
-console.setLevel(logging.INFO)
-
-
 class TagEditor(object):
 
     @staticmethod
@@ -66,8 +59,6 @@ class TagEditor(object):
             #download image
             TagEditor.getImageFromSpotify(data['image'], f"cache/{data['uri']}/{data['uri']}.png")
 
-            #logging
-            logging.info(f"IMAGE cache/{data['uri']}/{data['uri']}.png")
 
             audio = MP3(
                 f"cache/{data['uri']}/{data['uri']}.mp3",
@@ -110,11 +101,6 @@ class TagEditor(object):
             audio.save()
             ID3(f"cache/{data['uri']}/{data['uri']}.mp3").save(v2_version=3)
 
-            #logging
-            logging.info(f"SAVED cache/{data['uri']}/{data['uri']}.mp3")
-
-            # #delete downloaded picture
-            # os.remove('.temp.jpg')
 
             return True
         else:

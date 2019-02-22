@@ -9,21 +9,9 @@ import os
 #FIX STARTUP PYGAME HELLO MESSAGE
 #THANKS @Mad Physicist FROM STACK OVERFLOW
 import contextlib
-# with contextlib.redirect_stdout(None):
-#     from moviepy.editor import *
-#     import moviepy.editor as mp
-
-import imageio
-imageio.plugins.ffmpeg.download()
-from moviepy.editor import *
-import moviepy.editor as mp
-
-import logging
-
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(levelname)-2s - %(message)s')
-console = logging.StreamHandler()
-console.setLevel(logging.INFO)
+with contextlib.redirect_stdout(None):
+    from moviepy.editor import *
+    import moviepy.editor as mp
 
 class Youtube(object):
 
@@ -69,8 +57,6 @@ class Youtube(object):
         :return: list of results
         '''
 
-        logging.info(f"Finding")
-
         request = self.__url + str(text).replace(' ','+')
         response = requests.get(request, headers=self.headers)
         soup = BeautifulSoup(response.text,'lxml')
@@ -91,71 +77,42 @@ class Youtube(object):
         :param filename: name of file
         :return: str, filename
         '''
-        #logging
-        logging.info(f"Start downloading")
         try:
-            #logging
-            logging.info(f"Init YouTube")
-            logging.info(f"URL {url}")
+
             yt = YouTube(url)
-            #logging
-            logging.info(f"Get Data")
+
             #downloading
             yt = yt.streams.filter(
                 progressive=True,
                 file_extension='mp4'
             ).order_by('resolution').desc().first()
 
-            #logging
-            logging.info(f"Create Directory")
-
-
             fullpath = os.getcwd() + '/cache'
 
-            try:
-                # if not os.path.exists(fullpath):
-                #     os.makedirs(fullpath)
-                os.makedirs('cache/'+path)
-                #logging
-                logging.info(f"Created")
-            except:
-                #logging
-                logging.error(f"Youtube:os.makedirs('cache/'+path)")
-
-            #logging
-            logging.info(f"Start downloading")
-
+            try:os.makedirs('cache/'+path)
+            except:pass
 
             yt.download('cache/'+ path, filename=path)
-
-            #logging
-            logging.info(f"Downloading successful")
 
             return filename
         except: return None
 
 
     def convertVideoToMusic(self, uri):
-        #logging
-        logging.info(f"Start converting")
 
         try:
             fullpath = os.getcwd() + f'/cache/{uri}/'
             if not os.path.exists(fullpath):
                 os.makedirs(fullpath)
         except:
-            #logging
-            logging.error(f"Youtube:os.makedirs(fullpath)")
+            pass
 
         try:
 
             clip = mp.VideoFileClip(f'cache/{uri}/{uri}.mp4').subclip()
             clip.audio.write_audiofile(f'cache/{uri}/{uri}.mp3', bitrate='3000k')
 
-            logging.info(f"Converting successful")
-
         except Exception as e:
-            logging.error(f"Youtube.convertVideoToMusic")
             return -1
 
         finally:
@@ -182,9 +139,6 @@ class Youtube(object):
         result = -1
         link = None
 
-        #logging
-        logging.info(f"{len(research)} research objects")
-
         for item in research:
             try:
 
@@ -198,8 +152,7 @@ class Youtube(object):
                     result, link = diff, item
 
             except:
-                #logging
-                logging.error(f"Some problems on classify loop")
+                pass
 
         if link:
             _result = [link] + data1 + data2
@@ -236,5 +189,5 @@ class Youtube(object):
 if __name__ == "__main__":
 
     y = Youtube()
-    name = y.getNameFromYoutube('https://youtube.com/watch?v=H4buRu9-Wb4')
+    name = y.getNameFromYoutube('https://www.youtube.com/watch?v=YAqm_vUeUik')
     print(name)
