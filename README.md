@@ -3,6 +3,12 @@
 
 <img align="center" src="https://i.ibb.co/j84F6HJ/image5.png">
 
+<img align="left" height="50" wigth="50" src="https://i.ibb.co/6sLhjBk/telegram-logo-ad3d08a014-seeklogo-com-by-yagorocha-dbyy26q.png"> 
+
+## **Get it on Telegram <a href="https://telegram.me/SpotifyMusicDownloaderBot"><b>@SpotifyMusicDownloaderBot</b></a>**
+
+<img align="center" src="https://i.ibb.co/SX2VJSh/header.png">
+
 ## **Download your music in high quality**
 
 <img align="center" src="https://i.ibb.co/BwgvL5R/result.png">
@@ -80,11 +86,4 @@ Example:
 ```
 ./main.py -p spotify:user:spotify:playlist:37i9dQZF1DXcRXFNfZr7Tp
 
-```
-
-
-## **In case of `pytube.exceptions.regexmatcherror: regex pattern ("signature",\s?([a-za-z0-9$]+)\() had zero matches` try:**
-
-```
-pip3 install git+https://github.com/nficano/pytube.git
 ```

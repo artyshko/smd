@@ -3,7 +3,7 @@ Flask==0.12.2
 spotipy==2.4.4
 moviepy==0.2.3.5
 requests==2.18.4
-pytube==9.2.2
+git+git://github.com/nficano/pytube.git
 mutagen==1.41.0
 lxml==4.2.3
 beautifulsoup4==4.7.1
