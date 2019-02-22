@@ -262,7 +262,7 @@ class CLI(object):
         print('')
         print('\t Spotify Music Downlader (SMD)\n')
         print('./main.py [without any parameters] - normal startup\n')
-        print('./main.py [parameter][argument] - startup with argument\n')
+        print('./main.py [parameter][argument] - startup with arguments\n')
         print('Parameters\n')
         print('  -h, --help       Print a help message and exit.\n')
         print('  -s, --song       Spotify song URI.\n')
@@ -270,7 +270,8 @@ class CLI(object):
         print('  -q, --query      Search query.\n')
         print('  -y, --youtube    YouTube Music url.')
         print('                   Note that your link should be with quotation marks - "your_url"!\n')
-        print('  -v, --video      YouTube url.(You will get a song but without any tags)\n')
+        print('  -v, --video      YouTube url.(You will get a song but without any tags)')
+        print('                   Note that your link should be with quotation marks - "your_url"!\n')
         print('  -a, --apple      Apple Music url.\n')
         print('  -f, --file       File with song URIs. (Spotify only)\n')
 
@@ -298,7 +299,6 @@ class CLI(object):
            exit(0)
 
         for parameter, argument in opts:
-            print(parameter, argument)
 
             if parameter in ("-h", "--help"):
 

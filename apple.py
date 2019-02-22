@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from bs4 import BeautifulSoup
 import requests
 import lxml
@@ -16,7 +17,7 @@ class AppleMusic(object):
 
         url = url + '&l=uk'
 
-        
+
         splitted = str(url).split('/')
         splitted = splitted[:3]+['ua']+splitted[4:]
         url = '/'.join(splitted)
