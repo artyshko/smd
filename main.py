@@ -250,7 +250,6 @@ class MusicDownloader(object):
         else:
             return False, None
 
-
     def search(self, query):
         return self.__spotify.search(query=query)
 
@@ -404,7 +403,6 @@ class CLI(object):
                        md.downloadBySpotifyUri(input('[smd]>Sporify URI:'))
                 except KeyboardInterrupt:
                     sys.exit(0)
-
 
 
 def getCorrect(name):
