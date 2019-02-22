@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import re, os
+import shutil
 #used for mp3 ID3 tagging
 from mutagen.id3._frames import TIT2, TALB, TPE1
 from mutagen.mp3 import MP3
@@ -8,11 +9,24 @@ from mutagen.id3 import ID3, APIC, error
 import urllib.request
 
 
+import logging
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)-2s - %(message)s')
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+
+
 class TagEditor(object):
 
     @staticmethod
     def getImageFromSpotify(url, name):
-        urllib.request.urlretrieve(url, name)
+        if len(url):
+            urllib.request.urlretrieve(url, name)
+        else:
+
+            cachepath = os.getcwd() + '/cache'
+            datapath = os.getcwd() + '/Data'
+            os.system(f'cp {datapath}/temp.png {name}')
 
 
     @staticmethod
@@ -50,10 +64,13 @@ class TagEditor(object):
         if data:
 
             #download image
-            TagEditor.getImageFromSpotify(data['image'], f".cache/{data['uri']}/{data['uri']}.png")
+            TagEditor.getImageFromSpotify(data['image'], f"cache/{data['uri']}/{data['uri']}.png")
+
+            #logging
+            logging.info(f"IMAGE cache/{data['uri']}/{data['uri']}.png")
 
             audio = MP3(
-                f".cache/{data['uri']}/{data['uri']}.mp3",
+                f"cache/{data['uri']}/{data['uri']}.mp3",
                 ID3=ID3
             )
 
@@ -68,7 +85,7 @@ class TagEditor(object):
                 'image/jpeg',
                 3,
                 'Front cover',
-                open(f".cache/{data['uri']}/{data['uri']}.png", 'rb').read())
+                open(f"cache/{data['uri']}/{data['uri']}.png", 'rb').read())
             )
 
             #add song name
@@ -91,7 +108,10 @@ class TagEditor(object):
 
             #save result
             audio.save()
-            ID3(f".cache/{data['uri']}/{data['uri']}.mp3").save(v2_version=3)
+            ID3(f"cache/{data['uri']}/{data['uri']}.mp3").save(v2_version=3)
+
+            #logging
+            logging.info(f"SAVED cache/{data['uri']}/{data['uri']}.mp3")
 
             # #delete downloaded picture
             # os.remove('.temp.jpg')
