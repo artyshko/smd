@@ -1,10 +1,9 @@
-mutagen==1.41.0
-lxml==4.2.3
+pyperclip==1.6.4
 Flask==0.12.2
-moviepy==0.2.3.5
+git+git://github.com/nficano/pytube.git
 requests==2.18.4
 spotipy==2.4.4
-git+git://github.com/nficano/pytube.git
-imageio==2.3.0
-pyperclip==1.6.4
+lxml==4.2.3
+mutagen==1.41.0
+moviepy==0.2.3.5
 beautifulsoup4==4.7.1
