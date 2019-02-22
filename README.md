@@ -18,7 +18,7 @@
 ```
 ./main.py [without any parameters] - normal startup
 
-./main.py [parameter][argument] - startup with parameter
+./main.py [parameter][argument] - startup with arguments
 
 Parameters
 
@@ -28,7 +28,18 @@ Parameters
 
   -p, --playlist   Spotify playlist URI.
 
-  -f, --file       File with song URIs.
+  -q, --query      Search query.
+
+  -y, --youtube    YouTube Music url.
+                   Note that your link should be with quotation marks - "your_url"!
+
+  -v, --video      YouTube url.(You will get a song but without any tags)
+                   Note that your link should be with quotation marks - "your_url"!
+
+  -a, --apple      Apple Music url.
+
+  -f, --file       File with song URIs. (Spotify only)
+
 
 ```
 ## Installation
