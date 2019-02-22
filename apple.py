@@ -16,6 +16,11 @@ class AppleMusic(object):
 
         url = url + '&l=uk'
 
+        
+        splitted = str(url).split('/')
+        splitted = splitted[:3]+['ua']+splitted[4:]
+        url = '/'.join(splitted)
+
         response = requests.get(url, headers=self.headers)
         soup = BeautifulSoup(response.text,'lxml')
 
@@ -44,4 +49,4 @@ class AppleMusic(object):
                 return None
 if __name__ == "__main__":
     a = AppleMusic()
-    a.get('https://itunes.apple.com/ua/album/simplify/1430224633?i=1430225075')
+    a.get('https://itunes.apple.com/uk/album/simplify/1430224633?i=1430225075')
