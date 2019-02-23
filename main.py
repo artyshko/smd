@@ -6,6 +6,7 @@ from lastfm import LastFM
 from apple import AppleMusic
 import sys, getopt, shutil
 import os, re, random
+import notify2
 
 
 class MusicDownloader(object):
@@ -405,8 +406,25 @@ class CLI(object):
                     sys.exit(0)
 
 
+class notify(object):
+
+    image = os.getcwd() + '/Data/icon.png'
+    notify2.init("Cryptocurrency rates notifier")
+
+    @staticmethod
+    def send(message):
+
+        ns = notify2.Notification('Spotify Music Downloader', message=message, icon=notify.image)
+        # Set the urgency level
+        ns.set_urgency(notify2.URGENCY_NORMAL)
+        # Set the timeout
+        ns.set_timeout(1000)
+        ns.show()
+
+
 def getCorrect(name):
     return re.sub(r"[\"#/@;:<>{}`+=~|.!?$%^&*№&]", string=name, repl='')
+
 
 if __name__ == '__main__':
 
