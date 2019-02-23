@@ -1,7 +1,7 @@
 # Spotify Music Downloader (SMD) 
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/) [![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-<img align="center" src="https://i.ibb.co/j84F6HJ/image5.png"> 
+<img align="center" src="https://i.ibb.co/3Yrh7Qr/header.png"> 
 
 <img align="left" height="50" wigth="50" src="https://i.ibb.co/6sLhjBk/telegram-logo-ad3d08a014-seeklogo-com-by-yagorocha-dbyy26q.png">
 
@@ -18,7 +18,7 @@
 ```
 ./main.py [without any parameters] - normal startup
 
-./main.py [parameter][argument] - startup with parameter
+./main.py [parameter][argument] - startup with arguments
 
 Parameters
 
@@ -28,7 +28,18 @@ Parameters
 
   -p, --playlist   Spotify playlist URI.
 
-  -f, --file       File with song URIs.
+  -q, --query      Search query.
+
+  -y, --youtube    YouTube Music url.
+                   Note that your link should be with quotation marks - "your_url"!
+
+  -v, --video      YouTube url.(You will get a song but without any tags)
+                   Note that your link should be with quotation marks - "your_url"!
+
+  -a, --apple      Apple Music url.
+
+  -f, --file       File with song URIs. (Spotify only)
+
 
 ```
 ## Installation
@@ -64,6 +75,30 @@ spotify:track:4tmwiN9YU7xMjh2hoqcVuI
 Example:
 ```
 ./main.py -s spotify:track:7ARveOiD31w2Nq0n5FsSf8
+```
+
+### Query mode
+Example:
+```
+./main.py -q "The XX - Intro"
+```
+
+### YouTube Music mode
+Example:
+```
+./main.py -y "https://music.youtube.com/watch?v=HnXzzTIFu_U&list=RDAMVMHnXzzTIFu_U"
+```
+
+### YouTube video mode
+Example:
+```
+./main.py -v "https://www.youtube.com/watch?v=JHi-WGFGWek"
+```
+
+### Apple Music mode
+Example:
+```
+./main.py -a "https://itunes.apple.com/us/album/i-wanna-be-yours/663097964?i=663098065"
 ```
 
 ### File mode
