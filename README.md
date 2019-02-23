@@ -122,3 +122,8 @@ Example:
 ./main.py -p spotify:user:spotify:playlist:37i9dQZF1DXcRXFNfZr7Tp
 
 ```
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/artyshko/smd/badge.svg?style=beer-square)](https://beerpay.io/artyshko/smd)  [![Beerpay](https://beerpay.io/artyshko/smd/make-wish.svg?style=flat-square)](https://beerpay.io/artyshko/smd?focus=wish)
