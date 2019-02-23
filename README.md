@@ -103,7 +103,7 @@ Example:
 
 ### File mode
 #### Create file with songs
-<img align="center" src="https://i.ibb.co/JQsMCYV/image3.png">
+<img align="center" src="https://i.ibb.co/qJvgMXB/file.png">
 
 Example:
 ```
