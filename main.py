@@ -7,6 +7,7 @@ from apple import AppleMusic
 import sys, getopt, shutil
 import os, re, random
 import notify2
+from pygame import mixer
 
 
 class MusicDownloader(object):
@@ -97,6 +98,7 @@ class MusicDownloader(object):
                 try:shutil.rmtree(f"cache/{info['uri']}")
                 except:pass
 
+                notify.send(f'{info["artist"][0]} - {info["name"]}')
                 return True
         return False
 
@@ -142,6 +144,7 @@ class MusicDownloader(object):
             except:
                 pass
 
+            notify.send(f'{info["artist"][0]} - {info["name"]}')
             return True, info
         else:
             return False, None
@@ -164,10 +167,10 @@ class MusicDownloader(object):
 
         for i,song in zip(range(len(links)),links):
             print(f'[{i+1}] - {song}')
-            self.downloadBySpotifyUri(str(song).split(':')[-1])
             try:
-                pass
-                #self.downloadBySpotifyUri(song)
+                state = self.downloadBySpotifyUri(str(song).split(':')[-1])
+                if not state:
+                    notify.send(f'Failed to download',True)
             except:
                 print('Something went wrong!')
 
@@ -210,6 +213,8 @@ class MusicDownloader(object):
             try: shutil.rmtree(f"cache/{info['uri']}")
             except: pass
 
+            notify.send(f'{info["artist"][0]} - {info["name"]}')
+
     def downloadFromYoutubeMusic(self, url, info):
 
         uri = info['uri']
@@ -247,6 +252,7 @@ class MusicDownloader(object):
             try:shutil.rmtree(f"cache/{info['uri']}")
             except:pass
 
+            notify.send(f'{info["artist"][0]} - {info["name"]}')
             return True, info
         else:
             return False, None
@@ -310,7 +316,9 @@ class CLI(object):
                 #song uri
                 try:
                     md = MusicDownloader()
-                    md.downloadBySpotifyUri(argument)
+                    state = md.downloadBySpotifyUri(argument)
+                    if not state:
+                        notify.send(f'Failed to download',True)
                 except KeyboardInterrupt:
                     sys.exit(0)
                 sys.exit(0)
@@ -330,7 +338,7 @@ class CLI(object):
                    md = MusicDownloader()
                    state, data = md.downloadBySearchQuery(argument)
                    if not state:
-                      print('Something went wrong!')
+                       notify.send(f'Failed to download',True)
                 except KeyboardInterrupt:
                    sys.exit(0)
                 sys.exit(0)
@@ -344,8 +352,9 @@ class CLI(object):
                      name = md.getYoutubeMusicInfo(link)
                      tags = md.getLastFMTags(name)
 
-                     md.downloadFromYoutubeMusic(url=link, info=tags)
-
+                     state = md.downloadFromYoutubeMusic(url=link, info=tags)
+                     if not state:
+                         notify.send(f'Failed to download',True)
                  except KeyboardInterrupt:
                      sys.exit(0)
                  sys.exit(0)
@@ -369,8 +378,10 @@ class CLI(object):
                          'duration_ms' : 0
                      }
 
-                     md.downloadFromYoutubeMusic(url=argument, info=info)
+                     state = md.downloadFromYoutubeMusic(url=argument, info=info)
 
+                     if not state:
+                        notify.send(f'Failed to download',True)
                  except KeyboardInterrupt:
                      sys.exit(0)
                  sys.exit(0)
@@ -381,8 +392,9 @@ class CLI(object):
                      md = MusicDownloader()
                      apple = AppleMusic()
                      name = apple.getName(argument)
-                     md.downloadBySearchQuery(query=name)
-
+                     state = md.downloadBySearchQuery(query=name)
+                     if not state:
+                         notify.send(f'Failed to download',True)
                  except KeyboardInterrupt:
                      sys.exit(0)
                  sys.exit(0)
@@ -401,7 +413,9 @@ class CLI(object):
                 try:
                     while True:
                        md = MusicDownloader()
-                       md.downloadBySpotifyUri(input('[smd]>Sporify URI:'))
+                       state = md.downloadBySpotifyUri(input('[smd]>SONG URI:'))
+                       if not state:
+                          notify.send(f'Failed to download',True)
                 except KeyboardInterrupt:
                     sys.exit(0)
 
@@ -409,17 +423,28 @@ class CLI(object):
 class notify(object):
 
     image = os.getcwd() + '/Data/icon.png'
-    notify2.init("Cryptocurrency rates notifier")
+    sound_info = os.getcwd() + '/Data/i.mp3'
+    sound_warn = os.getcwd() + '/Data/w.mp3'
+    try:notify2.init("Spotify Music Downloader Notifier")
+    except:pass
 
     @staticmethod
-    def send(message):
+    def sound(error=False):
+        mixer.init()
+        mixer.music.load(notify.sound_warn if error else notify.sound_info)
+        mixer.music.play()
 
-        ns = notify2.Notification('Spotify Music Downloader', message=message, icon=notify.image)
-        # Set the urgency level
-        ns.set_urgency(notify2.URGENCY_NORMAL)
-        # Set the timeout
-        ns.set_timeout(1000)
-        ns.show()
+    @staticmethod
+    def send(message, error=False):
+        try:
+            ns = notify2.Notification('Spotify Music Downloader', message=message, icon=notify.image)
+            # Set the urgency level
+            ns.set_urgency(notify2.URGENCY_NORMAL)
+            # Set the timeout
+            ns.set_timeout(1000)
+            notify.sound(error)
+            ns.show()
+        except:pass
 
 
 def getCorrect(name):
