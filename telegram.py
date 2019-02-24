@@ -1,6 +1,5 @@
 from celery import Celery
 
-
 import requests
 import datetime
 import io, os
@@ -17,7 +16,6 @@ console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 
 manager = Celery('telegram',broker='redis://smd:mThquQxrJbyVYVlmLLAmwzLd2t5vDWVO@redis-12274.c52.us-east-1-4.ec2.cloud.redislabs.com:12274')
-
 
 
 class BotHandler(object):
@@ -573,12 +571,7 @@ class Controller(object):
             self.bot.sendText(id,text='Couldn\'t find that:(')
             return False
 
-<<<<<<< HEAD
-        return True
-
     def worker(self,update):
-
-        print(update)
 
         if 'message' in list(update.keys()):
             #in case of new message
@@ -600,17 +593,26 @@ class Controller(object):
                 logging.info(f'USER [{username}]')
                 logging.info(f'MESSAGE {message}')
 
+
                 try:
+
                     #start controller
                     self.controller(message, chat_id)
 
                 except:
                     #logging
                     logging.error('ERROR IN CONTROLLER')
-                    self.downloader = main.MusicDownloader()
 
-                    self.bot.sendSticker(chat_id, sticker=open(f"Data/s1.webp",'rb'))
-                    self.bot.sendText(chat_id, 'Couldn\'t find that :(')
+                    try:
+
+                        self.downloader = main.MusicDownloader()
+                        #restart controller
+                        self.controller(message, chat_id)
+
+                    except:
+
+                        self.bot.sendSticker(chat_id, sticker=open(f"Data/s1.webp",'rb'))
+                        self.bot.sendText(chat_id, 'Couldn\'t find that :(')
 
             else:
                 #logging
@@ -618,8 +620,6 @@ class Controller(object):
 
                 self.bot.sendSticker(chat_id, sticker=open(f"Data/s4.webp",'rb'))
                 self.bot.sendText(chat_id, 'Wooops! Something went wrong.\nERROR CODE 42 - You are so funny!')
-=======
->>>>>>> telegram-alpha
 
 
     def mainloop(self):
@@ -636,54 +636,7 @@ class Controller(object):
 
                 self.offset = update_id + 1
 
-@manager.task
-def do(update):
-    controller = Controller()
-    controller.worker(update)
-    del controller
 
-def mainloop():
-
-<<<<<<< HEAD
-    offset = None
-    bot = BotHandler()
-
-    while True:
-
-        bot.getUpdates(offset)
-        update = bot.checkLastUpdates()
-=======
-
-                        try:
-
-                            #start controller
-                            self.controller(message, chat_id)
-
-                        except:
-                            #logging
-                            logging.error('ERROR IN CONTROLLER')
-
-                            try:
-
-                                self.downloader = main.MusicDownloader()
-                                #restart controller
-                                self.controller(message, chat_id)
-
-                            except:
-
-                                self.bot.sendSticker(chat_id, sticker=open(f"Data/s1.webp",'rb'))
-                                self.bot.sendText(chat_id, 'Couldn\'t find that :(')
->>>>>>> telegram-alpha
-
-        if update:
-            update_id = update['update_id']
-
-            #celery task
-            do.delay(update)
-
-<<<<<<< HEAD
-            offset = update_id + 1
-=======
 def getCorrect(name):
     try:
 
@@ -699,11 +652,33 @@ def getCorrect(name):
         return re.sub(r"[\"#/@;:<>{}`+=~|.!?$%^&*№&]", string=name, repl='')
 
     except:
->>>>>>> telegram-alpha
 
         return 'music'
 
-if __name__ == '__main__':
+@manager.task
+def do(update):
+    controller = Controller()
+    controller.worker(update)
+    del controller
 
+def mainloop():
+
+    offset = None
+    bot = BotHandler()
+
+    while True:
+
+        bot.getUpdates(offset)
+        update = bot.checkLastUpdates()
+
+        if update:
+            update_id = update['update_id']
+
+            #celery task
+            do.delay(update)
+
+            offset = update_id + 1
+
+if __name__ == '__main__':
     logging.info('Starting app')
     mainloop()
