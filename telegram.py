@@ -4,6 +4,7 @@ import io, os
 import re
 import main
 import apple
+import random
 
 import logging
 
@@ -289,9 +290,15 @@ class Controller(object):
 
                         if state:
 
+                            name = getCorrect(f'{data["artist"][0]} - {data["name"]}')
+                            os.rename(
+                                f"Downloads/{data['uri']}.mp3",
+                                f"Downloads/{name}.mp3"
+                            )
+
                             code = self.bot.sendAudio(
                                 chat_id=id,
-                                audio=open(f"Downloads/{data['uri']}.mp3",'rb'),
+                                audio=open(f"Downloads/{name}.mp3",'rb'),
                                 thumb=open(f"Downloads/{data['uri']}.png",'rb'),
                                 name=f'{data["name"]}',
                                 artist=f'{data["artist"][0]}'
@@ -303,9 +310,9 @@ class Controller(object):
                                 self.bot.sendText(id,text='Something went wrong:(')
 
 
-                            os.remove(f"Downloads/{data['uri']}.mp3")
+                            os.remove(f"Downloads/{name}.mp3")
                             #logging
-                            logging.info(f"DELETED Downloads/{data['uri']}.mp3")
+                            logging.info(f"DELETED Downloads/{name}.mp3")
 
                             os.remove(f"Downloads/{data['uri']}.png")
                             #logging
@@ -374,9 +381,15 @@ class Controller(object):
                 fixed_name = f'{data["artist"][0]} - {data["name"]}'
                 fixed_name = data['uri']
 
+                name = getCorrect(f'{data["artist"][0]} - {data["name"]}')
+                os.rename(
+                    f"Downloads/{data['uri']}.mp3",
+                    f"Downloads/{name}.mp3"
+                )
+
                 code = self.bot.sendAudio(
                     chat_id=id,
-                    audio=open(f"Downloads/{data['uri']}.mp3",'rb'),
+                    audio=open(f"Downloads/{name}.mp3",'rb'),
                     thumb=open(f"Downloads/{data['uri']}.png",'rb'),
                     name=f'{data["name"]}',
                     artist=f'{data["artist"][0]}'
@@ -388,9 +401,9 @@ class Controller(object):
                     self.bot.sendText(id,text='Something went wrong:(')
 
 
-                os.remove(f"Downloads/{data['uri']}.mp3")
+                os.remove(f"Downloads/{name}.mp3")
                 #logging
-                logging.info(f"DELETED Downloads/{data['uri']}.mp3")
+                logging.info(f"DELETED Downloads/{name}.mp3")
 
                 os.remove(f"Downloads/{data['uri']}.png")
                 #logging
@@ -432,10 +445,16 @@ class Controller(object):
 
             if self.downloader.downloadBySpotifyUri(message):
 
+                name = getCorrect(f'{data["artist"][0]} - {data["name"]}')
+                os.rename(
+                    f"Downloads/{data['uri']}.mp3",
+                    f"Downloads/{name}.mp3"
+                )
+
 
                 code = self.bot.sendAudio(
                     chat_id=id,
-                    audio=open(f"Downloads/{uri}.mp3",'rb'),
+                    audio=open(f"Downloads/{name}.mp3",'rb'),
                     thumb=open(f"Downloads/{uri}.png",'rb'),
                     name=f'{data["name"]}',
                     artist=f'{data["artist"][0]}'
@@ -449,9 +468,9 @@ class Controller(object):
                     self.bot.sendText(id,text='Something went wrong:(')
 
 
-                os.remove(f"Downloads/{uri}.mp3")
+                os.remove(f"Downloads/{name}.mp3")
                 #logging
-                logging.info(f'DELETED Downloads/{uri}.mp3')
+                logging.info(f'DELETED Downloads/{name}.mp3')
 
                 os.remove(f"Downloads/{uri}.png")
                 #logging
@@ -529,7 +548,23 @@ class Controller(object):
 
                 self.offset = update_id + 1
 
+def getCorrect(name):
+    try:
 
+        #check for incorrect words
+        r = re.compile("[а-яА-Я]+")
+        text = str(name).split(' ')
+
+        status = True if len([w for w in filter(r.match, name)]) else False
+
+        if status:
+            return f'S{str(random.randint(1000000000,100000000000))}D'
+
+        return re.sub(r"[\"#/@;:<>{}`+=~|.!?$%^&*№&]", string=name, repl='')
+
+    except:
+
+        return 'music'
 
 if __name__ == '__main__':
     logging.info('Starting app')
