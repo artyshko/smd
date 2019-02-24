@@ -305,9 +305,36 @@ class Controller(object):
                             )
 
                             if int(code) != 200:
-                                #logging
-                                logging.warning(f'CODE {code}')
-                                self.bot.sendText(id,text='Something went wrong:(')
+                                try:
+                                    os.rename(
+                                        f"Downloads/{name}.mp3",
+                                        f"Downloads/{data['uri']}.mp3"
+                                    )
+
+                                    code = self.bot.sendAudio(
+                                        chat_id=id,
+                                        audio=open(f"Downloads/{data['uri']}.mp3",'rb'),
+                                        thumb=open(f"Downloads/{data['uri']}.png",'rb'),
+                                        name=f'{data["name"]}',
+                                        artist=f'{data["artist"][0]}'
+                                    )
+                                    os.remove(f"Downloads/{data['uri']}.mp3")
+                                    #logging
+                                    logging.info(f"DELETED Downloads/{data['uri']}.mp3")
+
+                                    os.remove(f"Downloads/{data['uri']}.png")
+                                    #logging
+                                    logging.info(f'DELETED Downloads/{data["uri"]}.png')
+
+                                    return True
+
+                                except:
+                                    #logging
+                                    logging.warning(f'CODE {code}')
+                                    self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
+                                    self.bot.sendText(id,text='Something went wrong:(')
+
+                                    return False
 
 
                             os.remove(f"Downloads/{name}.mp3")
@@ -396,9 +423,36 @@ class Controller(object):
                 )
 
                 if int(code) != 200:
-                    #logging
-                    logging.warning(f'CODE {code}')
-                    self.bot.sendText(id,text='Something went wrong:(')
+
+                    try:
+                        os.rename(
+                            f"Downloads/{name}.mp3",
+                            f"Downloads/{data['uri']}.mp3"
+                        )
+
+                        code = self.bot.sendAudio(
+                            chat_id=id,
+                            audio=open(f"Downloads/{data['uri']}.mp3",'rb'),
+                            thumb=open(f"Downloads/{data['uri']}.png",'rb'),
+                            name=f'{data["name"]}',
+                            artist=f'{data["artist"][0]}'
+                        )
+                        os.remove(f"Downloads/{data['uri']}.mp3")
+                        #logging
+                        logging.info(f"DELETED Downloads/{data['uri']}.mp3")
+
+                        os.remove(f"Downloads/{data['uri']}.png")
+                        #logging
+                        logging.info(f'DELETED Downloads/{data["uri"]}.png')
+
+                        return True
+
+                    except:
+                        #logging
+                        logging.warning(f'CODE {code}')
+                        self.bot.sendText(id,text='Something went wrong:(')
+
+                        return False
 
 
                 os.remove(f"Downloads/{name}.mp3")
@@ -462,10 +516,36 @@ class Controller(object):
 
 
                 if int(code) != 200:
-                    #logging
-                    logging.warning(f'CODE {code}')
-                    self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
-                    self.bot.sendText(id,text='Something went wrong:(')
+                    try:
+                        os.rename(
+                            f"Downloads/{name}.mp3",
+                            f"Downloads/{data['uri']}.mp3"
+                        )
+
+                        code = self.bot.sendAudio(
+                            chat_id=id,
+                            audio=open(f"Downloads/{data['uri']}.mp3",'rb'),
+                            thumb=open(f"Downloads/{data['uri']}.png",'rb'),
+                            name=f'{data["name"]}',
+                            artist=f'{data["artist"][0]}'
+                        )
+                        os.remove(f"Downloads/{data['uri']}.mp3")
+                        #logging
+                        logging.info(f"DELETED Downloads/{data['uri']}.mp3")
+
+                        os.remove(f"Downloads/{data['uri']}.png")
+                        #logging
+                        logging.info(f'DELETED Downloads/{data["uri"]}.png')
+
+                        return True
+
+                    except:
+                        #logging
+                        logging.warning(f'CODE {code}')
+                        self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
+                        self.bot.sendText(id,text='Something went wrong:(')
+
+                        return False
 
 
                 os.remove(f"Downloads/{name}.mp3")
