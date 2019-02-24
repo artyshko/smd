@@ -1,1 +1,1 @@
-python3 telegram.py & celery worker -A telegram --loglevel=error --autoscale=4,1
+python3 telegram.py & celery worker -A telegram --loglevel=info --autoscale=1,1

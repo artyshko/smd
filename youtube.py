@@ -150,7 +150,7 @@ class Youtube(object):
         try:
 
             clip = mp.VideoFileClip(f'cache/{uri}/{uri}.mp4').subclip()
-            clip.audio.write_audiofile(f'cache/{uri}/{uri}.mp3', bitrate='3000k')
+            clip.audio.write_audiofile(f'cache/{uri}/{uri}.mp3', bitrate='3000k', progress_bar=False)
 
             logging.info(f"Converting successful")
 
