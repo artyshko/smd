@@ -126,7 +126,7 @@ class Youtube(object):
             logging.info(f"Start downloading")
 
 
-            yt.download('cache/'+ path, filename=filename)
+            yt.download('cache/'+ path, filename=path)
 
             #logging
             logging.info(f"Downloading successful")
@@ -176,6 +176,9 @@ class Youtube(object):
 
         research = data2 + data1
 
+        if duration == 0:
+            return research
+
         result = -1
         link = None
 
@@ -204,3 +207,34 @@ class Youtube(object):
             _result = data1 + data2
 
         return _result
+
+    def getNameFromYoutube(self, url):
+
+        response = requests.get(url, headers=self.headers)
+        soup = BeautifulSoup(response.text,'lxml')
+
+        _title = soup.find('title').text
+        _title = str(_title).replace(' - YouTube', '')
+
+        _result = []
+        __name = None
+
+        if not str(_title).find('-') > -1:
+
+            for link in soup.findAll('meta', attrs={'property': 'og:video:tag'}):
+                _result.append(link.get('content'))
+
+            if len(_result) > 1:
+                name = f"{_result[0]} - {_title}"
+            else:
+                name = _title
+        else:
+            name = _title
+
+        return name
+
+if __name__ == "__main__":
+
+    y = Youtube()
+    name = y.getNameFromYoutube('https://youtube.com/watch?v=H4buRu9-Wb4')
+    print(name)

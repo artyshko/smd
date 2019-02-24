@@ -2,6 +2,7 @@
 from spotify import Spotify
 from youtube import Youtube
 from editor import TagEditor
+from lastfm import LastFM
 import sys, getopt, shutil
 import os
 
@@ -20,6 +21,7 @@ class MusicDownloader(object):
         self.__youtube = Youtube()
         self.__spotify = Spotify()
         self.__editor = TagEditor()
+        self.__last = LastFM()
 
 
     def __downloadMusicFromYoutube(self, name, uri, dur):
@@ -53,6 +55,12 @@ class MusicDownloader(object):
             return self.__spotify.getSongInfo(uri)
         except:
             return None
+
+    def getLastFMTags(self, name):
+        return self.__last.get(name)
+
+    def getYoutubeMusicInfo(self, url):
+        return self.__youtube.getNameFromYoutube(url)
 
     def downloadBySpotifyUri(self, uri):
 
@@ -115,6 +123,9 @@ class MusicDownloader(object):
         #get info
         info = self.__spotify.search(query=query)
 
+        if not info:
+            info = self.__last.get(query)
+
         if info:
 
             #logging
@@ -128,7 +139,6 @@ class MusicDownloader(object):
 
             #logging
             logging.info(f'FIXED {fixed_name}')
-
 
             #finding and download from YouTube and tagging
             self.__downloadMusicFromYoutube(fixed_name, info['uri'], info['duration_ms'])
@@ -235,8 +245,66 @@ class MusicDownloader(object):
             try: shutil.rmtree(f"cache/{info['uri']}")
             except: pass
 
+    def downloadFromYoutubeMusic(self, url, info):
+
+        uri = info['uri']
+
+        #downloading video from youtube
+        if self.__youtube.download(
+            url=url,
+            path=uri,
+            filename=uri
+        ):
+
+            #converting video to mp3 file
+            self.__youtube.convertVideoToMusic(
+                uri=uri
+            )
+
+            self.__editor.setTags(
+                data=info
+            )
+
+            cachepath = os.getcwd() + '/cache'
+            fullpath = os.getcwd() + '/Downloads'
+
+            #logging
+            logging.info(f'CACHEPATH {cachepath}')
+            logging.info(f'FULLPATH {fullpath}')
+
+            if not os.path.exists(fullpath):
+                os.makedirs(fullpath)
+
+            os.rename(
+                f"{cachepath}/{info['uri']}/{info['uri']}.png",
+                f"{fullpath}/{info['uri']}.png"
+            )
+            #logging
+            logging.info(f"MOVE TO Downloads/{info['uri']}.png")
+
+            os.rename(
+                f"{cachepath}/{info['uri']}/{info['uri']}.mp3",
+                f"{fullpath}/{info['uri']}.mp3"
+            )
+            #logging
+            logging.info(f"MOVE TO Downloads/{info['uri']}.mp3")
+
+            #deleting cache
+            try:
+                shutil.rmtree(f"cache/{info['uri']}")
+                #logging
+                logging.info(f"DELETED cache/{info['uri']}")
+            except:
+                #logging
+                logging.error(f"DELETING cache/{info['uri']}")
+
+            return True, info
+        else:
+            return False, None
+
     def search(self, query):
         return self.__spotify.search(query=query)
+
 
 
 class CLI(object):

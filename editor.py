@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import re, os
+import shutil
 #used for mp3 ID3 tagging
 from mutagen.id3._frames import TIT2, TALB, TPE1
 from mutagen.mp3 import MP3
@@ -19,7 +20,13 @@ class TagEditor(object):
 
     @staticmethod
     def getImageFromSpotify(url, name):
-        urllib.request.urlretrieve(url, name)
+        if len(url):
+            urllib.request.urlretrieve(url, name)
+        else:
+
+            cachepath = os.getcwd() + '/cache'
+            datapath = os.getcwd() + '/Data'
+            os.system(f'cp {datapath}/temp.png {name}')
 
 
     @staticmethod
