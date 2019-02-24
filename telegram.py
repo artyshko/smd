@@ -660,6 +660,7 @@ def do(update):
     controller = Controller()
     controller.worker(update)
     del controller
+    exit(0)
 
 def mainloop():
 
