@@ -660,7 +660,6 @@ def do(update):
     controller = Controller()
     controller.worker(update)
     del controller
-    return True
 
 def mainloop():
 
@@ -674,11 +673,10 @@ def mainloop():
 
         if update:
             update_id = update['update_id']
-
+            offset = update_id + 1
             #celery task
             do.delay(update)
 
-            offset = update_id + 1
 
 if __name__ == '__main__':
     logging.info('Starting app')
