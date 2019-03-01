@@ -255,6 +255,7 @@ class Controller(object):
 
         elif type == 'status':
             self.bot.sendText(id, text='200 ALIVE')
+            return True
 
         elif type == 'text':
 
