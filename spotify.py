@@ -189,3 +189,44 @@ class Spotify(object):
 
         data = self.client.track(uri)
         return data['duration_ms']
+
+    def getAlbum(self, uri):
+        try:
+
+            album = self.client.album(uri)
+
+            copyright = None
+
+            try:copyright = album['copyrights'][0]['text']
+            except:pass
+
+            alb = {
+                'name':album['name'],
+                'artist':album['artists'][0]['name'],
+                'copyright':copyright,
+                'image':album['images'][0]['url'],
+            }
+
+            tracks = []
+
+            for data in album['tracks']['items']:
+                tracks.append({
+                    'uri' : str(data['uri'].split(':')[-1]),
+                    'name' : data['name'],
+                    'artist' : [ artist['name'] for artist in data['artists']],
+                    'album' : alb['name'],
+                    'image' : alb['image'],
+                    'preview_url' : data['preview_url'],
+                    'duration_ms' : data['duration_ms']
+                })
+
+            alb.setdefault(
+                'tracks', tracks
+            )
+            print(album)
+            return alb
+        except: return None
+
+if __name__ == '__main__':
+    s = Spotify()
+    s.getAlbum('0nW0w37lrQ87k7PLZvC4qJ')

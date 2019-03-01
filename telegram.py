@@ -7,6 +7,7 @@ import re
 import main
 import apple
 import random
+import urllib.request
 
 import logging
 
@@ -164,6 +165,9 @@ class Controller(object):
         elif str(message) == '/start':
             return 'start'
 
+        elif str(message) == '/status':
+            return 'status'
+
         else:
             return 'text'
 
@@ -249,6 +253,8 @@ class Controller(object):
 
             return True
 
+        elif type == 'status':
+            self.bot.sendText(id, text='200 ALIVE')
 
         elif type == 'text':
 
@@ -482,6 +488,88 @@ class Controller(object):
             #logging
             logging.info(f'Converted open.spotify.com link to spotify URI')
 
+            if str(message).find('/album/') > -1:
+                logging.info('ALBUM MODE')
+
+                link = str(message).split('?')[0]
+                uri = str(link).split('/')[-1]
+                data = self.downloader.getAlbum(uri)
+                path = f"Downloads/{uri}.png"
+
+
+                downloadAlbumImage(data['image'], path)
+                logging.info(f'Downloaded {path}')
+
+                self.bot.sendPhoto(
+                    chat_id=id,
+                    photo=open(path,'rb'),
+                    text=f'Album <b>{data["name"]}</b> by <b>{data["artist"]}</b>\n\n<b>{data["copyright"]}</b>'
+                )
+
+                logging.info(f'Sended {path}')
+
+                album = data
+
+                for data in album['tracks']:
+                    #logging
+                    logging.info(f'SONG  {data["artist"][0]} - {data["name"]} | {data["uri"]}')
+
+
+                    if self.downloader.downloadBySpotifyUri(data['uri']):
+
+                        name = getCorrect(f'{data["artist"][0]} - {data["name"]}')
+
+                        os.rename(
+                            f"Downloads/{data['uri']}.mp3",
+                            f"Downloads/{name}.mp3"
+                        )
+
+
+                        code = self.bot.sendAudio(
+                            chat_id=id,
+                            audio=open(f"Downloads/{name}.mp3",'rb'),
+                            thumb=open(f"Downloads/{data['uri']}.png",'rb'),
+                            name=f'{data["name"]}',
+                            artist=f'{data["artist"][0]}'
+                        )
+
+                        if int(code) != 200:
+                            try:
+                                os.rename(
+                                    f"Downloads/{name}.mp3",
+                                    f"Downloads/{data['uri']}.mp3"
+                                )
+
+                                code = self.bot.sendAudio(
+                                    chat_id=id,
+                                    audio=open(f"Downloads/{data['uri']}.mp3",'rb'),
+                                    thumb=open(f"Downloads/{data['uri']}.png",'rb'),
+                                    name=f'{data["name"]}',
+                                    artist=f'{data["artist"][0]}'
+                                )
+                                os.remove(f"Downloads/{data['uri']}.mp3")
+                                #logging
+                                logging.info(f"DELETED Downloads/{data['uri']}.mp3")
+
+                            except:
+                                #logging
+                                logging.warning(f'CODE {code}')
+
+                        os.remove(f"Downloads/{name}.mp3")
+                        #logging
+                        logging.info(f'DELETED Downloads/{name}.mp3')
+
+                        os.remove(f"Downloads/{data['uri']}.png")
+                        #logging
+                        logging.info(f'DELETED Downloads/{data["uri"]}.png')
+
+
+                os.remove(path)
+                #logging
+                logging.info(f'DELETED {path}')
+
+                return True
+
             message = self.convertToURI(message)
 
 
@@ -654,6 +742,9 @@ def getCorrect(name):
 
         return 'music'
 
+def downloadAlbumImage(url, name):
+    urllib.request.urlretrieve(url, name)
+
 @manager.task
 def do(update):
     controller = Controller()
@@ -666,15 +757,19 @@ def mainloop():
     bot = BotHandler()
 
     while True:
+        try:
 
-        bot.getUpdates(offset)
-        update = bot.checkLastUpdates()
+            bot.getUpdates(offset)
+            update = bot.checkLastUpdates()
 
-        if update:
-            update_id = update['update_id']
-            offset = update_id + 1
-            #celery task
-            do.delay(update)
+            if update:
+                update_id = update['update_id']
+                offset = update_id + 1
+                #celery task
+                do.delay(update)
+        except:
+            offset = None
+            bot = BotHandler()
 
 
 if __name__ == '__main__':

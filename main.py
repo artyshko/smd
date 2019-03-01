@@ -305,6 +305,9 @@ class MusicDownloader(object):
     def search(self, query):
         return self.__spotify.search(query=query)
 
+    def getAlbum(self, uri):
+        return self.__spotify.getAlbum(uri)
+
 
 
 class CLI(object):
