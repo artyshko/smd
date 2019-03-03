@@ -7,7 +7,7 @@
 
 # **Get it on Telegram <a href="https://telegram.me/SpotifyMusicDownloaderBot"><b>@SpotifyMusicDownloaderBot</b></a>**
 
-<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram/Data/header1.png">
+<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram-beta/Data/header1.png">
 
 ## **Now with Shazam support**
 
