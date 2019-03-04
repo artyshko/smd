@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import re, os, sys
-import spotipy
+import spotify
 #used for copy to clipboard
 import pyperclip
 #used for web scraping
