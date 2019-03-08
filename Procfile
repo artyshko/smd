@@ -1,1 +1,1 @@
-worker: python3 telegram.py
+worker: bash worker.sh

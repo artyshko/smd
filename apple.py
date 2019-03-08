@@ -16,7 +16,7 @@ class AppleMusic(object):
 
         url = url + '&l=uk'
 
-        
+
         splitted = str(url).split('/')
         splitted = splitted[:3]+['ua']+splitted[4:]
         url = '/'.join(splitted)
