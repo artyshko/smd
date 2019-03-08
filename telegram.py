@@ -8,6 +8,7 @@ import main
 import apple
 import random
 import urllib.request
+import pickle
 
 import logging
 
@@ -22,8 +23,23 @@ manager = Celery('telegram',broker='redis://smd:mThquQxrJbyVYVlmLLAmwzLd2t5vDWVO
 class BotHandler(object):
 
     def __init__(self):
-        self.token = '752979930:AAFhdyGx0CSOJ-m17wLGN0NhrxvpwCqCPoQ'
+        self.__getData()
         self.api_url = "https://api.telegram.org/bot{}/".format(self.token)
+
+    def __getData(self):
+        try:
+
+            with open('.telegram_data.secret', 'rb') as f:
+                data = pickle.load(f)
+
+            self.token = data['token']
+
+        except:
+            print('''
+            A new version is available on GitHub.\n
+            Download: https://github.com/artyshko/smd
+            ''')
+            sys.exit()
 
     def getUpdates(self, offset=None, timeout=30):
 
