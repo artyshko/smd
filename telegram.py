@@ -251,20 +251,9 @@ class Controller(object):
             #logging
             logging.info('Sended hello message')
 
-            self.bot.sendPhoto(
-                chat_id=id,
-                photo=open(f"Data/header1.png",'rb'),
-                text=''
-            )
-            self.bot.sendPhoto(
-                chat_id=id,
-                photo=open(f"Data/header3.png",'rb'),
-                text=''
-            )
-            self.bot.sendPhoto(
-                chat_id=id,
-                photo=open(f"Data/header5.png",'rb'),
-                text=''
+            self.bot.sendText(
+                id,
+                text='https://telegra.ph/How-to-Spotify-Music-Downloader-Bot-full-instruction-03-09'
             )
 
             return True
