@@ -13,6 +13,10 @@
 
 <img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram-unstable/Data/header3.png">
 
+## Desktop version
+
+<img align="center" src="https://i.ibb.co/3Yrh7Qr/header.png"> 
+
 ## Usage
 
 ```
@@ -71,8 +75,6 @@ spotify:track:4tmwiN9YU7xMjh2hoqcVuI
 ```
 
 ### Song mode
-<img align="center" src="https://i.ibb.co/3Yrh7Qr/header.png"> 
-
 Example:
 ```
 ./main.py -s spotify:track:7ARveOiD31w2Nq0n5FsSf8
