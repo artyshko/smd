@@ -116,7 +116,7 @@ class Spotify(object):
         def __getData(self):
             try:
 
-                with open('.spotify_data.secret', 'rb') as f:
+                with open('.spotify', 'rb') as f:
                     data = pickle.load(f)
 
                 self.__client_id = data['client_id']
@@ -189,7 +189,7 @@ class Spotify(object):
     def __getData(self):
         try:
 
-            with open('.spotify_data.secret', 'rb') as f:
+            with open('.spotify', 'rb') as f:
                 data = pickle.load(f)
 
             self.__client_id = data['client_id']
