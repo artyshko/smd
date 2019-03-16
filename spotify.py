@@ -86,7 +86,7 @@ class Spotify(object):
 
             data = {'refresh_token' : self.__refresh_token}
 
-            with open('.spotify_refresh_token.secret', 'wb') as f:
+            with open('.spotify', 'wb') as f:
                 pickle.dump(data, f)
 
 
@@ -105,7 +105,7 @@ class Spotify(object):
         def __getRefreshToken(self):
             try:
 
-                with open('.spotify_refresh_token.secret', 'rb') as f:
+                with open('.spotify', 'rb') as f:
                     data = pickle.load(f)
                 self.__getAccessTokenByRefreshToken(data['refresh_token'])
 
@@ -289,8 +289,9 @@ class Spotify(object):
             alb.setdefault(
                 'tracks', tracks
             )
-            print(album)
+
             return alb
+
         except: return None
 
 if __name__ == '__main__':
