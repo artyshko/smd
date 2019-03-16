@@ -304,7 +304,7 @@ class Controller(object):
 
         for data, i in zip(album['tracks'], range(count)):
             #logging
-            logging.info(f'ALBUM {i+1}/{count} | {data["artist"][0]} - {data["name"]}')
+            logging.info(f'S-ALBUM {i+1}/{count} | {data["artist"][0]} - {data["name"]}')
 
             if self.downloader.downloadBySpotifyUri(data['uri']):
 
@@ -387,6 +387,41 @@ class Controller(object):
                 self.bot.sendText(user, text='This video is unavailable for me(')
 
                 return False
+
+        return True
+
+    def DL_DEEZER_ALBUM(self, message, user):
+
+        uri = message
+
+        data = self.downloader.getAlbumDeezer(uri)
+        path = f"Downloads/{uri}.png"
+
+
+        downloadAlbumImage(data['image'], path)
+        logging.info(f'Downloaded {path}')
+
+        self.bot.sendPhoto(
+            chat_id=user,
+            photo=open(path,'rb'),
+            text=f'Album <b>{data["name"]}</b> by <b>{data["artist"]}</b>'
+        )
+
+        logging.info(f'Sended {path}')
+        album = data
+        count = len(album['tracks'])
+
+        for data, i in zip(album['tracks'], range(count)):
+            #logging
+            logging.info(f'D-ALBUM {i+1}/{count} | {data["artist"][0]} - {data["name"]}')
+
+            if self.downloader.downloadByDeezerID(str(data['uri'][1:-1])):
+
+                self.sendSong(data=data, user=user)
+
+        os.remove(path)
+        #logging
+        logging.info(f'DELETED {path}')
 
         return True
 
@@ -489,6 +524,12 @@ class Controller(object):
         elif str(message) == '/status':
             return 'status'
 
+        elif str(message).find('deezer.com/track/') > 0:
+            return 'dtrack'
+
+        elif str(message).find('deezer.com/album/') > 0:
+            return 'dalbum'
+
         else:
             return 'text'
 
@@ -577,6 +618,39 @@ class Controller(object):
 
             return self.DL_QUERY(message, user=id)
 
+        elif type == 'dtrack':
+
+            #logging
+            logging.info(f'DEEZER TRACK DETECTED')
+
+            track = str(str(message).split('/track/')[1]).split('?')[0]
+            data = self.downloader.getDeezerTags(track)
+
+            if data:
+
+                #logging
+                logging.info(f'SONG  {data["artist"][0]} - {data["name"]}')
+
+                if self.downloader.downloadByDeezerID(track):
+
+                    return self.sendSong(data=data, user=id)
+
+            else:
+
+                #logging
+                logging.error(f'SENDED "Something went wrong" MESSAGE')
+                self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
+                self.bot.sendText(id,text='Couldn\'t find that:(')
+
+                return False
+
+        elif type == 'dalbum':
+
+            #logging
+            logging.info(f'DEEZER ALBUM DETECTED')
+            album = str(str(message).split('album/')[1]).split('?')[0]
+
+            return self.DL_DEEZER_ALBUM(album, id)
 
         elif type == 'link':
 

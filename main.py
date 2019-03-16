@@ -3,6 +3,7 @@ from spotify import Spotify
 from youtube import Youtube
 from editor import TagEditor
 from lastfm import LastFM
+from deezer import Deezer
 import sys, getopt, shutil
 import os
 
@@ -22,6 +23,7 @@ class MusicDownloader(object):
         self.__spotify = Spotify()
         self.__editor = TagEditor()
         self.__last = LastFM()
+        self.__deezer = Deezer()
 
 
     def __downloadMusicFromYoutube(self, name, uri, dur):
@@ -58,6 +60,9 @@ class MusicDownloader(object):
 
     def getLastFMTags(self, name):
         return self.__last.get(name)
+
+    def getDeezerTags(self, id):
+        return self.__deezer.getSongInfo(id)
 
     def getYoutubeMusicInfo(self, url):
         return self.__youtube.getNameFromYoutube(url)
@@ -302,11 +307,69 @@ class MusicDownloader(object):
         else:
             return False, None
 
+    def downloadByDeezerID(self, uri):
+        #get info
+        info = self.__deezer.getSongInfo(uri)
+
+        if info:
+
+            fixed_name = f'{info["artist"][0]} - {info["name"]}'
+            fixed_name = fixed_name.replace('.','')
+            fixed_name = fixed_name.replace(',','')
+            fixed_name = fixed_name.replace("'",'')
+            fixed_name = fixed_name.replace("/","")
+
+            #finding and download from YouTube and tagging
+            if self.__downloadMusicFromYoutube(fixed_name, info['uri'], info['duration_ms']):
+
+                self.__editor.setTags(
+                    data=info
+                )
+
+                cachepath = os.getcwd() + '/cache'
+                fullpath = os.getcwd() + '/Downloads'
+
+                #logging
+                logging.info(f'CACHEPATH {cachepath}')
+                logging.info(f'FULLPATH {fullpath}')
+
+                if not os.path.exists(fullpath):
+                    os.makedirs(fullpath)
+
+                os.rename(
+                    f"{cachepath}/{info['uri']}/{info['uri']}.png",
+                    f"{fullpath}/{info['uri']}.png"
+                )
+                #logging
+                logging.info(f"MOVE TO Downloads/{info['uri']}.png")
+
+                os.rename(
+                    f"{cachepath}/{info['uri']}/{info['uri']}.mp3",
+                    f"{fullpath}/{info['uri']}.mp3"
+                )
+                #logging
+                logging.info(f"MOVE TO Downloads/{info['uri']}.mp3")
+
+                #deleting cache
+                try:
+                    shutil.rmtree(f"cache/{info['uri']}")
+                    #logging
+                    logging.info(f"DELETED cache/{info['uri']}")
+                except:
+                    #logging
+                    logging.error(f"DELETING cache/{info['uri']}")
+
+                return True
+        return False
+
     def search(self, query):
         return self.__spotify.search(query=query)
 
     def getAlbum(self, uri):
         return self.__spotify.getAlbum(uri)
+
+    def getAlbumDeezer(self, id):
+        return self.__deezer.getAlbum(id)
 
 
 
