@@ -1,4 +1,4 @@
-# Spotify Music Downloader (SMD) Desktop \\ **<a href="https://github.com/artyshko/smd/tree/telegram"><b>Telegram</b></a>**
+# Spotify Music Downloader (SMD) Desktop | **<a href="https://github.com/artyshko/smd/tree/telegram"><b>Telegram</b></a>**
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/) [![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![GitHub repo size in bytes](https://img.shields.io/github/repo-size/artyshko/smd.svg) ![GitHub Release Date](https://img.shields.io/github/release-date/artyshko/smd.svg) ![GitHub issues](https://img.shields.io/github/issues/artyshko/smd.svg) ![Beerpay](https://img.shields.io/beerpay/artyshko/smd.svg) [![Beerpay](https://beerpay.io/artyshko/smd/make-wish.svg?style=flat)](https://beerpay.io/artyshko/smd?focus=wish)
 
 <img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram/Data/9.png"> 
@@ -7,11 +7,11 @@
 
 # **Get it on Telegram <a href="https://telegram.me/SpotifyMusicDownloaderBot"><b>@SpotifyMusicDownloaderBot</b></a>**
 
-<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram-beta/Data/header1.png">
-
-## **Now with Shazam support**
-
-<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram-unstable/Data/header3.png">
+<img align="center" src="https://telegra.ph/file/ea696ddba7754a7d69cef.png">
+<img align="center" src="https://telegra.ph/file/35c9427fbe65045b765ed.png">
+<img align="center" src="https://telegra.ph/file/38e841982cb6392f12697.png">
+<img align="center" src="https://telegra.ph/file/3b2d3eef17ba9e6c2a6bc.png">
+<img align="center" src="https://telegra.ph/file/4f284eaa2413a47994124.png">
 
 ## Desktop version
 
