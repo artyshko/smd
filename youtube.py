@@ -54,6 +54,8 @@ class Youtube(object):
 
     def get(self, text, dur):
 
+        text = str(text).replace('&','')
+
         data1 = self.getVideoFromYoutube(text)
         data2 = self.getVideoFromYoutube(text + ' Audio')
 
@@ -96,7 +98,7 @@ class Youtube(object):
         try:
             #logging
             logging.info(f"Init YouTube")
-            logging.info(f"URL {url}")
+            logging.warning(f"URL {url}")
             yt = YouTube(url)
             #logging
             logging.info(f"Get Data")
@@ -182,9 +184,6 @@ class Youtube(object):
         result = -1
         link = None
 
-        #logging
-        logging.info(f"{len(research)} research objects")
-
         for item in research:
             try:
 
@@ -193,6 +192,8 @@ class Youtube(object):
                 item_duration = int(y.length)*1000
                 diff = duration - item_duration
                 diff = diff * -1 if diff < 0 else diff
+
+                logging.warning(f'{item} {item_duration}')
 
                 if (result == -1 or diff < result) and not str(y.title).find('8D') > -1:
                     result, link = diff, item
@@ -236,5 +237,5 @@ class Youtube(object):
 if __name__ == "__main__":
 
     y = Youtube()
-    name = y.getNameFromYoutube('https://youtube.com/watch?v=H4buRu9-Wb4')
+    name = y.get(text="Sean Paul & J Balvin - ‎Contra La Pared", dur=256271)
     print(name)

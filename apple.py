@@ -49,4 +49,5 @@ class AppleMusic(object):
                 return None
 if __name__ == "__main__":
     a = AppleMusic()
-    a.get('https://itunes.apple.com/uk/album/simplify/1430224633?i=1430225075')
+    name = a.get('https://itunes.apple.com/us/album/contra-la-pared/1455082839?i=1455082850')
+    print(name)

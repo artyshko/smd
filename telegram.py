@@ -90,7 +90,7 @@ class BotHandler(object):
             'chat_id' : chat_id,
             'title': str(name),
             'performer':str(artist),
-            'caption':f'<b>{str(artist)}</b> {str(name)}',
+            'caption':f'<b>{str(artist)}</b> {str(name)}\n@SpotifyMusicDownloaderBot',
             'parse_mode':'HTML'
         }
 
@@ -180,31 +180,31 @@ class Controller(object):
 
         return True
 
-    def __send(self, data, user, incorrect=False):
+    def __send(self, data, user, name):
 
-        uri, name = data['uri'], getCorrect(f'{data["artist"][0]} - {data["name"]}')
+        uri = data['uri']
 
         os.rename(
-            f"Downloads/{name if incorrect else uri}.mp3",
-            f"Downloads/{uri if incorrect else name}.mp3"
+            f"Downloads/{uri}.mp3",
+            f"Downloads/{name}.mp3"
         )
 
         return self.bot.sendAudio(
             chat_id=user,
-            audio=open(f"Downloads/{uri if incorrect else name}.mp3",'rb'),
+            audio=open(f"Downloads/{name}.mp3",'rb'),
             thumb=open(f"Downloads/{uri}.png",'rb'),
             name=f'{data["name"]}',
             artist=f'{data["artist"][0]}'
         )
 
-    def __remove(self, data, incorrect=False):
+    def __remove(self, data, name):
 
-        uri, name = data['uri'], getCorrect(f'{data["artist"][0]} - {data["name"]}')
+        uri = data['uri']
 
         #deleting song and cover
-        os.remove(f"Downloads/{uri if incorrect else name}.mp3")
+        os.remove(f"Downloads/{name}.mp3")
         #logging
-        logging.info(f"DELETED Downloads/{uri if incorrect else name}.mp3")
+        logging.info(f"DELETED Downloads/{name}.mp3")
 
         os.remove(f"Downloads/{uri}.png")
         #logging
@@ -430,33 +430,41 @@ class Controller(object):
 
         try:
 
-            code = self.__send(data, user=user)
+            name = getCorrect(f'{data["artist"][0]} - {data["name"]}')
+            code = self.__send(data, name=name, user=user)
 
             if int(code) != 200:
 
                 #trying to fix incorrect name
-                code = self.__send(data, user=user, incorrect=True)
+                os.rename(
+                    f"Downloads/{name}.mp3",
+                    f"Downloads/{data['uri']}.mp3"
+                )
+                new_name = data['uri']
+                code = self.__send(data, user=user, name=new_name)
 
                 if int(code) != 200:
 
                     #sending sad message
-                    self.bot.sendText(user, text='Something went wrong:(')
-                    self.__remove(data, incorrect=True)
+                    self.bot.sendSticker(user, sticker=open(f"Data/s3.webp",'rb'),)
+                    self.bot.sendText(user, text='Couldn\'t find that:(')
+                    self.__remove(data, name=new_name)
 
                     return False
 
-                self.__remove(data, incorrect=True)
+                self.__remove(data, name=new_name)
 
                 return True
 
             else:
 
-                self.__remove(data)
+                self.__remove(data, name)
                 return True
 
         except:
 
             logging.error(f'ERROR IN controller.sendSong()')
+            self.bot.sendSticker(user, sticker=open(f"Data/s1.webp",'rb'),)
             self.bot.sendText(user, text='Something went wrong:(')
 
             return False
