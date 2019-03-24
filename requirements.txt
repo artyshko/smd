@@ -9,3 +9,4 @@ pyperclip==1.6.4
 lxml==4.2.3
 moviepy==0.2.3.5
 beautifulsoup4==4.7.1
+imageio==2.4.1
