@@ -9,6 +9,7 @@ import apple
 import random
 import urllib.request
 import pickle
+import image
 
 import logging
 
@@ -77,7 +78,7 @@ class BotHandler(object):
         return requests.post(self.api_url + method, params)
 
 
-    def sendAudio(self, chat_id, name, artist, audio, thumb):
+    def sendAudio(self, chat_id, name, artist, audio, thumb, duration, number=None):
 
         method = 'sendAudio'
 
@@ -86,11 +87,15 @@ class BotHandler(object):
             'thumb':thumb
         }
 
+        if number:
+            part = f"{number}. "
+
         data = {
             'chat_id' : chat_id,
             'title': str(name),
             'performer':str(artist),
-            'caption':f'<b>{str(artist)}</b> {str(name)}\n@SpotifyMusicDownloaderBot',
+            'duration':int(duration * .001),
+            'caption':f'{part if number else ""}<b>{str(artist)}</b> {str(name)}\n@SpotifyMusicDownloaderBot',
             'parse_mode':'HTML'
         }
 
@@ -180,7 +185,7 @@ class Controller(object):
 
         return True
 
-    def __send(self, data, user, name):
+    def __send(self, data, user, name, number=None):
 
         uri = data['uri']
 
@@ -194,7 +199,9 @@ class Controller(object):
             audio=open(f"Downloads/{name}.mp3",'rb'),
             thumb=open(f"Downloads/{uri}.png",'rb'),
             name=f'{data["name"]}',
-            artist=f'{data["artist"][0]}'
+            artist=f'{data["artist"][0]}',
+            duration=data['duration_ms'],
+            number=number
         )
 
     def __remove(self, data, name):
@@ -290,15 +297,20 @@ class Controller(object):
 
 
         downloadAlbumImage(data['image'], path)
+
+        try: image.Effects.createPoster(path, name=data["name"], artist=data["artist"], file=path)
+        except: pass
+
         logging.info(f'Downloaded {path}')
 
         self.bot.sendPhoto(
             chat_id=user,
             photo=open(path,'rb'),
-            text=f'Album <b>{data["name"]}</b> by <b>{data["artist"]}</b>\n\n<b>{data["copyright"]}</b>'
+            text=f''
         )
 
         logging.info(f'Sended {path}')
+
         album = data
         count = len(album['tracks'])
 
@@ -308,7 +320,7 @@ class Controller(object):
 
             if self.downloader.downloadBySpotifyUri(data['uri']):
 
-                self.sendSong(data=data, user=user)
+                self.sendSong(data=data, user=user, number=i+1)
 
         os.remove(path)
         #logging
@@ -399,12 +411,16 @@ class Controller(object):
 
 
         downloadAlbumImage(data['image'], path)
+
+        try: image.Effects.createPoster(path, name=data["name"], artist=data["artist"], file=path)
+        except: pass
+
         logging.info(f'Downloaded {path}')
 
         self.bot.sendPhoto(
             chat_id=user,
             photo=open(path,'rb'),
-            text=f'Album <b>{data["name"]}</b> by <b>{data["artist"]}</b>'
+            text=f''
         )
 
         logging.info(f'Sended {path}')
@@ -417,7 +433,7 @@ class Controller(object):
 
             if self.downloader.downloadByDeezerID(str(data['uri'][1:-1])):
 
-                self.sendSong(data=data, user=user)
+                self.sendSong(data=data, user=user, number=i+1)
 
         os.remove(path)
         #logging
@@ -426,12 +442,12 @@ class Controller(object):
         return True
 
 
-    def sendSong(self, data, user):
+    def sendSong(self, data, user, number=None):
 
         try:
 
             name = getCorrect(f'{data["artist"][0]} - {data["name"]}')
-            code = self.__send(data, name=name, user=user)
+            code = self.__send(data, name=name, user=user, number=number)
 
             if int(code) != 200:
 
@@ -441,7 +457,7 @@ class Controller(object):
                     f"Downloads/{data['uri']}.mp3"
                 )
                 new_name = data['uri']
-                code = self.__send(data, user=user, name=new_name)
+                code = self.__send(data, user=user, name=new_name, number=number)
 
                 if int(code) != 200:
 
