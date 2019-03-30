@@ -318,6 +318,10 @@ class Controller(object):
             #logging
             logging.info(f'S-ALBUM {i+1}/{count} | {data["artist"][0]} - {data["name"]}')
 
+            #fixed incorrect statistic
+            try: self.downloader.getData(data["uri"])
+            except: pass
+
             if self.downloader.downloadBySpotifyUri(data['uri']):
 
                 self.sendSong(data=data, user=user, number=i+1)
