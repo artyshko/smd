@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO,
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 
-manager = Celery('telegram',broker='redis://smd:mThquQxrJbyVYVlmLLAmwzLd2t5vDWVO@redis-12274.c52.us-east-1-4.ec2.cloud.redislabs.com:12274')
+manager = Celery('telegram',broker='redis://smd:1mThquQxrJbyVYVlmLLAmwzLd2t5vDWVO@redis-12274.c52.us-east-1-4.ec2.cloud.redislabs.com:12274')
 
 class BotHandler(object):
 
@@ -470,6 +470,17 @@ class Controller(object):
             return False
 
     def worker(self,update):
+
+        #get message data
+        chat_id = update['message']['chat']['id']
+
+        #Youtube has blocked our server, so bot will be down for a few days. BUT NOT FOREVER! IT WILL WORK AGAIN!
+        #Sorry for the temporary inconvenience!
+
+        self.bot.sendSticker(chat_id, sticker=open(f"Data/s1.webp",'rb'))
+        self.bot.sendText(chat_id, 'Youtube has blocked our server, so bot will be down for a few days.\nBUT NOT FOREVER! IT WILL WORK AGAIN!\nSorry for the temporary inconvenience!')
+
+        return True
 
         if 'message' in list(update.keys()):
             #in case of new message
