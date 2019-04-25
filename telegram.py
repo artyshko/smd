@@ -491,17 +491,6 @@ class Controller(object):
 
     def worker(self,update):
 
-        #get message data
-        chat_id = update['message']['chat']['id']
-
-        #Youtube has blocked our server, so bot will be down for a few days. BUT NOT FOREVER! IT WILL WORK AGAIN!
-        #Sorry for the temporary inconvenience!
-
-        self.bot.sendSticker(chat_id, sticker=open(f"Data/s1.webp",'rb'))
-        self.bot.sendText(chat_id, 'Youtube has blocked our server, so bot will be down for a few days.\nBUT NOT FOREVER! IT WILL WORK AGAIN!\nSorry for the temporary inconvenience!')
-
-        return True
-
         if 'message' in list(update.keys()):
             #in case of new message
 

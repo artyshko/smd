@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+from __future__ import unicode_literals
+import youtube_dl
+
 from pytube import YouTube
 from bs4 import BeautifulSoup
 import requests
@@ -96,17 +99,14 @@ class Youtube(object):
         #logging
         logging.info(f"Start downloading")
         try:
+
+            try:url = str(url).replace('com//watch','com/watch')
+            except:pass
+
             #logging
             logging.info(f"Init YouTube")
             logging.warning(f"URL {url}")
-            yt = YouTube(url)
-            #logging
-            logging.info(f"Get Data")
-            #downloading
-            yt = yt.streams.filter(
-                progressive=True,
-                file_extension='mp4'
-            ).order_by('resolution').desc().first()
+
 
             #logging
             logging.info(f"Create Directory")
@@ -128,7 +128,17 @@ class Youtube(object):
             logging.info(f"Start downloading")
 
 
-            yt.download('cache/'+ path, filename=path)
+            print(filename)
+            ydl_opts = {
+            'outtmpl': f'{fullpath}/{filename}/{filename}',
+            'format':'best'
+            }
+            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([url])
+
+            os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
+
+            #yt.download('cache/'+ path, filename=path)
 
             #logging
             logging.info(f"Downloading successful")
@@ -149,12 +159,14 @@ class Youtube(object):
             #logging
             logging.error(f"Youtube:os.makedirs(fullpath)")
 
+        clip = mp.VideoFileClip(f'cache/{uri}/{uri}.mp4').subclip()
+        clip.audio.write_audiofile(f'cache/{uri}/{uri}.mp3', bitrate='3000k', progress_bar=False)
+
+        logging.info(f"Converting successful")
+
         try:
 
-            clip = mp.VideoFileClip(f'cache/{uri}/{uri}.mp4').subclip()
-            clip.audio.write_audiofile(f'cache/{uri}/{uri}.mp3', bitrate='3000k', progress_bar=False)
-
-            logging.info(f"Converting successful")
+            pass
 
         except Exception as e:
             logging.error(f"Youtube.convertVideoToMusic")
@@ -185,17 +197,28 @@ class Youtube(object):
         link = None
 
         for item in research:
+
+
             try:
 
-                y = YouTube(item)
+                try:item = str(item).replace('com//watch','com/watch')
+                except:pass
 
-                item_duration = int(y.length)*1000
+                ydl_opts = {
+                'outtmpl': f'1',
+                'format':'best'
+                }
+
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    dictMeta = ydl.extract_info(item, download=False)
+
+                item_duration = int(dictMeta['duration'])*1000
                 diff = duration - item_duration
                 diff = diff * -1 if diff < 0 else diff
 
                 logging.warning(f'{item} {item_duration}')
 
-                if (result == -1 or diff < result) and not str(y.title).find('8D') > -1:
+                if (result == -1 or diff < result) and not str(dictMeta['title']).find('8D') > -1:
                     result, link = diff, item
 
             except:
@@ -234,8 +257,19 @@ class Youtube(object):
 
         return name
 
+
+
 if __name__ == "__main__":
 
     y = Youtube()
-    name = y.get(text="Sean Paul & J Balvin - ‎Contra La Pared", dur=256271)
-    print(name)
+    #name = y.get(text="Sean Paul & J Balvin - ‎Contra La Pared", dur=256271)
+    y.download(url='https://www.youtube.com//watch?v=l91u752OCPo', path='boom',filename='file')
+
+
+
+    # ydl_opts = {
+    # 'outtmpl': 'videoo.%(ext)s',
+    # 'format':'137'
+    # }
+    # with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+    #     ydl.download(['https://www.youtube.com/watch?v=dP15zlyra3c'])
