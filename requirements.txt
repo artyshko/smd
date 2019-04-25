@@ -11,3 +11,4 @@ pytube==9.4.0
 imageio==2.3.0
 Pillow==6.0.0
 beautifulsoup4==4.7.1
+celery==4.2.1
