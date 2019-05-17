@@ -4,7 +4,8 @@ requests==2.18.4
 mutagen==1.41.0
 notify2==0.3.1
 pygame==1.9.4
-git+git://github.com/nficano/pytube.git
+youtube_dl==2019.5.11
+pytube==9.4.0
 pyperclip==1.6.4
 lxml==4.2.3
 moviepy==0.2.3.5
