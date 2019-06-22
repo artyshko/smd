@@ -12,3 +12,4 @@ imageio==2.3.0
 Pillow==6.0.0
 beautifulsoup4==4.7.1
 redis==2.10.6
+lyricsgenius==1.4.0
