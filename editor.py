@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 import re, os
 import shutil
+import genius
 #used for mp3 ID3 tagging
-from mutagen.id3._frames import TIT2, TALB, TPE1
+from mutagen.id3._frames import TIT2, TALB, TPE1, USLT
 from mutagen.mp3 import MP3
 from mutagen.id3 import ID3, APIC, error
+
 #used for web scraping
 import urllib.request
 
@@ -104,6 +106,14 @@ class TagEditor(object):
             audio.tags.add(TPE1(
                 encoding=3,
                 text=(data['artist'][0]))
+            )
+
+            #add song artist
+            audio.tags.add(USLT(
+                encoding=3,
+                lang=u'eng',
+                desc=u'desc',
+                text=genius.getLyrics(data['artist'][0],data['name']))
             )
 
             #save result
