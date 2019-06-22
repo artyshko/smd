@@ -2,7 +2,7 @@ from celery import Celery
 
 import requests
 import datetime
-import io, os
+import io, os, sys
 import re
 import main
 import apple
@@ -676,9 +676,22 @@ class Controller(object):
 
             #logging
             logging.info(f'DEEZER ALBUM DETECTED')
-            album = str(str(message).split('album/')[1]).split('?')[0]
 
-            return self.DL_DEEZER_ALBUM(album, id)
+            self.bot.sendSticker(
+                id,
+                sticker=open(f"Data/s6.webp",'rb')
+            )
+
+            self.bot.sendHTML(
+                id,
+                '<b>Due to a huge load and often fall down, the bot temporary won\'t support albums downloading.</b>\n\nWe Apologize for the Temporary Inconvenience!'
+            )
+
+
+            #album = str(str(message).split('album/')[1]).split('?')[0]
+
+            #return self.DL_DEEZER_ALBUM(album, id)
+            return None
 
         elif type == 'link':
 
@@ -688,7 +701,19 @@ class Controller(object):
             if str(message).find('/album/') > -1:
 
                 logging.info('ALBUM MODE')
-                return self.DL_SPOTIFY_ALBUM(message, user=id)
+
+                self.bot.sendSticker(
+                    id,
+                    sticker=open(f"Data/s6.webp",'rb')
+                )
+
+                self.bot.sendHTML(
+                    id,
+                    '<b>Due to a huge load and often fall down, the bot temporary won\'t support albums downloading.</b>\n\nWe Apologize for the Temporary Inconvenience!'
+                )
+
+                #return self.DL_SPOTIFY_ALBUM(message, user=id)
+                return None
 
             message = self.__convertToURI(message)
 
