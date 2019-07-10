@@ -136,7 +136,8 @@ class Youtube(object):
             'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
             }
 
-            logging.error('SERVER_IPv4:',socket.gethostbyname(socket.getfqdn()))
+            try:print(f'SERVER_IPv4:{socket.gethostbyname(socket.getfqdn())}')
+            except:pass
 
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
