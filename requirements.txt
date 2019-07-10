@@ -1,7 +1,7 @@
 lxml==4.2.3
 mutagen==1.41.0
 spotipy==2.4.4
-youtube_dl==2019.6.21
+youtube_dl==2019.7.2
 Flask==0.12.2
 pyperclip==1.6.4
 celery==4.2.1
