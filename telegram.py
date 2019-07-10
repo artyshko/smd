@@ -192,8 +192,7 @@ class Controller(object):
     def __restart(self):
 
         #logging
-        logging.warning(f'Restarting a downloader')
-        logging.warning(f'Trying to do the same')
+        logging.warning(f'RESTARTING "youtube_dl" MODULE')
 
         self.downloader = main.MusicDownloader()
 
@@ -577,6 +576,9 @@ class Controller(object):
 
     def controller(self, message, id):
 
+        #fix
+        self.__restart()
+
         type = self.classify(message)
 
         #logging
@@ -802,6 +804,8 @@ def mainloop():
                 offset = update_id + 1
                 #celery task
                 do.delay(update)
+
+
         except:
             offset = None
             bot = BotHandler()
