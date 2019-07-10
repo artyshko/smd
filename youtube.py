@@ -133,10 +133,10 @@ class Youtube(object):
             ydl_opts = {
             'outtmpl': f'{fullpath}/{filename}/{filename}',
             'format':'best',
-            'source_address': f'{socket.gethostbyname(socket.getfqdn())[0]}'
+            'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
             }
 
-            logging.warning('SERVER_IPv4:',socket.gethostbyname(socket.getfqdn())[0])
+            logging.error('SERVER_IPv4:',socket.gethostbyname(socket.getfqdn()))
 
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
@@ -212,7 +212,7 @@ class Youtube(object):
                 ydl_opts = {
                 'outtmpl': f'1',
                 'format':'best',
-                'source_address': f'{socket.gethostbyname(socket.getfqdn())[0]}'
+                'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
                 }
 
                 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
