@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 import requests
 import lxml
 import os
+import socket
 
 #IMPORT WITH STDOUT REDIRECTION
 #FIX STARTUP PYGAME HELLO MESSAGE
@@ -131,8 +132,12 @@ class Youtube(object):
             print(filename)
             ydl_opts = {
             'outtmpl': f'{fullpath}/{filename}/{filename}',
-            'format':'best'
+            'format':'best',
+            'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
             }
+
+            logging.warning('SERVER_IPv4:',socket.gethostbyname(socket.getfqdn()))
+
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
 
@@ -206,7 +211,8 @@ class Youtube(object):
 
                 ydl_opts = {
                 'outtmpl': f'1',
-                'format':'best'
+                'format':'best',
+                'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
                 }
 
                 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
