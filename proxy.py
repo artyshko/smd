@@ -1,11 +1,12 @@
 from proxyscrape import create_collector
 
 def getProxy(log=True):
-
-    collector = create_collector(
-        'my-collector',
-        ('http', 'https', 'socks4', 'socks5')
-    )
+    try:
+        collector = create_collector(
+            'my-collector',
+            ('http', 'https', 'socks4', 'socks5')
+        )
+    except:pass
 
     proxy = collector.get_proxy(
         {
@@ -22,5 +23,3 @@ def getProxy(log=True):
         print(f'| PROXY | {str(proxy[3]).upper()} | {str(proxy[5]).upper()} {"| ANONYMOUS |" if proxy[4] else "| PUBLIC |"} {result["proxy"]} |')
 
     return result
-
-getProxy()
