@@ -8,6 +8,7 @@ import requests
 import lxml
 import os
 import socket
+import proxy
 
 #IMPORT WITH STDOUT REDIRECTION
 #FIX STARTUP PYGAME HELLO MESSAGE
@@ -40,6 +41,7 @@ class Youtube(object):
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
         }
         self.__result = []
+        self.__proxy = proxy.getProxy()
 
 
     def getResult(self,i=0):
@@ -132,7 +134,8 @@ class Youtube(object):
             print(filename)
             ydl_opts = {
             'outtmpl': f'{fullpath}/{filename}/{filename}',
-            'format':'best'
+            'format':'best',
+            'proxy':self.__proxy['proxy']
             }
 
             # #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
@@ -212,7 +215,8 @@ class Youtube(object):
 
                 ydl_opts = {
                 'outtmpl': f'1',
-                'format':'best'
+                'format':'best',
+                'proxy':self.__proxy['proxy']
                 }
 
                 #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
