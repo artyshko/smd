@@ -134,13 +134,13 @@ class Youtube(object):
             print(filename)
             ydl_opts = {
             'outtmpl': f'{fullpath}/{filename}/{filename}',
-            'format':'best',
-            'proxy':self.__proxy['proxy']
+            'format':'best'
             }
 
             # #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
             # try:print(f'SERVER_IPv4:{socket.gethostbyname(socket.getfqdn())}')
-            # except:pass
+            # except:pass            'proxy':self.__proxy['proxy']
+
 
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
@@ -215,8 +215,7 @@ class Youtube(object):
 
                 ydl_opts = {
                 'outtmpl': f'1',
-                'format':'best',
-                'proxy':self.__proxy['proxy']
+                'format':'best'
                 }
 
                 #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
