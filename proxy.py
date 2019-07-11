@@ -1,4 +1,4 @@
-from proxyscrape import create_collector
+from proxyscrape import create_collector, get_collector
 
 def getProxy(log=True):
 
