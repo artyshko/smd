@@ -1,12 +1,18 @@
 from proxyscrape import create_collector
 
 def getProxy(log=True):
+
     try:
+
         collector = create_collector(
-            'my-collector',
+            'smd-collector',
             ('http', 'https', 'socks4', 'socks5')
         )
-    except:pass
+
+    except:
+
+        collector = get_collector('smd-collector')
+
 
     proxy = collector.get_proxy(
         {
