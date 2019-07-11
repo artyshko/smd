@@ -576,7 +576,7 @@ class Controller(object):
     def controller(self, message, id):
 
         #fix
-        #self.__restart()
+        self.__restart()
 
         type = self.classify(message)
 

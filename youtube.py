@@ -41,7 +41,7 @@ class Youtube(object):
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
         }
         self.__result = []
-        self.__proxy = proxy.getProxy()
+        
 
 
     def getResult(self,i=0):
@@ -133,8 +133,9 @@ class Youtube(object):
 
             print(filename)
             ydl_opts = {
-            'outtmpl': f'{fullpath}/{filename}/{filename}',
-            'format':'best'
+                'outtmpl': f'{fullpath}/{filename}/{filename}',
+                'format':'best',
+                'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
             }
 
             # #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
@@ -214,8 +215,9 @@ class Youtube(object):
                 except:pass
 
                 ydl_opts = {
-                'outtmpl': f'1',
-                'format':'best'
+                    'outtmpl': f'1',
+                    'format':'best',
+                    'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
                 }
 
                 #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
