@@ -575,8 +575,23 @@ class Controller(object):
 
     def controller(self, message, id):
 
-        #fix
-        self.__restart()
+        TEXT = """Google is blocking our servers. (Again)
+
+We will definitely not give up and will work to find any solution.
+Proxy servers using is a bad idea, because the time of downloading increases from a few secounds to 5-7 minutes and more.
+Until Sunday (July 14) Spotify Music Downloader Bot will probably not work and you will recive this message instead of a song. We do apologize for any inconvenience.
+
+Truly yours, SMD Bot Team."""
+
+        #logging
+        logging.warning(f"Sending sad message")
+        self.bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
+        self.bot.sendText(
+            id,
+            text=TEXT
+            )
+            
+        return None
 
         type = self.classify(message)
 
