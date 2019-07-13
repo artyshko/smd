@@ -227,16 +227,29 @@ class Youtube(object):
 
         for item in research:
 
-            try:
-                y = YouTube(item)
 
-                item_duration = int(y.length)*1000
+            try:
+
+                try:item = str(item).replace('com//watch','com/watch')
+                except:pass
+
+                ydl_opts = {
+                    'outtmpl': f'1',
+                    'format':'best',
+                    'force-ipv4': True
+                }
+
+                #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    dictMeta = ydl.extract_info(item, download=False)
+
+                item_duration = int(dictMeta['duration'])*1000
                 diff = duration - item_duration
                 diff = diff * -1 if diff < 0 else diff
 
                 logging.warning(f'{item} {item_duration}')
 
-                if (result == -1 or diff < result) and not str(y.title).find('8D') > -1:
+                if (result == -1 or diff < result) and not str(dictMeta['title']).find('8D') > -1:
                     result, link = diff, item
 
             except:
