@@ -588,7 +588,7 @@ Until Sunday (July 14) Spotify Music Downloader Bot will probably not work and y
 Truly yours, SMD Bot Team."""
 
         state = False
-        try:state = True if id == 232027721 else False
+        try:state = True if id != 232027721 else False
         except:state = False
 
         if state:
