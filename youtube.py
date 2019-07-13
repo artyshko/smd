@@ -168,7 +168,7 @@ class Youtube(object):
 
                 os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
             except:
-                
+
                 self.__proxy = proxy.get()
                 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                     ydl.download([url])
@@ -234,10 +234,8 @@ class Youtube(object):
 
         for item in research:
 
-            print(self.__proxy['proxy'])
-
             try:
-
+                self.__proxy = proxy.get()
                 try:item = str(item).replace('com//watch','com/watch')
                 except:pass
 
