@@ -16,7 +16,7 @@ def getProxy(log=True):
         collector = get_collector('smd-collector')
 
 
-    proxy = collector.get_proxy()
+    proxy = collector.get_proxy({'code': ('us', 'uk')})
 
     result = {
         'proxy': f'{proxy[5]}://{proxy[0]}:{proxy[1]}',
