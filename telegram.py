@@ -18,8 +18,8 @@ logging.basicConfig(level=logging.INFO,
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 
-manager = Celery('telegram',broker='redis://smd:1mThquQxrJbyVYVlmLLAmwzLd2t5vDWVO@redis-12274.c52.us-east-1-4.ec2.cloud.redislabs.com:12274')
-#manager = Celery('telegram',broker='redis://localhost:6379/0')
+#manager = Celery('telegram',broker='redis://smd:1mThquQxrJbyVYVlmLLAmwzLd2t5vDWVO@redis-12274.c52.us-east-1-4.ec2.cloud.redislabs.com:12274')
+manager = Celery('telegram',broker='redis://localhost:6379/0')
 
 class BotHandler(object):
 
@@ -580,7 +580,7 @@ class Controller(object):
 
     def controller(self, message, id):
 
-        TEXT = """Google is blocking our servers. (Again)
+        TEXT = """Google is blocking our servers. (Again) [TEST SERVER]
 
 We will definitely not give up and will work to find any solution.
 Proxy servers using is a bad idea, because the time of downloading increases from a few secounds to 5-7 minutes and more.
@@ -588,15 +588,23 @@ Until Sunday (July 14) Spotify Music Downloader Bot will probably not work and y
 
 Truly yours, SMD Bot Team."""
 
-        # #logging
-        # logging.warning(f"Sending sad message")
-        # self.bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
-        # self.bot.sendText(
-        #     id,
-        #     text=TEXT
-        #     )
-        #
-        # return None
+        state = False
+        try:state = True if id == 232027721 else False
+        except:state = False
+
+        if state:
+
+            #logging
+            logging.warning(f"Sending sad message")
+            #self.bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
+            self.bot.sendText(
+                id,
+                text=TEXT
+                )
+
+            return None
+
+        print('Yes')
 
         type = self.classify(message)
 

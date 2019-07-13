@@ -151,7 +151,7 @@ class Youtube(object):
 
 
         try:
-            
+
             ydl_opts = {
                 'outtmpl': f'{fullpath}/{filename}/{filename}',
                 'format':'best',
@@ -227,20 +227,17 @@ class Youtube(object):
 
         for item in research:
 
-            y = YouTube(item)
-
-            item_duration = int(y.length)*1000
-            diff = duration - item_duration
-            diff = diff * -1 if diff < 0 else diff
-
-            logging.warning(f'{item} {item_duration}')
-
-            if (result == -1 or diff < result) and not str(y.title).find('8D') > -1:
-                result, link = diff, item
-
             try:
+                y = YouTube(item)
 
-                pass
+                item_duration = int(y.length)*1000
+                diff = duration - item_duration
+                diff = diff * -1 if diff < 0 else diff
+
+                logging.warning(f'{item} {item_duration}')
+
+                if (result == -1 or diff < result) and not str(y.title).find('8D') > -1:
+                    result, link = diff, item
 
             except:
                 #logging
