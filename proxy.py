@@ -18,9 +18,9 @@ def getProxy(log=True):
 
     proxy = collector.get_proxy()
     #{'code': ('us', 'uk')}
-
+    #'proxy': f'{proxy[5]}://{proxy[0]}:{proxy[1]}',
     result = {
-        'proxy': f'{proxy[5]}://{proxy[0]}:{proxy[1]}',
+        'proxy': f'{proxy[5]}://1.1.1.1:80',
         'type':proxy[5],
         'ip':f'{proxy[5]}://{proxy[0]}',
         'port':proxy[1]
