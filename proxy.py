@@ -8,7 +8,7 @@ def getProxy(log=True):
 
         collector = create_collector(
             'smd-collector',
-            ('socks4', 'socks5')
+            ('http','https')
         )
 
     except:
@@ -17,6 +17,7 @@ def getProxy(log=True):
 
 
     proxy = collector.get_proxy()
+    #{'code': ('us', 'uk')}
 
     result = {
         'proxy': f'{proxy[5]}://{proxy[0]}:{proxy[1]}',
