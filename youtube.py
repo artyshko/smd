@@ -162,11 +162,18 @@ class Youtube(object):
             # try:print(f'SERVER_IPv4:{socket.gethostbyname(socket.getfqdn())}')
             # except:pass            'proxy':self.__proxy['proxy']
 
+            try:
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([url])
 
-            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                ydl.download([url])
+                os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
+            except:
+                
+                self.__proxy = proxy.get()
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([url])
 
-            os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
+                os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
             #subprocess.call(f'youtube-dl --force-ipv4 -f best {url} -o cache/{path}/{path}.mp4')
             #subprocess.call(['youtube-dl', f'-o cache/{path}/{path}.mp4 {url} --force-ipv4 -f best'])
 
@@ -254,6 +261,7 @@ class Youtube(object):
                     result, link = diff, item
 
             except:
+                self.__proxy = proxy.get()
                 #logging
                 logging.error(f"Some problems on classify loop")
 
