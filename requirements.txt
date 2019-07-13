@@ -7,10 +7,10 @@ pyperclip==1.6.4
 celery==4.2.1
 requests==2.18.4
 moviepy==0.2.3.5
-pytube==9.4.0
+pytube==9.5.1
 imageio==2.3.0
 Pillow==6.0.0
 beautifulsoup4==4.7.1
-redis==2.10.6
+redis==3.2.0
 lyricsgenius==1.4.0
 proxyscrape==0.2.1

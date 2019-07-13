@@ -19,6 +19,7 @@ console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 
 manager = Celery('telegram',broker='redis://smd:1mThquQxrJbyVYVlmLLAmwzLd2t5vDWVO@redis-12274.c52.us-east-1-4.ec2.cloud.redislabs.com:12274')
+#manager = Celery('telegram',broker='redis://localhost:6379/0')
 
 class BotHandler(object):
 
@@ -29,7 +30,7 @@ class BotHandler(object):
     def __getData(self):
         try:
 
-            with open('.telegram', 'rb') as f:
+            with open('.beta', 'rb') as f:
                 data = pickle.load(f)
 
             self.token = data['token']
@@ -523,10 +524,12 @@ class Controller(object):
                 logging.info(f'USER [{username}]')
                 logging.info(f'MESSAGE {message}')
 
+                #start controller
+                self.controller(message, chat_id)
+
                 try:
 
-                    #start controller
-                    self.controller(message, chat_id)
+                    pass
 
                 except:
                     #logging
@@ -583,15 +586,15 @@ Until Sunday (July 14) Spotify Music Downloader Bot will probably not work and y
 
 Truly yours, SMD Bot Team."""
 
-        #logging
-        logging.warning(f"Sending sad message")
-        self.bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
-        self.bot.sendText(
-            id,
-            text=TEXT
-            )
-            
-        return None
+        # #logging
+        # logging.warning(f"Sending sad message")
+        # self.bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
+        # self.bot.sendText(
+        #     id,
+        #     text=TEXT
+        #     )
+        #
+        # return None
 
         type = self.classify(message)
 

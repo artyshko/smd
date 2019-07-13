@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from __future__ import unicode_literals
 import youtube_dl
+
 from pytube import YouTube
 from bs4 import BeautifulSoup
 import requests
@@ -8,7 +9,6 @@ import lxml
 import os
 import socket
 import proxy
-
 
 #IMPORT WITH STDOUT REDIRECTION
 #FIX STARTUP PYGAME HELLO MESSAGE
@@ -41,6 +41,7 @@ class Youtube(object):
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
         }
         self.__result = []
+        
 
 
     def getResult(self,i=0):
@@ -100,80 +101,59 @@ class Youtube(object):
         '''
         #logging
         logging.info(f"Start downloading")
-
-        #logging
-        logging.info(f"Init YouTube")
-        logging.warning(f"URL {url}")
-        yt = YouTube(url)
-        #logging
-        logging.info(f"Get Data")
-        #downloading
-        # yt = yt.streams.filter(
-        #     progressive=True,
-        #     file_extension='mp4'
-        # ).order_by('resolution').desc().first()
-        try:url = str(url).replace('com//watch','com/watch')
-        except:pass
-
-        #logging
-        logging.info(f"Create Directory")
-
-
-        fullpath = os.getcwd() + '/cache'
-
         try:
-            # if not os.path.exists(fullpath):
-            #     os.makedirs(fullpath)
-            os.makedirs('cache/'+path)
+
+            try:url = str(url).replace('com//watch','com/watch')
+            except:pass
+
             #logging
-            logging.info(f"Created")
-        except:
+            logging.info(f"Init YouTube")
+            logging.warning(f"URL {url}")
+
+
             #logging
-            logging.error(f"Youtube:os.makedirs('cache/'+path)")
-
-        #logging
-        logging.info(f"Start downloading")
+            logging.info(f"Create Directory")
 
 
-        #yt.download('cache/'+ path, filename=path)
-        # print(path)
-        # print(f'cache/{path}/{path}.mp4')
-        # print(f'youtube-dl --force-ipv4 -f best {url} -o cache/{path}/{path}.mp4')
-        #
-        # import subprocess
-        # #p = subprocess.Popen(['youtube-dl', '--force-ipv4', f'-f best {url}', f'-o cache/{path}/{path}.mp4'], bufsize=0, shell=True, stdout=subprocess.PIPE)
-        # #p.wait()
-        # os.system('touch test.sh')
-        # os.system(f'"youtube-dl --force-ipv4 -f best {url} -o cache/{path}/{path}.mp4" > test.sh')
-        # #p1 = subprocess.Popen(['youtube-dl', f'-o cache/{path}/{path}.mp4 -URL {url} --force-ipv4 -f best'],shell=True)
-        # p1 = subprocess.Popen(['bash', 'test.sh'],shell=True)
-        # sStdout, sStdErr = p1.communicate()
+            fullpath = os.getcwd() + '/cache'
 
-        ydl_opts = {
-            'outtmpl': f'{fullpath}/{filename}/{filename}',
-            'format':'best',
-            'force-ipv4': True
-        }
+            try:
+                # if not os.path.exists(fullpath):
+                #     os.makedirs(fullpath)
+                os.makedirs('cache/'+path)
+                #logging
+                logging.info(f"Created")
+            except:
+                #logging
+                logging.error(f"Youtube:os.makedirs('cache/'+path)")
 
-        # #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
-        # try:print(f'SERVER_IPv4:{socket.gethostbyname(socket.getfqdn())}')
-        # except:pass            'proxy':self.__proxy['proxy']
+            #logging
+            logging.info(f"Start downloading")
 
 
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
+            print(filename)
+            ydl_opts = {
+                'outtmpl': f'{fullpath}/{filename}/{filename}',
+                'format':'best',
+                'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
+            }
 
-        os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
-        #subprocess.call(f'youtube-dl --force-ipv4 -f best {url} -o cache/{path}/{path}.mp4')
-        #subprocess.call(['youtube-dl', f'-o cache/{path}/{path}.mp4 {url} --force-ipv4 -f best'])
+            # #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
+            # try:print(f'SERVER_IPv4:{socket.gethostbyname(socket.getfqdn())}')
+            # except:pass            'proxy':self.__proxy['proxy']
 
-        #logging
-        logging.info(f"Downloading successful")
 
-        return filename
+            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([url])
 
-        try:
-            pass
+            os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
+
+            #yt.download('cache/'+ path, filename=path)
+
+            #logging
+            logging.info(f"Downloading successful")
+
+            return filename
         except: return None
 
 
@@ -189,12 +169,14 @@ class Youtube(object):
             #logging
             logging.error(f"Youtube:os.makedirs(fullpath)")
 
+        clip = mp.VideoFileClip(f'cache/{uri}/{uri}.mp4').subclip()
+        clip.audio.write_audiofile(f'cache/{uri}/{uri}.mp3', bitrate='3000k', progress_bar=False)
+
+        logging.info(f"Converting successful")
+
         try:
 
-            clip = mp.VideoFileClip(f'cache/{uri}/{uri}.mp4').subclip()
-            clip.audio.write_audiofile(f'cache/{uri}/{uri}.mp3', bitrate='3000k', progress_bar=False)
-
-            logging.info(f"Converting successful")
+            pass
 
         except Exception as e:
             logging.error(f"Youtube.convertVideoToMusic")
@@ -226,20 +208,30 @@ class Youtube(object):
 
         for item in research:
 
-            y = YouTube(item)
-
-            item_duration = int(y.length)*1000
-            diff = duration - item_duration
-            diff = diff * -1 if diff < 0 else diff
-
-            logging.warning(f'{item} {item_duration}')
-
-            if (result == -1 or diff < result) and not str(y.title).find('8D') > -1:
-                result, link = diff, item
 
             try:
 
-                pass
+                try:item = str(item).replace('com//watch','com/watch')
+                except:pass
+
+                ydl_opts = {
+                    'outtmpl': f'1',
+                    'format':'best',
+                    'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
+                }
+
+                #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    dictMeta = ydl.extract_info(item, download=False)
+
+                item_duration = int(dictMeta['duration'])*1000
+                diff = duration - item_duration
+                diff = diff * -1 if diff < 0 else diff
+
+                logging.warning(f'{item} {item_duration}')
+
+                if (result == -1 or diff < result) and not str(dictMeta['title']).find('8D') > -1:
+                    result, link = diff, item
 
             except:
                 #logging
@@ -277,8 +269,19 @@ class Youtube(object):
 
         return name
 
+
+
 if __name__ == "__main__":
 
     y = Youtube()
-    name = y.get(text="Sean Paul & J Balvin - ‎Contra La Pared", dur=256271)
-    print(name)
+    #name = y.get(text="Sean Paul & J Balvin - ‎Contra La Pared", dur=256271)
+    y.download(url='https://www.youtube.com//watch?v=l91u752OCPo', path='boom',filename='file')
+
+
+
+    # ydl_opts = {
+    # 'outtmpl': 'videoo.%(ext)s',
+    # 'format':'137'
+    # }
+    # with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+    #     ydl.download(['https://www.youtube.com/watch?v=dP15zlyra3c'])
