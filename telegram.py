@@ -302,25 +302,27 @@ class Controller(object):
 
     def DL_SPOTIFY_ALBUM(self, message, user):
 
+        try:
+            link = str(message).split('?')[0]
+            uri = str(link).split('/')[-1]
+            data = self.downloader.getAlbum(uri)
+            path = f"Downloads/{uri}.png"
 
-        link = str(message).split('?')[0]
-        uri = str(link).split('/')[-1]
-        data = self.downloader.getAlbum(uri)
-        path = f"Downloads/{uri}.png"
 
+            downloadAlbumImage(data['image'], path)
 
-        downloadAlbumImage(data['image'], path)
+            try: image.Effects.createPoster(path, name=data["name"], artist=data["artist"], file=path)
+            except: pass
 
-        try: image.Effects.createPoster(path, name=data["name"], artist=data["artist"], file=path)
-        except: pass
+            logging.info(f'Downloaded {path}')
 
-        logging.info(f'Downloaded {path}')
+            self.bot.sendPhoto(
+                chat_id=user,
+                photo=open(path,'rb'),
+                text=f''
+            )
 
-        self.bot.sendPhoto(
-            chat_id=user,
-            photo=open(path,'rb'),
-            text=f''
-        )
+        except:pass
 
         logging.info(f'Sended {path}')
 

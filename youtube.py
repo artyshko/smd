@@ -149,31 +149,32 @@ class Youtube(object):
         # p1 = subprocess.Popen(['bash', 'test.sh'],shell=True)
         # sStdout, sStdErr = p1.communicate()
 
-        ydl_opts = {
-            'outtmpl': f'{fullpath}/{filename}/{filename}',
-            'format':'best',
-            'force-ipv4': True
-        }
-
-        # #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
-        # try:print(f'SERVER_IPv4:{socket.gethostbyname(socket.getfqdn())}')
-        # except:pass            'proxy':self.__proxy['proxy']
-
-
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
-
-        os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
-        #subprocess.call(f'youtube-dl --force-ipv4 -f best {url} -o cache/{path}/{path}.mp4')
-        #subprocess.call(['youtube-dl', f'-o cache/{path}/{path}.mp4 {url} --force-ipv4 -f best'])
-
-        #logging
-        logging.info(f"Downloading successful")
-
-        return filename
 
         try:
-            pass
+            
+            ydl_opts = {
+                'outtmpl': f'{fullpath}/{filename}/{filename}',
+                'format':'best',
+                'force-ipv4': True
+            }
+
+            # #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
+            # try:print(f'SERVER_IPv4:{socket.gethostbyname(socket.getfqdn())}')
+            # except:pass            'proxy':self.__proxy['proxy']
+
+
+            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([url])
+
+            os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
+            #subprocess.call(f'youtube-dl --force-ipv4 -f best {url} -o cache/{path}/{path}.mp4')
+            #subprocess.call(['youtube-dl', f'-o cache/{path}/{path}.mp4 {url} --force-ipv4 -f best'])
+
+            #logging
+            logging.info(f"Downloading successful")
+
+            return filename
+
         except: return None
 
 
