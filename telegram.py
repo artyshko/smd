@@ -735,18 +735,18 @@ Truly yours, SMD Bot Team."""
 
                 logging.info('ALBUM MODE')
 
-                self.bot.sendSticker(
-                    id,
-                    sticker=open(f"Data/s6.webp",'rb')
-                )
+                # self.bot.sendSticker(
+                #     id,
+                #     sticker=open(f"Data/s6.webp",'rb')
+                # )
+                #
+                # self.bot.sendHTML(
+                #     id,
+                #     '<b>Due to a huge load and often fall down, the bot temporary won\'t support albums downloading.</b>\n\nWe Apologize for the Temporary Inconvenience!'
+                # )
 
-                self.bot.sendHTML(
-                    id,
-                    '<b>Due to a huge load and often fall down, the bot temporary won\'t support albums downloading.</b>\n\nWe Apologize for the Temporary Inconvenience!'
-                )
-
-                #return self.DL_SPOTIFY_ALBUM(message, user=id)
-                return None
+                return self.DL_SPOTIFY_ALBUM(message, user=id)
+                #return None
 
             message = self.__convertToURI(message)
 
