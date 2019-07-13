@@ -527,8 +527,8 @@ class Controller(object):
                 logging.info(f'MESSAGE {message}')
 
 
-                try:
 
+                try:
                     #start controller
                     self.controller(message, chat_id)
 
@@ -593,13 +593,13 @@ Truly yours, SMD Bot Team."""
 
         if state:
 
-            #logging
-            logging.warning(f"Sending sad message")
-            #self.bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
-            self.bot.sendText(
-                id,
-                text=TEXT
-                )
+            # #logging
+            # logging.warning(f"Sending sad message")
+            # #self.bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
+            # self.bot.sendText(
+            #     id,
+            #     text=TEXT
+            #     )
 
             return None
 
