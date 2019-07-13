@@ -41,7 +41,7 @@ class Youtube(object):
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
         }
         self.__result = []
-        self.__proxy = proxy.get()
+        self.__proxy = None
 
     def getResult(self,i=0):
         return self.__result[i]
@@ -155,7 +155,6 @@ class Youtube(object):
             ydl_opts = {
                 'outtmpl': f'{fullpath}/{filename}/{filename}',
                 'format':'best',
-                'proxy':self.__proxy['proxy']
             }
 
             # #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
@@ -170,6 +169,12 @@ class Youtube(object):
             except:
 
                 self.__proxy = proxy.get()
+                ydl_opts = {
+                    'outtmpl': f'{fullpath}/{filename}/{filename}',
+                    'format':'best',
+                    'proxy':self.__proxy['proxy']
+                }
+
                 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                     ydl.download([url])
 
