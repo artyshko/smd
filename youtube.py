@@ -168,11 +168,9 @@ class Youtube(object):
                 os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
             except:
 
-                self.__proxy = proxy.get()
                 ydl_opts = {
                     'outtmpl': f'{fullpath}/{filename}/{filename}',
                     'format':'best',
-                    'proxy':self.__proxy['proxy']
                 }
 
                 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
@@ -247,7 +245,6 @@ class Youtube(object):
                 ydl_opts = {
                     'outtmpl': f'1',
                     'format':'best',
-                    'proxy':self.__proxy['proxy']
                 }
                 #'force-ipv4': True,
                 #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'

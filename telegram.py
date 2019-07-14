@@ -30,7 +30,7 @@ class BotHandler(object):
     def __getData(self):
         try:
 
-            with open('.beta', 'rb') as f:
+            with open('.telegram', 'rb') as f:
                 data = pickle.load(f)
 
             self.token = data['token']
@@ -579,11 +579,12 @@ class Controller(object):
 
     def controller(self, message, id):
 
-        TEXT = """Google is blocking our servers. (Again) [TEST SERVER]
+        TEXT = """Google is blocking our servers. (Again)
 
 We will definitely not give up and will work to find any solution.
 Proxy servers using is a bad idea, because the time of downloading increases from a few secounds to 5-7 minutes and more.
-Until Sunday (July 14) Spotify Music Downloader Bot will probably not work and you will recive this message instead of a song. We do apologize for any inconvenience.
+We do apologize for any inconvenience.
+https://t.me/joinchat/AAAAAFi_vxi7Z2lRxub5cQ
 
 Truly yours, SMD Bot Team."""
 
@@ -593,13 +594,13 @@ Truly yours, SMD Bot Team."""
 
         if state:
 
-            # #logging
-            # logging.warning(f"Sending sad message")
-            # #self.bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
-            # self.bot.sendText(
-            #     id,
-            #     text=TEXT
-            #     )
+            #logging
+            logging.warning(f"Sent sad message")
+            self.bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
+            self.bot.sendText(
+                id,
+                text=TEXT
+                )
 
             return None
 
@@ -744,18 +745,18 @@ Truly yours, SMD Bot Team."""
 
                 logging.info('ALBUM MODE')
 
-                # self.bot.sendSticker(
-                #     id,
-                #     sticker=open(f"Data/s6.webp",'rb')
-                # )
-                #
-                # self.bot.sendHTML(
-                #     id,
-                #     '<b>Due to a huge load and often fall down, the bot temporary won\'t support albums downloading.</b>\n\nWe Apologize for the Temporary Inconvenience!'
-                # )
+                self.bot.sendSticker(
+                    id,
+                    sticker=open(f"Data/s6.webp",'rb')
+                )
 
-                return self.DL_SPOTIFY_ALBUM(message, user=id)
-                #return None
+                self.bot.sendHTML(
+                    id,
+                    '<b>Due to a huge load and often fall down, the bot temporary won\'t support albums downloading.</b>\n\nWe Apologize for the Temporary Inconvenience!'
+                )
+
+                #return self.DL_SPOTIFY_ALBUM(message, user=id)
+                return None
 
             message = self.__convertToURI(message)
 
