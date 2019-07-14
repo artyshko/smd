@@ -584,7 +584,7 @@ class Controller(object):
 We will definitely not give up and will work to find any solution.
 Proxy servers using is a bad idea, because the time of downloading increases from a few secounds to 5-7 minutes and more.
 We do apologize for any inconvenience.
-https://t.me/joinchat/AAAAAFi_vxi7Z2lRxub5cQ
+@smd_bot_news
 
 Truly yours, SMD Bot Team."""
 
