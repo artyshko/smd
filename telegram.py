@@ -181,11 +181,12 @@ class BotHandler(object):
 
 class Controller(object):
 
-    def __init__(self):
+    def __init__(self, YT_API_KEY_N):
         self.bot = BotHandler()
         self.offset = None
 
-        self.downloader = main.MusicDownloader()
+
+        self.downloader = main.MusicDownloader(YT_API_KEY_N)
         self.apple = apple.AppleMusic()
 
 
@@ -526,11 +527,11 @@ class Controller(object):
                 logging.info(f'USER [{username}]')
                 logging.info(f'MESSAGE {message}')
 
-
+                #start controller
+                self.controller(message, chat_id)
 
                 try:
-                    #start controller
-                    self.controller(message, chat_id)
+                    pass
 
                 except:
                     #logging
@@ -810,8 +811,8 @@ def downloadAlbumImage(url, name):
     urllib.request.urlretrieve(url, name)
 
 @manager.task
-def do(update):
-    controller = Controller()
+def do(update, YT_API_KEY_N=0):
+    controller = Controller(YT_API_KEY_N)
     controller.worker(update)
     del controller
 
@@ -819,6 +820,9 @@ def mainloop():
 
     offset = None
     bot = BotHandler()
+
+    YT_API_KEY_N = 0
+
 
     while True:
         try:
@@ -830,8 +834,12 @@ def mainloop():
                 update_id = update['update_id']
                 offset = update_id + 1
                 #celery task
-                do.delay(update)
+                do.delay(update, YT_API_KEY_N)
 
+                if YT_API_KEY_N < 11:
+                    YT_API_KEY_N += 1
+                else:
+                    YT_API_KEY_N = 0
 
         except:
             offset = None

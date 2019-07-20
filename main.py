@@ -18,8 +18,8 @@ console.setLevel(logging.INFO)
 class MusicDownloader(object):
 
 
-    def __init__(self):
-        self.__youtube = Youtube()
+    def __init__(self, YT_API_KEY_N):
+        self.__youtube = Youtube(YT_API_KEY_N)
         self.__spotify = Spotify()
         self.__editor = TagEditor()
         self.__last = LastFM()
