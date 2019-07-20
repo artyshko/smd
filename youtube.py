@@ -8,31 +8,27 @@ import lxml
 import os
 import socket
 import proxy
-
-
-#IMPORT WITH STDOUT REDIRECTION
-#FIX STARTUP PYGAME HELLO MESSAGE
-#THANKS @Mad Physicist FROM STACK OVERFLOW
+import json
+import pickle
 import contextlib
-# with contextlib.redirect_stdout(None):
-#     from moviepy.editor import *
-#     import moviepy.editor as mp
-
 import imageio
+#fix
 imageio.plugins.ffmpeg.download()
 from moviepy.editor import *
 import moviepy.editor as mp
-
 import logging
 
+#include loagging
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)-2s - %(message)s')
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 
+
 class Youtube(object):
 
-    def __init__(self):
+    def __init__(self, YT_API_KEY_N):
+
         self.__query = ''
         self.__host = 'https://www.youtube.com/'
         self.__url = self.__host + 'results?search_query='
@@ -42,10 +38,15 @@ class Youtube(object):
         }
         self.__result = []
         self.__proxy = None
+        self.YT_API_KEY_N = YT_API_KEY_N
+
+        GoogleAPI.loadData()
+        logging.error(f"YT_API_KEY_{self.YT_API_KEY_N}")
+        GoogleAPI.setKey(self.YT_API_KEY_N)
+
 
     def getResult(self,i=0):
         return self.__result[i]
-
 
     def getFullResult(self):
         return self.__result
@@ -61,8 +62,10 @@ class Youtube(object):
 
         text = str(text).replace('&','')
 
-        data1 = self.getVideoFromYoutube(text)
-        data2 = self.getVideoFromYoutube(text + ' Audio')
+        # data1 = self.getVideoFromYoutube(text)
+        # data2 = self.getVideoFromYoutube(text + ' Audio')
+        data1 = GoogleAPI.search(text)
+        data2 = GoogleAPI.search(text + ' Audio')
 
         self.__result = self.classify(data1, data2, dur)
 
@@ -107,11 +110,7 @@ class Youtube(object):
         yt = YouTube(url)
         #logging
         logging.info(f"Get Data")
-        #downloading
-        # yt = yt.streams.filter(
-        #     progressive=True,
-        #     file_extension='mp4'
-        # ).order_by('resolution').desc().first()
+    
         try:url = str(url).replace('com//watch','com/watch')
         except:pass
 
@@ -135,31 +134,12 @@ class Youtube(object):
         logging.info(f"Start downloading")
 
 
-        #yt.download('cache/'+ path, filename=path)
-        # print(path)
-        # print(f'cache/{path}/{path}.mp4')
-        # print(f'youtube-dl --force-ipv4 -f best {url} -o cache/{path}/{path}.mp4')
-        #
-        # import subprocess
-        # #p = subprocess.Popen(['youtube-dl', '--force-ipv4', f'-f best {url}', f'-o cache/{path}/{path}.mp4'], bufsize=0, shell=True, stdout=subprocess.PIPE)
-        # #p.wait()
-        # os.system('touch test.sh')
-        # os.system(f'"youtube-dl --force-ipv4 -f best {url} -o cache/{path}/{path}.mp4" > test.sh')
-        # #p1 = subprocess.Popen(['youtube-dl', f'-o cache/{path}/{path}.mp4 -URL {url} --force-ipv4 -f best'],shell=True)
-        # p1 = subprocess.Popen(['bash', 'test.sh'],shell=True)
-        # sStdout, sStdErr = p1.communicate()
-
-
         try:
 
             ydl_opts = {
                 'outtmpl': f'{fullpath}/{filename}/{filename}',
                 'format':'best',
             }
-
-            # #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
-            # try:print(f'SERVER_IPv4:{socket.gethostbyname(socket.getfqdn())}')
-            # except:pass            'proxy':self.__proxy['proxy']
 
             try:
                 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
@@ -177,8 +157,6 @@ class Youtube(object):
                     ydl.download([url])
 
                 os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
-            #subprocess.call(f'youtube-dl --force-ipv4 -f best {url} -o cache/{path}/{path}.mp4')
-            #subprocess.call(['youtube-dl', f'-o cache/{path}/{path}.mp4 {url} --force-ipv4 -f best'])
 
             #logging
             logging.info(f"Downloading successful")
@@ -222,6 +200,7 @@ class Youtube(object):
         #self.convertVideoToMusic(self.download(self.get(name)[0],filename=name))
         return None
 
+
     def classify(self, data1, data2, duration=229486):
 
         data1 = data1[:2] if len(data1) >= 2 else data1
@@ -238,30 +217,16 @@ class Youtube(object):
         for item in research:
 
             try:
-                self.__proxy = proxy.get()
                 try:item = str(item).replace('com//watch','com/watch')
                 except:pass
 
-                ydl_opts = {
-                    'outtmpl': f'1',
-                    'format':'best',
-                }
-                #'force-ipv4': True,
-                #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
-                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                    dictMeta = ydl.extract_info(item, download=False)
-
-                item_duration = int(dictMeta['duration'])*1000
+                item_duration = GoogleAPI.duration(item)
                 diff = duration - item_duration
                 diff = diff * -1 if diff < 0 else diff
 
                 logging.warning(f'{item} {item_duration}')
 
-                if (result == -1 or diff < result) and not str(dictMeta['title']).find('8D') > -1:
-                    result, link = diff, item
-
             except:
-                self.__proxy = proxy.get()
                 #logging
                 logging.error(f"Some problems on classify loop")
 
@@ -297,8 +262,87 @@ class Youtube(object):
 
         return name
 
+
+
+class GoogleAPI():
+
+
+    YT_API_KEY = None
+    YT_API_KEY_DATA = {}
+
+
+    YT_API_V3_SEARCH = f'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q='
+    YT_API_V3_VIDEOS = f'https://www.googleapis.com/youtube/v3/videos?&part=contentDetails&id='
+    YT_V_DEFAULT_URL = 'https://www.youtube.com/watch?v='
+
+
+    @staticmethod
+    def loadData():
+
+        try:
+
+            with open('.youtube', 'rb') as f:
+                data = pickle.load(f)
+
+            GoogleAPI.YT_API_KEY_DATA = data
+
+        except:
+            pass
+
+
+    @staticmethod
+    def setKey(key):
+
+        GoogleAPI.YT_API_KEY = GoogleAPI.YT_API_KEY_DATA[f'YT_API_KEY_{key}']
+        logging.info(f"LOADED NEW KEY [...{GoogleAPI.YT_API_KEY[:20:]}...]")
+
+
+    @staticmethod
+    def search(query):
+
+        #logging
+        logging.info("YouTube APIv3 SEARCH")
+        query = str(query).replace(' ','+')
+
+        data = json.loads(
+            requests.get(
+                f'{GoogleAPI.YT_API_V3_SEARCH}{query}&key={GoogleAPI.YT_API_KEY}'
+            ).text
+        )['items']
+
+        return [GoogleAPI.YT_V_DEFAULT_URL + str(video['id']['videoId']) for video in data]
+
+
+
+    @staticmethod
+    def duration(video):
+        #logging
+        logging.info("YouTube APIv3 VIDEO_INFO")
+
+        video = str(video).split('watch?v=')[1]
+        video = str(video).split('&')[0]
+
+        data = json.loads(
+            requests.get(
+                f'{GoogleAPI.YT_API_V3_VIDEOS}{video}&key={GoogleAPI.YT_API_KEY}'
+            ).text
+        )['items'][0]['contentDetails']['duration']
+
+        #google sucks
+        _google_time_format = data[2:-1]
+
+        try:
+
+            min, sec = str(_google_time_format).split('M')
+            msec = (int(sec) + (int(min) * 60)) * 1000
+
+            return msec
+
+        except: return 0
+
+
 if __name__ == "__main__":
 
-    y = Youtube()
-    name = y.get(text="Sean Paul & J Balvin - ‎Contra La Pared", dur=256271)
-    print(name)
+    print(GoogleAPI.YT_API_KEY_DATA)
+
+    [print(i) for i in range(0,12)]
