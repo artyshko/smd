@@ -580,33 +580,6 @@ class Controller(object):
 
     def controller(self, message, id):
 
-        TEXT = """Google is blocking our servers. (Again)
-
-We will definitely not give up and will work to find any solution.
-Proxy servers using is a bad idea, because the time of downloading increases from a few secounds to 5-7 minutes and more.
-We do apologize for any inconvenience.
-@smd_bot_news
-
-Truly yours, SMD Bot Team."""
-
-        state = False
-        try:state = True if id != 232027721 else False
-        except:state = False
-
-        if state:
-
-            #logging
-            logging.warning(f"Sent sad message")
-            self.bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
-            self.bot.sendText(
-                id,
-                text=TEXT
-                )
-
-            return None
-
-        print('Yes')
-
         type = self.classify(message)
 
         #logging
