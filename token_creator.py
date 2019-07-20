@@ -9,7 +9,10 @@ def create_new_file(file, token):
                 'token':str(token)
             }, f
         )
+def create_new_file_from_dict(file, dict):
 
-if __name__ == '__main__':
+    with open(file, 'wb') as f:
 
-    create_new_file('.beta','token')
+        pickle.dump(
+            dict, f
+        )
