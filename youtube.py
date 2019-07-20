@@ -103,66 +103,59 @@ class Youtube(object):
         '''
         #logging
         logging.info(f"Start downloading")
-
-        #logging
-        logging.info(f"Init YouTube")
-        logging.warning(f"URL {url}")
-        yt = YouTube(url)
-        #logging
-        logging.info(f"Get Data")
-    
-        try:url = str(url).replace('com//watch','com/watch')
-        except:pass
-
-        #logging
-        logging.info(f"Create Directory")
-
-
-        fullpath = os.getcwd() + '/cache'
-
-        try:
-            # if not os.path.exists(fullpath):
-            #     os.makedirs(fullpath)
-            os.makedirs('cache/'+path)
-            #logging
-            logging.info(f"Created")
-        except:
-            #logging
-            logging.error(f"Youtube:os.makedirs('cache/'+path)")
-
-        #logging
-        logging.info(f"Start downloading")
-
-
         try:
 
+            try:url = str(url).replace('com//watch','com/watch')
+            except:pass
+
+            #logging
+            logging.info(f"Init YouTube")
+            logging.warning(f"URL {url}")
+
+
+            #logging
+            logging.info(f"Create Directory")
+
+
+            fullpath = os.getcwd() + '/cache'
+
+            try:
+                # if not os.path.exists(fullpath):
+                #     os.makedirs(fullpath)
+                os.makedirs('cache/'+path)
+                #logging
+                logging.info(f"Created")
+            except:
+                #logging
+                logging.error(f"Youtube:os.makedirs('cache/'+path)")
+
+            #logging
+            logging.info(f"Start downloading")
+
+
+            print(filename)
             ydl_opts = {
                 'outtmpl': f'{fullpath}/{filename}/{filename}',
                 'format':'best',
+                'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
             }
 
-            try:
-                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                    ydl.download([url])
+            # #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
+            # try:print(f'SERVER_IPv4:{socket.gethostbyname(socket.getfqdn())}')
+            # except:pass            'proxy':self.__proxy['proxy']
 
-                os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
-            except:
 
-                ydl_opts = {
-                    'outtmpl': f'{fullpath}/{filename}/{filename}',
-                    'format':'best',
-                }
+            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([url])
 
-                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                    ydl.download([url])
+            os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
 
-                os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
+            #yt.download('cache/'+ path, filename=path)
 
             #logging
             logging.info(f"Downloading successful")
 
             return filename
-
         except: return None
 
 
