@@ -527,12 +527,10 @@ class Controller(object):
                 logging.info(f'USER [{username}]')
                 logging.info(f'MESSAGE {message}')
 
-                #start controller
-                self.controller(message, chat_id)
 
                 try:
-                    pass
-
+                    #start controller
+                    self.controller(message, chat_id)
                 except:
                     #logging
                     logging.error('ERROR IN CONTROLLER')
