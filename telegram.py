@@ -30,7 +30,7 @@ class BotHandler(object):
     def __getData(self):
         try:
 
-            with open('.telegra', 'rb') as f:
+            with open('.telegram', 'rb') as f:
                 data = pickle.load(f)
 
             self.token = data['token']
