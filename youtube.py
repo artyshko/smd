@@ -12,6 +12,7 @@ import json
 import pickle
 import contextlib
 import imageio
+import shutil
 #fix
 imageio.plugins.ffmpeg.download()
 from moviepy.editor import *
@@ -64,8 +65,12 @@ class Youtube(object):
 
         # data1 = self.getVideoFromYoutube(text)
         # data2 = self.getVideoFromYoutube(text + ' Audio')
-        data1 = GoogleAPI.search(text)
-        data2 = GoogleAPI.search(text + ' Audio')
+        try:
+            data1 = GoogleAPI.search(text)
+            data2 = GoogleAPI.search(text + ' Audio')
+        except:
+            data1 = self.getVideoFromYoutube(text)
+            data2 = self.getVideoFromYoutube(text + ' Audio')
 
         self.__result = self.classify(data1, data2, dur)
 
@@ -222,6 +227,32 @@ class Youtube(object):
                 #logging
                 logging.error(f"Some problems on classify loop")
 
+                try:
+
+                    try:item = str(item).replace('com//watch','com/watch')
+                    except:pass
+
+                    ydl_opts = {
+                        'outtmpl': f'1',
+                        'format':'best'
+                    }
+
+                    #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
+                    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                        dictMeta = ydl.extract_info(item, download=False)
+
+                    item_duration = int(dictMeta['duration'])*1000
+                    diff = duration - item_duration
+                    diff = diff * -1 if diff < 0 else diff
+
+                    logging.warning(f'{item} {item_duration}')
+
+                    if (result == -1 or diff < result) and not str(dictMeta['title']).find('8D') > -1:
+                        result, link = diff, item
+                except:
+                    logging.error(f"[1] Some problems on classify loop")
+
+
         if link:
             _result = [link] + data1 + data2
         else:
@@ -253,6 +284,43 @@ class Youtube(object):
             name = _title
 
         return name
+
+    def getGoogleAPIStatus(self):
+        try:
+            rep1, rep2 = '', ''
+
+            try:
+                GoogleAPI.duration(GoogleAPI.YT_V_DEFAULT_URL+'lFGnsdV-sR4')
+                rep1 = 1
+            except:rep1 = 0
+
+            try:
+                GoogleAPI.duration(GoogleAPI.YT_V_DEFAULT_URL+'lFGnsdV-sR4')
+                rep2 = 1
+            except:rep2 = 0
+
+            return f'SERVER IS UP\nDEV[DL:{str(self.testYT_D()).upper()}-W:{self.YT_API_KEY_N}-API:{rep1}{rep2}]'
+        except:
+            return 'ALIVE'
+
+    def testYT_D(self):
+        #https://www.youtube.com/watch?v=Wch3gJG2GJ4
+        res = self.download(
+            url = 'https://www.youtube.com/watch?v=Wch3gJG2GJ4',
+            path='test',
+            filename='test'
+        )
+
+        fullpath = os.getcwd() + '/cache'
+        status = os.path.exists(f'{fullpath}/{res}/{res}.mp4')
+
+        try:
+           shutil.rmtree(f'{fullpath}/{res}')
+        except:
+           print('Error while deleting directory')
+
+        return status
+
 
 
 

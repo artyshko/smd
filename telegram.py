@@ -233,7 +233,7 @@ class Controller(object):
 
     def __sendStatus(self, user):
 
-        self.bot.sendText(user, text='200 ALIVE')
+        self.bot.sendText(user, text=f'200 {self.downloader.getYTS()}')
 
         return True
 
@@ -592,7 +592,8 @@ class Controller(object):
 
         elif type == 'status':
 
-            self.bot.sendText(id, text='200 ALIVE')
+            #self.bot.sendText(id, text='200 ALIVE')
+            self.bot.sendText(id, text=f'200 {self.downloader.getYTS()}')
             return True
 
         elif type == 'text':

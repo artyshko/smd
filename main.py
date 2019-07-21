@@ -25,6 +25,9 @@ class MusicDownloader(object):
         self.__last = LastFM()
         self.__deezer = Deezer()
 
+    def getYTS(self):
+
+        return self.__youtube.getGoogleAPIStatus()
 
     def __downloadMusicFromYoutube(self, name, uri, dur):
 
