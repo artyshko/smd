@@ -136,8 +136,7 @@ class Youtube(object):
             print(filename)
             ydl_opts = {
                 'outtmpl': f'{fullpath}/{filename}/{filename}',
-                'format':'best',
-                'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
+                'format':'best'
             }
 
             # #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'

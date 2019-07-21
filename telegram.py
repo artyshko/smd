@@ -30,7 +30,7 @@ class BotHandler(object):
     def __getData(self):
         try:
 
-            with open('.telegram', 'rb') as f:
+            with open('.telegra', 'rb') as f:
                 data = pickle.load(f)
 
             self.token = data['token']
@@ -527,10 +527,13 @@ class Controller(object):
                 logging.info(f'USER [{username}]')
                 logging.info(f'MESSAGE {message}')
 
+                #start controller
+                self.controller(message, chat_id)
 
                 try:
                     #start controller
                     self.controller(message, chat_id)
+
                 except:
                     #logging
                     logging.error('ERROR IN CONTROLLER')
