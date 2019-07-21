@@ -195,7 +195,7 @@ class Controller(object):
         #logging
         logging.warning(f'RESTARTING "youtube_dl" MODULE')
 
-        self.downloader = main.MusicDownloader()
+        self.downloader = main.MusicDownloader(7)
 
         return True
 
