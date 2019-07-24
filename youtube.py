@@ -424,13 +424,6 @@ class GoogleAPI():
         video = str(video).split('watch?v=')[1]
         video = str(video).split('&')[0]
 
-        print(
-            json.loads(
-                requests.get(
-                    f'{GoogleAPI.YT_API_V3_VIDEOS}{video}&key={GoogleAPI.YT_API_KEY}'
-                ).text
-            )
-        )
 
         data = json.loads(
             requests.get(
