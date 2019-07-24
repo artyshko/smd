@@ -13,6 +13,7 @@ import pickle
 import contextlib
 import imageio
 import shutil
+import heroku
 #fix
 imageio.plugins.ffmpeg.download()
 from moviepy.editor import *
@@ -261,13 +262,15 @@ class Youtube(object):
                         bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
                         bot.sendText(
                             chat_id=232027721,
-                            text='SERVER IS DOWN'
+                            text='SERVER IS DOWN\nRESTARTING!'
                             )
 
                     except:
                         print('NOOOO')
 
+                    heroku.restart()
 
+                    return None
 
 
         if link:
@@ -307,7 +310,7 @@ class Youtube(object):
             rep1, rep2 = '', ''
 
             try:
-                GoogleAPI.duration(GoogleAPI.YT_V_DEFAULT_URL+'lFGnsdV-sR4')
+                GoogleAPI.search('Google sucks')
                 rep1 = 1
             except:rep1 = 0
 
@@ -319,6 +322,7 @@ class Youtube(object):
             return f'SERVER IS UP\nDEV[DL:{str(self.testYT_D()).upper()}-W:{self.YT_API_KEY_N}-API:{rep1}{rep2}]'
         except:
             return 'ALIVE'
+
 
     def testYT_D(self):
         #https://www.youtube.com/watch?v=Wch3gJG2GJ4
@@ -335,6 +339,26 @@ class Youtube(object):
            shutil.rmtree(f'{fullpath}/{res}')
         except:
            print('Error while deleting directory')
+
+        if not status:
+
+            try:
+
+                from telegram import BotHandler
+
+                bot = BotHandler()
+
+                bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
+                bot.sendText(
+                    chat_id=232027721,
+                    text='SERVER IS DOWN\nRESTARTING!'
+                    )
+
+            except:
+                print('NOOOO')
+
+            heroku.restart()
+
 
         return status
 
@@ -381,6 +405,7 @@ class GoogleAPI():
         logging.info("YouTube APIv3 SEARCH")
         query = str(query).replace(' ','+')
 
+
         data = json.loads(
             requests.get(
                 f'{GoogleAPI.YT_API_V3_SEARCH}{query}&key={GoogleAPI.YT_API_KEY}'
@@ -398,6 +423,14 @@ class GoogleAPI():
 
         video = str(video).split('watch?v=')[1]
         video = str(video).split('&')[0]
+
+        print(
+            json.loads(
+                requests.get(
+                    f'{GoogleAPI.YT_API_V3_VIDEOS}{video}&key={GoogleAPI.YT_API_KEY}'
+                ).text
+            )
+        )
 
         data = json.loads(
             requests.get(
