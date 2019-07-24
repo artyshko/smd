@@ -8,7 +8,7 @@ def restart():
 
         try:
 
-            with open('.heroku', 'rb') as f:
+            with open('.heroku_data', 'rb') as f:
                 data = pickle.load(f)
 
             return data['token']
