@@ -8,7 +8,7 @@ def getProxy(log=True):
 
         collector = create_collector(
             'smd-collector',
-            ('socks4', 'socks5')
+            ('socks4', 'http')
         )
 
     except:
@@ -17,10 +17,9 @@ def getProxy(log=True):
 
 
     proxy = collector.get_proxy()
-    #{'code': ('us', 'uk')}
-    #'proxy': f'{proxy[5]}://{proxy[0]}:{proxy[1]}',
+
     result = {
-        'proxy': f'https://8.8.8.8:80',
+        'proxy': f'{proxy[5]}://{proxy[0]}:{proxy[1]}',
         'type':proxy[5],
         'ip':f'{proxy[5]}://{proxy[0]}',
         'port':proxy[1]
@@ -54,6 +53,8 @@ def get():
 
         print("All was fine")
         return proxy
+
+
 
 if __name__ == '__main__':
 
