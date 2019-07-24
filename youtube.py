@@ -252,6 +252,23 @@ class Youtube(object):
                 except:
                     logging.error(f"[1] Some problems on classify loop")
 
+                    try:
+
+                        from telegram import BotHandler
+
+                        bot = BotHandler()
+
+                        bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
+                        bot.sendText(
+                            chat_id=232027721,
+                            text='SERVER IS DOWN'
+                            )
+
+                    except:
+                        print('NOOOO')
+
+
+
 
         if link:
             _result = [link] + data1 + data2
