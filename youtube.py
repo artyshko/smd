@@ -14,15 +14,20 @@ import contextlib
 import imageio
 import shutil
 import heroku
+import time
+import logging
+
 #fix
 imageio.plugins.ffmpeg.download()
 from moviepy.editor import *
 import moviepy.editor as mp
-import logging
+
 
 #include loagging
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(levelname)-2s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)-2s - %(message)s'
+)
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 
@@ -348,18 +353,21 @@ class Youtube(object):
                 from telegram import BotHandler
 
                 bot = BotHandler()
-
-                bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
                 bot.sendText(
                     chat_id=232027721,
                     text='SERVER IS DOWN\nRESTARTING!'
                     )
 
-            except:
-                print('NOOOO')
+            except:print('NOOOO')
 
             heroku.restart()
 
+            # 10 SEC SLEEP
+            #
+            # It has to make a pause and won't let to get the last message,
+            # so it is probably gonna fix "the last message issue"
+
+            time.sleep(10)
 
         return status
 

@@ -791,14 +791,15 @@ def do(update, YT_API_KEY_N=0):
 def mainloop():
 
     offset = None
-    bot = BotHandler()
-
     YT_API_KEY_N = 0
 
+    bot = BotHandler()
+    downloader = main.MusicDownloader(YT_API_KEY_N)
 
     while True:
 
         try:
+            downloader.FUCK_GOOGLE()
 
             bot.getUpdates(offset)
             update = bot.checkLastUpdates()
