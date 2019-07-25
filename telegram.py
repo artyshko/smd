@@ -830,14 +830,16 @@ def mainloop():
     while True:
 
         try:
-            downloader.FUCK_GOOGLE()
 
             bot.getUpdates(offset)
             update = bot.checkLastUpdates()
 
             if update:
+
+                downloader.FUCK_GOOGLE()
                 update_id = update['update_id']
                 offset = update_id + 1
+                
                 #celery task
                 do.delay(update, YT_API_KEY_N)
 
