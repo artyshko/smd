@@ -92,7 +92,7 @@ class BotHandler(object):
         return requests.post(self.api_url + method, params)
 
 
-    def sendAudio(self, chat_id, name, artist, audio, thumb, duration, number=None):
+    def sendAudioOld(self, chat_id, name, artist, audio, thumb, duration, number=None):
 
         method = 'sendAudio'
 
@@ -110,6 +110,37 @@ class BotHandler(object):
             'performer':str(artist),
             'duration':int(duration * .001),
             'caption':f'{part if number else ""}<b>{str(artist)}</b> {str(name)}\n@SpotifyMusicDownloaderBot',
+            'parse_mode':'HTML'
+        }
+
+        response = requests.post(
+                        self.api_url + method,
+                        files=files,
+                        data=data
+                    )
+        #logging
+        logging.info(f'SEND STATUS {response.status_code} {response.reason}')
+
+        return response.status_code
+
+    def sendAudio(self, chat_id, name, artist, audio, thumb, duration, number=None):
+
+        method = 'sendAudio'
+
+        files = {
+            'audio': audio,
+            'thumb':thumb
+        }
+
+        if number:
+            part = f"{number}. "
+
+        data = {
+            'chat_id' : chat_id,
+            'title': str(name),
+            'performer':str(artist),
+            'duration':int(duration * .001),
+            'caption':f'{part if number else ""}<b>{str(artist)}</b> <a href="https://t.me/SpotifyMusicDownloaderBot">{str(name)}</a>',
             'parse_mode':'HTML'
         }
 
