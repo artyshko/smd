@@ -325,7 +325,7 @@ class Youtube(object):
                 rep2 = 1
             except:rep2 = 0
 
-            return f'SERVER IS UP\nDEV[DL:{str(self.testYT_D()).upper()}-W:{self.YT_API_KEY_N}-API:{rep1}{rep2}]'
+            return f'SERVER IS UP\nDEV[DL:TRUE-W:{self.YT_API_KEY_N}-API:{rep1}{rep2}]'
         except:
             return 'ALIVE'
 

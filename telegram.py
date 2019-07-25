@@ -826,6 +826,7 @@ def mainloop():
 
     bot = BotHandler()
     downloader = main.MusicDownloader(YT_API_KEY_N)
+    downloader.FUCK_GOOGLE()
 
     while True:
 
@@ -839,7 +840,7 @@ def mainloop():
                 downloader.FUCK_GOOGLE()
                 update_id = update['update_id']
                 offset = update_id + 1
-                
+
                 #celery task
                 do.delay(update, YT_API_KEY_N)
 
