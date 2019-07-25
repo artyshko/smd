@@ -67,11 +67,12 @@ class Youtube(object):
         # data1 = self.getVideoFromYoutube(text)
         # data2 = self.getVideoFromYoutube(text + ' Audio')
         try:
-            data1 = GoogleAPI.search(text)
-            data2 = GoogleAPI.search(text + ' Audio')
-        except:
             data1 = self.getVideoFromYoutube(text)
             data2 = self.getVideoFromYoutube(text + ' Audio')
+        except:
+            data1 = GoogleAPI.search(text)
+            data2 = GoogleAPI.search(text + ' Audio')
+
 
         self.__result = self.classify(data1, data2, dur)
 
@@ -310,8 +311,8 @@ class Youtube(object):
             rep1, rep2 = '', ''
 
             try:
-                GoogleAPI.search('Google sucks')
-                rep1 = 1
+                #GoogleAPI.search('Google sucks')
+                rep1 = 0
             except:rep1 = 0
 
             try:
