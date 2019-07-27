@@ -1,48 +1,46 @@
-# Spotify Music Downloader (SMD) Desktop | **<a href="https://github.com/artyshko/smd/tree/telegram"><b>Telegram</b></a>**
+# Spotify Music Downloader (SMD) Desktop | **<a href="https://t.me/SpotifyMusicDownloaderBot"><b>Telegram</b></a>**
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/) [![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![GitHub repo size in bytes](https://img.shields.io/github/repo-size/artyshko/smd.svg) ![GitHub Release Date](https://img.shields.io/github/release-date/artyshko/smd.svg) ![GitHub issues](https://img.shields.io/github/issues/artyshko/smd.svg) ![Beerpay](https://img.shields.io/beerpay/artyshko/smd.svg) [![Beerpay](https://beerpay.io/artyshko/smd/make-wish.svg?style=flat)](https://beerpay.io/artyshko/smd?focus=wish)
 
 <img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram/Data/9.png"> 
 
-<img align="left" height="50" wigth="50" src="https://i.ibb.co/6sLhjBk/telegram-logo-ad3d08a014-seeklogo-com-by-yagorocha-dbyy26q.png">
+<p align="center">
+  <b><h1>Desktop version<h1></b><br>
+</p>
+<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/6.png"> 
+<p align="center">
+  <h1>Telegram version</h1>
+  <h5><a href="https://telegram.me/SpotifyMusicDownloaderBot"><b>@SpotifyMusicDownloaderBot</b></a></h5>
+</p>
 
-# **Get it on Telegram <a href="https://telegram.me/SpotifyMusicDownloaderBot"><b>@SpotifyMusicDownloaderBot</b></a>**
+<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/1.png">
+<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/2.png">
+<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/3.png">
+<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/4.png">
+<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/5.png">
 
-<img align="center" src="https://telegra.ph/file/ea696ddba7754a7d69cef.png">
-<img align="center" src="https://telegra.ph/file/35c9427fbe65045b765ed.png">
-<img align="center" src="https://telegra.ph/file/38e841982cb6392f12697.png">
-<img align="center" src="https://telegra.ph/file/3b2d3eef17ba9e6c2a6bc.png">
-<img align="center" src="https://telegra.ph/file/4f284eaa2413a47994124.png">
-
-## Desktop version
-
-<img align="center" src="https://i.ibb.co/3Yrh7Qr/header.png"> 
-
-## Usage
+## Usage (Desktop version)
 
 ```
-./main.py [without any parameters] - normal startup
+./main.py [argument][value] - startup with arguments
 
-./main.py [parameter][argument] - startup with arguments
+ Arguments:
 
-Parameters
+        -h,  --help                  Print a help message and exit.
+        -p,  --path                  Set another directory.
 
-  -h, --help       Print a help message and exit.
+        -ss, --spotify-song          Spotify song link or URI.
+        -sa, --spotify-album         Spotify album link or URI.
+        -sp, --spotify-playlist      Spotify playlist URI.
 
-  -s, --song       Spotify song URI.
+        -ds, --deezer-song           Deezer song link.
+        -da, --deezer-album          Deezer album link.
+        -dp, --deezer-playlist       Deezer playlist link.
 
-  -p, --playlist   Spotify playlist URI.
+        -ym, --youtube-music         YouTube Music link.
+        -yv, --youtube-video         YouTube Video link.
 
-  -q, --query      Search query.
-
-  -y, --youtube    YouTube Music url.
-                   Note that your link should be with quotation marks - "your_url"!
-
-  -v, --video      YouTube url.(You will get a song but without any tags)
-                   Note that your link should be with quotation marks - "your_url"!
-
-  -a, --apple      Apple Music url.
-
-  -f, --file       File with song URIs. (Spotify only)
+        -a,  --apple                 Apple Music link.
+        -q,  --query                 Search query.
 
 ```
 ## Installation
