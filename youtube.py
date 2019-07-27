@@ -33,7 +33,7 @@ from contextlib import contextmanager
 import sys, os
 
 @contextmanager
-def suppress_stdout():
+def suppress_stdout1():
     with open(os.devnull, "w") as devnull:
         old_stdout = sys.stdout
         sys.stdout = devnull
@@ -41,6 +41,15 @@ def suppress_stdout():
             yield
         finally:
             sys.stdout = old_stdout
+@contextmanager
+def suppress_stdout():
+    new_target = open(os.devnull, "w")
+    old_target = sys.stdout
+    sys.stdout = new_target
+    try:
+        yield new_target
+    finally:
+        sys.stdout = old_target
 
 class Youtube(object):
 
@@ -146,7 +155,8 @@ class Youtube(object):
             }
             with suppress_stdout():
                 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                    ydl.download([url])
+                    with suppress_stdout():
+                        ydl.download([url])
 
 
             os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
@@ -173,7 +183,7 @@ class Youtube(object):
             logging.error(f"Youtube:os.makedirs(fullpath)")
 
         clip = mp.VideoFileClip(f'cache/{uri}/{uri}.mp4').subclip()
-        clip.audio.write_audiofile(f'cache/{uri}/{uri}.mp3', bitrate='3000k', progress_bar=False)
+        clip.audio.write_audiofile(f'cache/{uri}/{uri}.mp3', bitrate='3000k', progress_bar=True)
 
         #logging.info(f"Converting successful")
 
@@ -221,15 +231,16 @@ class Youtube(object):
                 'outtmpl': f'1',
                 'format':'best'
                 }
-
-                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                    dictMeta = ydl.extract_info(item, download=False)
+                with suppress_stdout():
+                    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                        with suppress_stdout():
+                            dictMeta = ydl.extract_info(item, download=False)
 
                 item_duration = int(dictMeta['duration'])*1000
                 diff = duration - item_duration
                 diff = diff * -1 if diff < 0 else diff
 
-                logging.warning(f'{item} {item_duration}')
+                #logging.warning(f'{item} {item_duration}')
 
                 if (result == -1 or diff < result) and not str(dictMeta['title']).find('8D') > -1:
                     result, link = diff, item
