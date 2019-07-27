@@ -11,13 +11,17 @@
   <h1>Telegram version</h1>
 </p>
 
-<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/1.png">
-<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/2.png">
-<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/3.png">
-<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/4.png">
-<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/5.png">
+<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/1.png"></br>
 
-## Usage (Desktop version)
+<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/2.png"></br>
+
+<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/3.png"></br>
+
+<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/4.png"></br>
+
+<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/5.png"></br>
+
+## Manual (Desktop version)
 
 ```
 ./main.py [argument][value] - startup with arguments
@@ -48,7 +52,7 @@
 git clone https://github.com/artyshko/smd.git
 ```
 
-### First you need to install all dependencies
+### First you have to install all dependencies
 ```
 pip3 install -r requirements.txt
 ```
@@ -62,19 +66,51 @@ chmod +x main.py
 ```
 python3 main.py
 ```
-### How to get song URI
 
-<img align="center" src="https://i.ibb.co/BzM7ZKp/image4.png">
-
-### Example of Spotify URI Code
+### Spotify
+Song:
 ```
-spotify:track:4tmwiN9YU7xMjh2hoqcVuI
+./main.py -ss "https://open.spotify.com/track/2QoDAlMnML5haTXvYRS86X?si=eMGX4dlwQd-7dyiG6OmUHQ"
+```
+Album:
+```
+./main.py -sa "https://open.spotify.com/album/79dL7FLiJFOO0EoehUHQBv?si=lDnHRa2BR_uFUOnUOZPbUQ"
+```
+Playlist:
+```
+./main.py -sp "https://open.spotify.com/playlist/37i9dQZF1DXcRXFNfZr7Tp?si=Yd3IJQ9ATWOdFulNa7ax5g"
 ```
 
-### Song mode
+### Deezer
+Song:
+```
+./main.py -ds "https://www.deezer.com/track/3787855"
+```
+Album:
+```
+./main.py -da "https://www.deezer.com/album/1695172"
+```
+Playlist:
+```
+./main.py -dp "https://www.deezer.com/playlist/1306931615"
+```
+
+### YouTube Music
+Song:
+```
+./main.py -ym "https://music.youtube.com/watch?v=HnXzzTIFu_U&list=RDAMVMHnXzzTIFu_U"
+```
+
+### YouTube Video
+Video:
+```
+./main.py -yv "https://www.youtube.com/watch?v=JHi-WGFGWek"
+```
+
+### Apple Music
 Example:
 ```
-./main.py -s spotify:track:7ARveOiD31w2Nq0n5FsSf8
+./main.py -a "https://itunes.apple.com/us/album/i-wanna-be-yours/663097964?i=663098065"
 ```
 
 ### Query mode
@@ -83,41 +119,10 @@ Example:
 ./main.py -q "The XX - Intro"
 ```
 
-### YouTube Music mode
+### Choose another directory 
 Example:
 ```
-./main.py -y "https://music.youtube.com/watch?v=HnXzzTIFu_U&list=RDAMVMHnXzzTIFu_U"
-```
+./main.py -q "The XX - Intro" -p ~/Music
 
-### YouTube video mode
-Example:
-```
-./main.py -v "https://www.youtube.com/watch?v=JHi-WGFGWek"
-```
-
-### Apple Music mode
-Example:
-```
-./main.py -a "https://itunes.apple.com/us/album/i-wanna-be-yours/663097964?i=663098065"
-```
-
-### File mode
-#### Create file with songs
-<img align="center" src="https://i.ibb.co/qJvgMXB/file.png">
-
-Example:
-```
-./main.py -f songs.txt
-```
-
-### Playlist mode
-#### Create playlist and make it secret
-<img align="center" src="https://i.ibb.co/kBKtDys/image1.png">
-
-#### Then copy playlist URI
-<img align="center" src="https://i.ibb.co/yWHHBDX/image2.png">
-
-Example:
-```
-./main.py -p spotify:user:spotify:playlist:37i9dQZF1DXcRXFNfZr7Tp
+./main.py -ss "https://open.spotify.com/track/2QoDAlMnML5haTXvYRS86X -p ~/Desktop/Music/New
 ```
