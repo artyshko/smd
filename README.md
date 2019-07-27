@@ -4,12 +4,11 @@
 <img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram/Data/9.png"> 
 
 <p align="center">
-  <b><h1>Desktop version<h1></b><br>
+  <b><h1>Desktop version<h1></b>
 </p>
 <img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/6.png"> 
 <p align="center">
   <h1>Telegram version</h1>
-  <h5><a href="https://telegram.me/SpotifyMusicDownloaderBot"><b>@SpotifyMusicDownloaderBot</b></a></h5>
 </p>
 
 <img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/1.png">
