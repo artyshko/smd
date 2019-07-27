@@ -500,7 +500,7 @@ class CLI(object):
     path = None
 
     @staticmethod
-    def help():
+    def logo():
 
         print(u'''
 
@@ -515,6 +515,11 @@ _____/\\\\\\\\\\\\\\\\\\\\\\____/\\\\\\\\____________/\\\\\\\\__/\\\\\\\\\\\\\\\
         ___\\///////////_____\\///______________\\///__\\////////////_____
 
         ''')
+
+    @staticmethod
+    def help():
+
+        CLI.logo()
 
         print('\t\t       Spotify Music Downloader')
         print('\t\t          version  1.6.0-dev\n')
@@ -689,7 +694,7 @@ _____/\\\\\\\\\\\\\\\\\\\\\\____/\\\\\\\\____________/\\\\\\\\__/\\\\\\\\\\\\\\\
 
                 try:
                    md = MusicDownloader()
-                   state, data = md.downloadBySearchQuery(query=name, path=CLI.path)
+                   state, data = md.downloadBySearchQuery(query=array[i+1], path=CLI.path)
                    if not state:
                        notify.send(f'Failed to download',True)
                 except KeyboardInterrupt:
