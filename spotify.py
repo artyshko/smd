@@ -169,7 +169,6 @@ class Spotify(object):
         '''
        Init function
        Creating spotify object with access_token
-
        :return: None
        '''
 
@@ -257,8 +256,44 @@ class Spotify(object):
         return data['duration_ms']
 
 
+    def getAlbum(self, uri):
+        try:
+
+            album = self.client.album(uri)
+
+            copyright = None
+
+            try:copyright = album['copyrights'][0]['text']
+            except:pass
+
+            alb = {
+                'name':album['name'],
+                'artist':album['artists'][0]['name'],
+                'copyright':copyright,
+                'image':album['images'][0]['url'],
+            }
+
+            tracks = []
+
+            for data in album['tracks']['items']:
+                tracks.append({
+                    'uri' : str(data['uri'].split(':')[-1]),
+                    'name' : data['name'],
+                    'artist' : [ artist['name'] for artist in data['artists']],
+                    'album' : alb['name'],
+                    'image' : alb['image'],
+                    'preview_url' : data['preview_url'],
+                    'duration_ms' : data['duration_ms']
+                })
+
+            alb.setdefault(
+                'tracks', tracks
+            )
+
+            return alb
+
+        except: return None
 
 if __name__ == '__main__':
-    sp = Spotify()
-    r = sp.search('The XX - Intro')
-    print(r)
+    s = Spotify()
+    s.getAlbum('0nW0w37lrQ87k7PLZvC4qJ')
