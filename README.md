@@ -124,5 +124,5 @@ Example:
 ```
 ./main.py -q "The XX - Intro" -p ~/Music
 
-./main.py -ss "https://open.spotify.com/track/2QoDAlMnML5haTXvYRS86X -p ~/Desktop/Music/New
+./main.py -ss "https://open.spotify.com/track/2QoDAlMnML5haTXvYRS86X" -p ~/Desktop/Music/New
 ```
