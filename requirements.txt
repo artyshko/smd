@@ -11,3 +11,4 @@ Flask==0.12.2
 pygame==1.9.6
 youtube_dl==2019.7.2
 beautifulsoup4==4.7.1
+imageio==2.4.1
