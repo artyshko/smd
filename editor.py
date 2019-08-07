@@ -3,7 +3,7 @@ import re, os
 import shutil
 import genius
 #used for mp3 ID3 tagging
-from mutagen.id3._frames import TIT2, TALB, TPE1, USLT
+from mutagen.id3._frames import TIT2, TALB, TPE1, USLT, TRCK
 from mutagen.mp3 import MP3
 from mutagen.id3 import ID3, APIC, error
 
@@ -106,6 +106,15 @@ class TagEditor(object):
                 desc=u'desc',
                 text=genius.getLyrics(data['artist'][0],data['name']))
             )
+
+
+            #add track number if specified
+            if 'tracknumber' in data:
+                audio.tags.add(TRCK(
+                    encoding=3,
+                    text=str(data['tracknumber']))
+                )
+            
 
             #save result
             audio.save()
