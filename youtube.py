@@ -150,7 +150,7 @@ class Youtube(object):
             #logging.info(f"Start downloading")
 
             ydl_opts = {
-                'outtmpl': f'{fullpath}/{filename}/{filename}',
+                'outtmpl': f'{fullpath}/{filename}/{filename}.mp4',
                 'format':'best'
             }
             with suppress_stdout():
@@ -158,8 +158,7 @@ class Youtube(object):
                     with suppress_stdout():
                         ydl.download([url])
 
-
-            os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
+           
 
             #yt.download('cache/'+ path, filename=path)
 
@@ -182,6 +181,7 @@ class Youtube(object):
             #logging
             logging.error(f"Youtube:os.makedirs(fullpath)")
 
+        print(uri)
         clip = mp.VideoFileClip(f'cache/{uri}/{uri}.mp4').subclip()
         clip.audio.write_audiofile(f'cache/{uri}/{uri}.mp3', bitrate='3000k', progress_bar=True)
 
