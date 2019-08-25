@@ -1,0 +1,6 @@
+pip3 install -r requirements.txt
+pip3 install PyQtWebEngine
+sudo apt-get install python3-pyqt5.qtwebengine
+
+chmod +x run.sh
+./run.sh

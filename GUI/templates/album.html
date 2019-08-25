@@ -1,0 +1,191 @@
+
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div style='width:100%; height:400px; margin-top:-50px!important; position: relative;'>
+   <div class='albums-slider' style='width:83%; margin-left: 17%;' >
+        <div class="border-last-artist" style='width:100% !important;'>
+          <div class="image-shadow-last-artist" style="background-image:url({{info.alb_image}});filter: blur(10px);
+          -webkit-filter: blur(10px);">
+          </div>
+      </div>
+  </div>
+
+  <div class='p-name pagination-centered text-center'>
+   <span class="item-text-12">{{info.alb_name}}</span>><br>
+  </div>
+</div>
+<div class='genres pagination-centered text-center'>
+        <a class='no-link'href="{{ url_for('artist', uri=info.art_id)}}"><p class='song-time'>{{info.art_name}}</p></a>
+        <div class='genres pagination-centered text-center'>
+                {% for genre in info.genres %}
+                    <span class="badge badge-danger">{{genre}}</span>
+                {% endfor %}
+         </div>
+
+        <span class="badge badge-success download-button-song">
+              <i class="fab fa-spotify"></i> Listen on Spotify
+        </span>
+        <a class='no-link download-link' href="{{ url_for('downloadAlbum', uri=info.alb_id)}}">
+        <span class="badge badge-primary download-button-song">
+          <i class="fas fa-arrow-alt-circle-down"></i> Download
+        </span>
+        </a>
+
+      </div>
+<div class='stat pagination-centered text-center'>
+    <span class="badge b-number">
+    {{info.alb_popularity}}<br>
+    <h4>POPULARITY</h4>
+    </span>
+    <span class="badge b-number">
+            {{info.total_tracks}}<br>
+            <h4>TRACKS</h4>
+          </span>
+    <span class="badge b-number">
+    {{info.alb_r_d}}<br>
+    <h4>RELEASED</h4>
+    </span>
+  </div>
+  </div>
+
+  <p class='title' style="margin-top: -10px;">
+    Tracks
+  </p>
+  <div class="container maxWidth alb-cont-border lazy">
+    <div class='row'>
+      <div class="border-alb-v">
+          <div class="image-shadow-alb-v" style="background-image:url({{info.alb_image}});" ></div>
+          <div class=alb-info>
+            <p class="item-text-8"> {{info.alb_name}}</p>
+            <p class="item-text-3">{{info.total_tracks}} songs</p>
+            <a class='no-link' href='#'>
+                    <span class="badge badge-success download-button">
+                        <i class="fab fa-spotify"></i> Listen on Spotify
+                    </span>
+            </a></br>
+            <a class='no-link download-link' href="{{ url_for('downloadAlbum', uri=info.alb_id)}}">
+            <span class="badge badge-primary download-button">
+                <i class="fas fa-arrow-alt-circle-down"></i> Download Full Album
+            </span>
+            </a>
+            <p></p>
+        </div>
+      </div>
+      <div class='alb-songs justify-content'>
+          <table class="table table-dark justify-content space-between">
+              <tbody>
+
+                    {% for i in range(info.tracks| length) %}
+
+                    {% if i == 0 %}
+                      <tr style="height:40px; border: 0px solid #fff !important;" >
+                    {% else %}
+                      <tr style="height:40px;" > 
+                    {% endif %}
+                        {% if i == 0 %}
+                          <td scope="row" style='padding: auto;padding-left:0px;width:20px;border: 0px solid #fff !important;'> 
+                        {% else %}
+                          <td scope="row" style='padding: auto;padding-left:0px;width:20px;'> 
+                        {% endif %}
+                          <div class="player">
+                              <audio class="button-player">
+                                <source src="{{info.tracks[i].trc_preview}}">
+                              </audio>
+                              <button onClick="play(this)" class='pl-button' style='background-color: rgba(73, 73, 73, 0)!important;'>{{i+1}}</button>
+                              <p class='pl-button-name'>{{i+1}}</p>  
+                            </div>
+                          </td>
+    
+                          {% if i == 0 %}
+                            <td style="border: 0px solid #fff !important;">
+                          {% else %}
+                            <td>
+                          {% endif %}
+                              <a class='no-link' style='color: #fff;' href="{{ url_for('song', uri=info.tracks[i].trc_id) }}">
+                                  {% if info.tracks[i].trc_name|length >= 60 %}
+                                    {{info.tracks[i].trc_name[:57]}}...
+                                  {% else %}
+                                    {{info.tracks[i].trc_name}}
+                                  {% endif %}
+                              </a>
+                           </td>
+    
+                            {% if i == 0 %}
+                              <th class="text-justify text-right" style="border: 0px solid #fff !important;">
+                            {% else %}
+                            <th class="text-justify text-right">
+                            {% endif %}
+                            
+                                
+                            <a class='no-link download-link' href="{{ url_for('downloadSingleSong', uri=info.tracks[i].trc_id)}}">
+                              <span class="badge badge-primary download-button">
+                                <i class="fas fa-arrow-alt-circle-down"></i> Download
+                              </span>
+                            </a>
+                        </th>
+    
+                    </tr>
+    
+                  {% endfor %}
+                  
+              </tbody>
+            </table>
+      </div>
+      <p class='item-text-10 text-center'>
+        {{info.copyrights}}
+      </p>
+    </div>
+      
+  </div>
+
+
+
+
+
+<br>
+
+  
+{% if artists_albums| length %}
+  <p class='title'>
+      More albums from {{info.art_name}}
+  </p>
+{% endif %}
+
+<div class='albums-slider lazy' style='width:80%; margin-left: 18%;' >
+    
+        {% for albums in artists_albums %}
+            <div class="border cursor-pointer-all-obj">
+                <a class='no-link' href='{{ url_for('album', uri=albums.alb_id)}}'>
+                  <div class="image-shadow" style="background-image:url({{albums.alb_image}})" ></div>
+                  <p class="item-text-3">{{albums.alb_name}}</p>
+                </a>
+            </div>
+          {% endfor %}
+    
+      </div>
+
+{% if artists_related| length %}
+<p class='title'>
+    Fans also like
+</p>
+{% endif %}
+
+<div class='artists-slider lazy' style='width:80%; margin-left: 18%;' >
+
+        {% for artist in artists_related %}
+    
+          <div class="border cursor-pointer-all-obj">
+              <a class='no-link' href='{{ url_for('artist', uri=artist.id)}}'>
+                <div class="image-shadow-circ" style="background-image:url({{artist.image}})" ></div>
+                <p class="item-text-3">{{ artist.name }}</p>
+              </a>
+          </div>
+    
+        {% endfor %}
+    
+      </div>
+  <br>
+  
+{% endblock %}
