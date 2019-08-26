@@ -22,14 +22,20 @@ class TagEditor(object):
 
     @staticmethod
     def getImageFromSpotify(url, name):
-        if len(url):
-            urllib.request.urlretrieve(url, name)
-        else:
 
+        try:
+            if len(url):
+                urllib.request.urlretrieve(url, name)
+            else:
+
+                cachepath = os.getcwd() + '/cache'
+                datapath = os.getcwd() + '/Data'
+                os.system(f'cp {datapath}/temp.png {name}')
+                
+        except:
             cachepath = os.getcwd() + '/cache'
             datapath = os.getcwd() + '/Data'
             os.system(f'cp {datapath}/temp.png {name}')
-
 
     @staticmethod
     def getTags():
@@ -64,6 +70,10 @@ class TagEditor(object):
        :return: boolean, in case of some errors - False, else True
        '''
         if data:
+
+            if data['image'] == 'https://lastfm-img2.akamaized.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png':
+
+                data['image'] = None
 
             #download image
             TagEditor.getImageFromSpotify(data['image'], f"cache/{data['uri']}/{data['uri']}.png")

@@ -1,7 +1,7 @@
 from celery import Celery
 
 import requests
-import datetime
+import datetime, time
 import io, os, sys
 import re
 import main
@@ -10,6 +10,8 @@ import random
 import urllib.request
 import pickle
 import image
+import status_manager
+import heroku
 
 import logging
 
@@ -92,7 +94,7 @@ class BotHandler(object):
         return requests.post(self.api_url + method, params)
 
 
-    def sendAudio(self, chat_id, name, artist, audio, thumb, duration, number=None):
+    def sendAudioOld(self, chat_id, name, artist, audio, thumb, duration, number=None):
 
         method = 'sendAudio'
 
@@ -110,6 +112,37 @@ class BotHandler(object):
             'performer':str(artist),
             'duration':int(duration * .001),
             'caption':f'{part if number else ""}<b>{str(artist)}</b> {str(name)}\n@SpotifyMusicDownloaderBot',
+            'parse_mode':'HTML'
+        }
+
+        response = requests.post(
+                        self.api_url + method,
+                        files=files,
+                        data=data
+                    )
+        #logging
+        logging.info(f'SEND STATUS {response.status_code} {response.reason}')
+
+        return response.status_code
+
+    def sendAudio(self, chat_id, name, artist, audio, thumb, duration, number=None):
+
+        method = 'sendAudio'
+
+        files = {
+            'audio': audio,
+            'thumb':thumb
+        }
+
+        if number:
+            part = f"{number}. "
+
+        data = {
+            'chat_id' : chat_id,
+            'title': str(name),
+            'performer':str(artist),
+            'duration':int(duration * .001),
+            'caption':f'{part if number else ""}<b>{str(artist)}</b> <a href="https://t.me/SpotifyMusicDownloaderBot">{str(name)}</a>',
             'parse_mode':'HTML'
         }
 
@@ -233,7 +266,7 @@ class Controller(object):
 
     def __sendStatus(self, user):
 
-        self.bot.sendText(user, text='200 ALIVE')
+        self.bot.sendText(user, text=f'200 {self.downloader.getYTS()}')
 
         return True
 
@@ -517,6 +550,10 @@ class Controller(object):
                 username = update['message']['chat']['username']
             except:
                 username = 'unknown'
+            
+            if chat_id != 232027721:
+
+                return False
 
             if 'text' in list(update['message'].keys()):
                 #skipping unsupported messages
@@ -537,7 +574,7 @@ class Controller(object):
 
                     try:
 
-                        self.downloader = main.MusicDownloader()
+                        self.downloader = main.MusicDownloader(0)
                         #restart controller
                         self.controller(message, chat_id)
 
@@ -592,7 +629,8 @@ class Controller(object):
 
         elif type == 'status':
 
-            self.bot.sendText(id, text='200 ALIVE')
+            #self.bot.sendText(id, text='200 ALIVE')
+            self.bot.sendText(id, text=f'200 {self.downloader.getYTS()}')
             return True
 
         elif type == 'text':
@@ -781,41 +819,79 @@ def getCorrect(name):
 def downloadAlbumImage(url, name):
     urllib.request.urlretrieve(url, name)
 
+
 @manager.task
 def do(update, YT_API_KEY_N=0):
+
     controller = Controller(YT_API_KEY_N)
     controller.worker(update)
+
+    if not status_manager.Manager.getStatus():
+        bot = BotHandler()
+
+        bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
+        bot.sendText(
+            chat_id=232027721,
+            text='SERVER IS DOWN!\nRESTARTING!'
+        )
+        print('HEROKU:RESTART')
+        heroku.restart()
+        
+    else:
+
+        downloader = main.MusicDownloader(YT_API_KEY_N)
+        downloader.FUCK_GOOGLE()
+
     del controller
+
 
 def mainloop():
 
     offset = None
-    bot = BotHandler()
-
     YT_API_KEY_N = 0
 
+    bot = BotHandler()
+    downloader = main.MusicDownloader(YT_API_KEY_N)
+    downloader.FUCK_GOOGLE()
+
+    bot.sendText(
+            chat_id=232027721,
+            text='SERVER IS UP'
+    )
 
     while True:
 
-        try:
+        print('BLOCKED_STATUS:', not status_manager.Manager.getStatus())
+
+        if status_manager.Manager.getStatus():
 
             bot.getUpdates(offset)
             update = bot.checkLastUpdates()
 
-            if update:
-                update_id = update['update_id']
-                offset = update_id + 1
-                #celery task
-                do.delay(update, YT_API_KEY_N)
+            
+            try:
 
-                if YT_API_KEY_N < 11:
-                    YT_API_KEY_N += 1
+                if update:
+
+                    update_id = update['update_id']
+                    offset = update_id + 1
+
+                    #celery task
+                    do.delay(update, YT_API_KEY_N)
+
+                    if YT_API_KEY_N < 11:
+                        YT_API_KEY_N += 1
+                        
                 else:
                     YT_API_KEY_N = 0
 
-        except:
-            offset = None
-            bot = BotHandler()
+            except:
+                offset = None
+                bot = BotHandler()
+        else:
+
+            time.sleep(10)
+            print('BLOCKED')
 
 
 if __name__ == '__main__':
