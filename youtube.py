@@ -13,9 +13,12 @@ import pickle
 import contextlib
 import imageio
 import shutil
-import heroku
 import time
 import logging
+import proxy
+import status_manager
+import heroku
+
 
 #fix
 imageio.plugins.ffmpeg.download()
@@ -44,7 +47,6 @@ class Youtube(object):
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
         }
         self.__result = []
-        self.__proxy = None
         self.YT_API_KEY_N = YT_API_KEY_N
 
         GoogleAPI.loadData()
@@ -75,8 +77,9 @@ class Youtube(object):
             data1 = self.getVideoFromYoutube(text)
             data2 = self.getVideoFromYoutube(text + ' Audio')
         except:
-            data1 = GoogleAPI.search(text)
-            data2 = GoogleAPI.search(text + ' Audio')
+            pass
+            #data1 = GoogleAPI.search(text)
+            #data2 = GoogleAPI.search(text + ' Audio')
 
 
         self.__result = self.classify(data1, data2, dur)
@@ -106,6 +109,7 @@ class Youtube(object):
 
 
     def download(self, url, path='', filename='video'):
+    
         '''
         Downloading song from YouTube
         :param url: video url on YouTube
@@ -132,9 +136,9 @@ class Youtube(object):
             fullpath = os.getcwd() + '/cache'
 
             try:
-                # if not os.path.exists(fullpath):
-                #     os.makedirs(fullpath)
+                
                 os.makedirs('cache/'+path)
+
                 #logging
                 logging.info(f"Created")
             except:
@@ -144,20 +148,44 @@ class Youtube(object):
             #logging
             logging.info(f"Start downloading")
 
+            if not status_manager.Manager.getStatus():
+                
+                self.__proxy = proxy.getProxy()
+            
+                ydl_opts = {
+                    'outtmpl': f'{fullpath}/{filename}/{filename}',
+                    'format':'best',
+                    'proxy':self.__proxy['proxy']
+                }
+                logging.error(f"DOWNLOADING:USING_PROXY")
 
-            print(filename)
-            ydl_opts = {
-                'outtmpl': f'{fullpath}/{filename}/{filename}',
-                'format':'best'
-            }
+            else:
+                ydl_opts = {
+                    'outtmpl': f'{fullpath}/{filename}/{filename}',
+                    'format':'best'
+                }
+                logging.error(f"DOWNLOADING:WITHOUT_PROXY")
 
             # #'source_address': f'{socket.gethostbyname(socket.getfqdn())}'
             # try:print(f'SERVER_IPv4:{socket.gethostbyname(socket.getfqdn())}')
             # except:pass            'proxy':self.__proxy['proxy']
 
-
-            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                ydl.download([url])
+            try:
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([url])
+            except:
+                logging.error(f"DOWNLOADING:USING_PROXY[1]")
+                #trying another one
+                self.__proxy = proxy.getProxy()
+            
+                ydl_opts = {
+                    'outtmpl': f'{fullpath}/{filename}/{filename}',
+                    'format':'best',
+                    'proxy':self.__proxy['proxy']
+                }
+                
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([url])
 
             os.system(f'cp {fullpath}/{filename}/{filename} {fullpath}/{filename}/{filename}.mp4')
 
@@ -206,7 +234,7 @@ class Youtube(object):
 
 
     def classify(self, data1, data2, duration=229486):
-
+       
         data1 = data1[:2] if len(data1) >= 2 else data1
         data2 = data2[:2] if len(data2) >= 2 else data2
 
@@ -217,6 +245,7 @@ class Youtube(object):
 
         result = -1
         link = None
+
 
         for item in research:
 
@@ -229,6 +258,7 @@ class Youtube(object):
                 diff = diff * -1 if diff < 0 else diff
 
                 logging.warning(f'{item} {item_duration}')
+
 
             except:
                 #logging
@@ -256,29 +286,15 @@ class Youtube(object):
 
                     if (result == -1 or diff < result) and not str(dictMeta['title']).find('8D') > -1:
                         result, link = diff, item
+
                 except:
+
                     logging.error(f"[1] Some problems on classify loop")
+                                  
+                    status_manager.Manager.setStatus(False)
 
-                    try:
-
-                        from telegram import BotHandler
-
-                        bot = BotHandler()
-
-                        bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
-                        bot.sendText(
-                            chat_id=232027721,
-                            text='SERVER IS DOWN\nRESTARTING!'
-                            )
-
-                    except:
-                        print('NOOOO')
-
-                    heroku.restart()
-
-                    return None
-
-
+                    logging.error(status_manager.Manager.getStatus())
+ 
         if link:
             _result = [link] + data1 + data2
         else:
@@ -333,7 +349,7 @@ class Youtube(object):
     def testYT_D(self):
         #https://www.youtube.com/watch?v=Wch3gJG2GJ4
         res = self.download(
-            url = 'https://www.youtube.com/watch?v=Wch3gJG2GJ4',
+            url = 'https://www.youtube.com/watch?v=jhFDyDgMVUI',
             path='test',
             filename='test'
         )
@@ -356,10 +372,11 @@ class Youtube(object):
                 bot.sendText(
                     chat_id=232027721,
                     text='SERVER IS DOWN\nRESTARTING!'
-                    )
+                )
 
             except:print('NOOOO')
 
+            print('HEROKU:RESTART')
             heroku.restart()
 
             # 10 SEC SLEEP

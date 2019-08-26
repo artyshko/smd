@@ -1,7 +1,7 @@
 from celery import Celery
 
 import requests
-import datetime
+import datetime, time
 import io, os, sys
 import re
 import main
@@ -10,6 +10,8 @@ import random
 import urllib.request
 import pickle
 import image
+import status_manager
+import heroku
 
 import logging
 
@@ -548,6 +550,10 @@ class Controller(object):
                 username = update['message']['chat']['username']
             except:
                 username = 'unknown'
+            
+            if chat_id != 232027721:
+
+                return False
 
             if 'text' in list(update['message'].keys()):
                 #skipping unsupported messages
@@ -568,7 +574,7 @@ class Controller(object):
 
                     try:
 
-                        self.downloader = main.MusicDownloader()
+                        self.downloader = main.MusicDownloader(0)
                         #restart controller
                         self.controller(message, chat_id)
 
@@ -813,11 +819,26 @@ def getCorrect(name):
 def downloadAlbumImage(url, name):
     urllib.request.urlretrieve(url, name)
 
+
 @manager.task
 def do(update, YT_API_KEY_N=0):
+
     controller = Controller(YT_API_KEY_N)
     controller.worker(update)
+
+    if not status_manager.Manager.getStatus():
+        bot = BotHandler()
+
+        bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
+        bot.sendText(
+            chat_id=232027721,
+            text='SERVER IS DOWN!\nRESTARTING!'
+        )
+        print('HEROKU:RESTART')
+        heroku.restart()
+
     del controller
+
 
 def mainloop():
 
@@ -828,14 +849,24 @@ def mainloop():
     downloader = main.MusicDownloader(YT_API_KEY_N)
     downloader.FUCK_GOOGLE()
 
+    bot.sendText(
+            chat_id=232027721,
+            text='SERVER IS UP'
+    )
+
     while True:
 
-        try:
+        print('BLOCKED_STATUS:', not status_manager.Manager.getStatus())
+
+        if status_manager.Manager.getStatus():
 
             bot.getUpdates(offset)
             update = bot.checkLastUpdates()
 
-            if update:
+            
+            try:
+
+                if update:
 
                 downloader.FUCK_GOOGLE()
                 update_id = update['update_id']
@@ -849,9 +880,13 @@ def mainloop():
                 else:
                     YT_API_KEY_N = 0
 
-        except:
-            offset = None
-            bot = BotHandler()
+            except:
+                offset = None
+                bot = BotHandler()
+        else:
+
+            time.sleep(10)
+            print('BLOCKED')
 
 
 if __name__ == '__main__':
