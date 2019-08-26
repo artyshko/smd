@@ -177,6 +177,7 @@ class Youtube(object):
                 logging.error(f"DOWNLOADING:USING_PROXY[1]")
                 #trying another one
                 self.__proxy = proxy.getProxy()
+                status_manager.Manager.setStatus(False)
             
                 ydl_opts = {
                     'outtmpl': f'{fullpath}/{filename}/{filename}',
