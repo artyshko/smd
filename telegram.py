@@ -551,9 +551,6 @@ class Controller(object):
             except:
                 username = 'unknown'
             
-            if chat_id != 232027721:
-
-                return False
 
             if 'text' in list(update['message'].keys()):
                 #skipping unsupported messages
