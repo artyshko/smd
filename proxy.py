@@ -1,45 +1,46 @@
-from proxyscrape import create_collector, get_collector
-import urllib
+import asyncio
+from proxybroker import Broker
 import requests
 
 def getProxy(log=True):
 
-    try:
+    async def show(proxies):
+        while True:
+            proxy = await proxies.get()
+            if proxy is None: break
+            print('Found proxy: %s' % proxy)
 
-        collector = create_collector(
-            'smd-collector',
-            ('socks4', 'http')
-        )
-
-    except:
-
-        collector = get_collector('smd-collector')
+            return {
+                'proxy': f'https://{proxy.host}:{proxy.port}',
+                'type':'https',
+                'ip':f'https://{proxy.host}',
+                'port':proxy.port
+            }
 
 
-    proxy = collector.get_proxy()
+    proxies = asyncio.Queue()
+    broker = Broker(proxies)
+    tasks = asyncio.gather(
+        broker.find(types=['HTTPS'], limit=1),
+        show(proxies))
 
-    result = {
-        'proxy': f'{proxy[5]}://{proxy[0]}:{proxy[1]}',
-        'type':proxy[5],
-        'ip':f'{proxy[5]}://{proxy[0]}',
-        'port':proxy[1]
-    }
+    loop = asyncio.get_event_loop()
+    result = loop.run_until_complete(tasks)
 
-    if log:
-        print(f'| PROXY | {str(proxy[3]).upper()} | {str(proxy[5]).upper()} {"| ANONYMOUS |" if proxy[4] else "| PUBLIC |"} {result["proxy"]} |')
-
-    return result
+    return result[1]
 
 def get():
 
     proxy = getProxy()
+
+    print(proxy)
 
     _type = proxy['type']
     _proxy = proxy['proxy']
 
     try:
         requests.get(
-            "http://example.com",
+            "https://www.youtube.com",
             proxies = {
                 _type:_proxy
             }
