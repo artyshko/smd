@@ -1,7 +1,7 @@
 lxml==4.2.3
 mutagen==1.41.0
 spotipy==2.4.4
-youtube_dl==2019.7.30
+youtube_dl==2019.8.13
 Flask==1.0.0
 pyperclip==1.6.4
 celery==4.2.1
@@ -13,6 +13,5 @@ Pillow==6.0.0
 beautifulsoup4==4.7.1
 redis==3.2.0
 lyricsgenius==1.4.0
-proxyscrape==0.2.1
+proxybroker==0.3.2
 heroku3==3.4.0
-
