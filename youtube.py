@@ -363,7 +363,7 @@ class Youtube(object):
         except:
            print('Error while deleting directory')
 
-        if not status:
+        if not status or status_manager.Manager.getStatus():
 
             try:
 
@@ -374,11 +374,12 @@ class Youtube(object):
                     chat_id=232027721,
                     text='SERVER IS DOWN\nRESTARTING!'
                 )
+                heroku.restart()
 
             except:print('NOOOO')
 
             print('HEROKU:RESTART')
-            heroku.restart()
+
 
             # 10 SEC SLEEP
             #
