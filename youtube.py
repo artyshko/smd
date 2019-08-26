@@ -363,7 +363,7 @@ class Youtube(object):
         except:
            print('Error while deleting directory')
 
-        if not status or status_manager.Manager.getStatus():
+        if not status or not status_manager.Manager.getStatus():
 
             try:
 
