@@ -836,6 +836,11 @@ def do(update, YT_API_KEY_N=0):
         )
         print('HEROKU:RESTART')
         heroku.restart()
+        
+    else:
+
+        downloader = main.MusicDownloader(YT_API_KEY_N)
+        downloader.FUCK_GOOGLE()
 
     del controller
 
@@ -868,15 +873,15 @@ def mainloop():
 
                 if update:
 
-                downloader.FUCK_GOOGLE()
-                update_id = update['update_id']
-                offset = update_id + 1
+                    update_id = update['update_id']
+                    offset = update_id + 1
 
-                #celery task
-                do.delay(update, YT_API_KEY_N)
+                    #celery task
+                    do.delay(update, YT_API_KEY_N)
 
-                if YT_API_KEY_N < 11:
-                    YT_API_KEY_N += 1
+                    if YT_API_KEY_N < 11:
+                        YT_API_KEY_N += 1
+                        
                 else:
                     YT_API_KEY_N = 0
 
