@@ -16,10 +16,11 @@ def restart():
         except:
 
             sys.exit()
+    
     try:
 
         heroku_conn = heroku3.from_key(getData())
-        app = heroku_conn.apps()['spotify-music-downloader-bot']
+        app = heroku_conn.apps()['spotify-music-downloader']
         dyno = app.dynos()[0]
 
         print('RESTARTING_DYNO:DONE')
