@@ -845,6 +845,7 @@ def do(update, YT_API_KEY_N=0):
 def mainloop():
 
     offset = None
+    wait = 0
     YT_API_KEY_N = 0
 
     bot = BotHandler()
@@ -888,7 +889,13 @@ def mainloop():
         else:
 
             time.sleep(10)
-            print('BLOCKED')
+            wait += 10 
+
+            print(f'BLOCKED:{wait}')
+
+            if wait >= 120:
+                print('HEROKU:RESTART')
+                heroku.restart()
 
 
 if __name__ == '__main__':
