@@ -11,8 +11,7 @@ html{
     width:100%;
 }
 body{
-    background: rgb(38,38,38);
-background: linear-gradient(180deg, rgba(38,38,38,1) 0%, rgba(21,21,21,1) 37%, rgba(0,0,0,1) 92%);
+    background:rgb(28,28,30);
 }
 .container-fluid{
     height: 100%;
@@ -74,42 +73,11 @@ background: linear-gradient(180deg, rgba(38,38,38,1) 0%, rgba(21,21,21,1) 37%, r
         <h6 class='desc'>Linux v1.6.8-dev</h6>
         </div>
         <div class="text-center">
-            <h5>Loading</h5>
+            
             <div class="lds-ripple"><div></div><div></div></div>
         </div>
     </div>
-
-    
-<script>
-  $(document).ready(function(){
-    $.post(
-          'http://0.0.0.0:8050/shutdown',
-          function(data) {
-            
-        })
-  };
-
-    $('#search').keypress(function(e) {
-            
-      if(e.which == 10 || e.which == 13) {
-
-        window.location.replace("http://0.0.0.0:8050/search/"+$('#search').val().replace(/ /g,'+'));
-
-      }
-
-  });
-    $(function() {
-      $(".download-link").on("click",function(e) {
-        e.preventDefault(); // cancel the link itself
-
-        $.post(
-          this.href,
-          function(data) {
-            
-        });
-      });
-    });
-
+ 
 </script>
 </body>
 </html>

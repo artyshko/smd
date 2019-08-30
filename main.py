@@ -72,6 +72,7 @@ class MusicDownloader(object):
             notify.send(f'{info["artist"][0]} - {info["name"]}', downloaded=False)
 
             info['uri'] = str(info['uri']).split('/')[-1]
+            info['uri'] = str(info['uri']).split('?')[0]
 
             fixed_name = f'{info["artist"][0]} - {info["name"]}'
             fixed_name = fixed_name.replace('.','')
@@ -205,6 +206,9 @@ class MusicDownloader(object):
         for info, i in zip(playlist,range(len(playlist))):
 
             print(f'Downloading {i+1} of {len(playlist)}')
+            
+            info['uri'] = str(info['uri']).split('/')[-1]
+            info['uri'] = str(info['uri']).split('?')[0]
 
             notify.send(f'{info["artist"][0]} - {info["name"]}', downloaded=False)
 
@@ -255,6 +259,7 @@ class MusicDownloader(object):
         for info, i in zip(playlist['tracks'],range(len(playlist['tracks']))):
 
             info['uri'] = str(info['uri']).split('/')[-1]
+            info['uri'] = str(info['uri']).split('?')[0]
 
             notify.send(f'{info["artist"][0]} - {info["name"]}', downloaded=False)
 
@@ -534,7 +539,7 @@ _____/\\\\\\\\\\\\\\\\\\\\\\____/\\\\\\\\____________/\\\\\\\\__/\\\\\\\\\\\\\\\
         CLI.logo()
 
         print('\t\t       Spotify Music Downloader')
-        print('\t\t          version  1.6.0-dev\n')
+        print('\t\t          version  1.6.8-dev\n')
 
         print(' ./main.py [argument][value] - startup with arguments\n')
 

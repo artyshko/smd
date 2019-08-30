@@ -52,9 +52,6 @@ def artist(uri):
 
     lf_artist_info = lastfm.getArtistsInfo(sp_artist_info['name'])
 
-    print(len(sp_artist_alb))
-    print(len(sp_artist_alb_full))
-
     #creating tags
     name = str(sp_artist_info['name']).replace(' ','')
 
@@ -176,7 +173,6 @@ def search(q):
 
     query = ' '.join(str(q).split('+'))
 
-    print(query)
 
     results = user.search(query)
 
@@ -222,7 +218,6 @@ def song(uri):
 def album(uri):
 
     sp_album_data = user.getAlbumInfo(uri)[0]
-    print(sp_album_data['art_id'])
     sp_artist_alb = user.getArtistsAlbums(sp_album_data['art_id'])
     sp_artist_r_a = user.getArtistsRelatedArtists(sp_album_data['art_id'])
 
@@ -288,6 +283,21 @@ def downloadAlbum(uri):
         music = expanduser("~") + '/Music'
 
         subprocess.Popen(["python3", f"{os.getcwd()}/main.py", '-sa', f'https://open.spotify.com/album/{uri}', '-p', music])
+
+        return json.dumps(
+            {
+                'status': True
+            }
+        )
+
+@app.route("/downloadPlaylist/<uri>", methods=['GET','POST'])
+def downloadPlaylist(uri):
+
+    if request.method == 'POST':
+
+        music = expanduser("~") + '/Music'
+
+        subprocess.Popen(["python3", f"{os.getcwd()}/main.py", '-sp', f'https://open.spotify.com/playlist/{uri}', '-p', music])
 
         return json.dumps(
             {

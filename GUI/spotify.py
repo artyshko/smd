@@ -1187,8 +1187,5 @@ class Spotify(object):
         except: return None
 
 if __name__ == '__main__':
+    
     u = Spotify.User()
-    s = Spotify()
-
-    res = u.search('Love')
-    print(res)
