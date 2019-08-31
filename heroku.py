@@ -20,7 +20,7 @@ def restart():
     try:
 
         heroku_conn = heroku3.from_key(getData())
-        app = heroku_conn.apps()['spotify-music-downloader']
+        app = heroku_conn.apps()['smd-bot']
         dyno = app.dynos()[0]
 
         print('RESTARTING_DYNO:DONE')
