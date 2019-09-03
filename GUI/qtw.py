@@ -15,9 +15,14 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__(*args, **kwargs)
 
         self.browser = QWebEngineView()
+        self.url = QUrl('https://accounts.spotify.com/en/login') 
+        self.browser.page().profile().setCachePath(f'{os.getcwd()}/cache')
+        self.browser.page().profile().setPersistentCookiesPolicy( self.browser.page().profile().NoPersistentCookies)
         self.browser.page().profile().clearHttpCache()
         #self.browser.setUrl(QUrl("file:///home/eve/Data/PycharmProjects/SpotifyMusicDownloader/GUI/templates/login.html"))
-        self.browser.setUrl(QUrl("http://0.0.0.0:8050/home"))
+        self.browser.setUrl(QUrl("http://127.0.0.1:5000/login"))
+        self.browser.page().profile().setPersistentCookiesPolicy( self.browser.page().profile().NoPersistentCookies)
+        #self.browser.setUrl(QUrl("https://open.spotify.com/artist/3iOvXCl6edW5Um0fXEBRXy"))
 
 
         self.browser.urlChanged.connect(self.update_urlbar)
@@ -69,7 +74,9 @@ class MainWindow(QMainWindow):
         self.browser.setUrl(QUrl(""))
 
     def navigate_to_url(self):  # Does not receive the Url
+
         q = QUrl(self.urlbar.text())
+
         if q.scheme() == "":
             q.setScheme("http")
 
@@ -77,20 +84,28 @@ class MainWindow(QMainWindow):
 
     def update_urlbar(self, q):
 
-        if q.scheme() == 'https':
-            # Secure padlock icon
-            self.httpsicon.setPixmap(QPixmap(os.path.join('images', 'lock-ssl.png')))
+        if q.toString() == 'http://localhost:5000/shutdown':
 
-        else:
-            # Insecure padlock icon
-            self.httpsicon.setPixmap(QPixmap(os.path.join('images', 'lock-nossl.png')))
+            sys.exit(0)
+
+        try:
+            if q.scheme() == 'https':
+                # Secure padlock icon
+                self.httpsicon.setPixmap(QPixmap(os.path.join('images', 'lock-ssl.png')))
+
+            else:
+                # Insecure padlock icon
+                self.httpsicon.setPixmap(QPixmap(os.path.join('images', 'lock-nossl.png')))
+        except:
+            
+            pass
 
         self.urlbar.setText(q.toString())
         self.urlbar.setCursorPosition(0)
 
 
 def serverShutDown():
-    requests.get('http://127.0.0.1:8050/shutdown')
+    requests.get('http://127.0.0.1:5000/shutdown')
 
 if __name__ ==  "__main__":
     

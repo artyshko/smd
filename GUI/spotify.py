@@ -39,7 +39,7 @@ class Spotify(object):
 
         @staticmethod
         @app.route('/', methods=['GET', 'POST'])
-        def code():
+        def getCode():
 
             Spotify.Server.code = request.args.get('code')
             Spotify.Server.stop()
@@ -48,7 +48,7 @@ class Spotify(object):
 
     class User(object):
 
-        def __init__(self):
+        def __init__(self, server):
 
             self.__grant_type = 'authorization_code'
             self.__scope = '''
@@ -59,23 +59,71 @@ class Spotify(object):
                 playlist-read-collaborative,
                 user-read-recently-played
             '''
+            self.server = server
             self.__getData()
             self.__redirect = 'http://localhost:5000/'
             self.__urlCode = f'https://accounts.spotify.com/authorize?client_id={self.__client_id}&response_type=code&redirect_uri={self.__redirect}&scope={self.__scope}'
             self.__url = 'https://accounts.spotify.com/api/token'
+            self.__image = 'https://raw.githubusercontent.com/artyshko/smd/telegram/Data/9.png'
 
-            self.__getRefreshToken()
+            if not self.server:
+
+                self.__getRefreshToken()
+
+                self.__client = spotipy.Spotify(auth=self.__access_token)
+            
+            
+        def getURL(self):
+
+            return self.__urlCode
+
+        def serverLogin(self, code):
+
+            self.__code = code
+
+            self.__body_params = {
+                'grant_type': self.__grant_type,
+                'code': self.__code,
+                'redirect_uri': self.__redirect,
+                }
+
+            #getting access_token by POST request to Spotify API
+            response = requests.post(
+                self.__url,
+                data=self.__body_params,
+                auth=(
+                    self.__client_id,
+                    self.__client_secret
+                )
+            ).json()
+
+            self.__access_token = response['access_token']
+            self.__refresh_token = response['refresh_token']
+
+            data = {'refresh_token' : self.__refresh_token}
+
+            with open('.spotify_refresh_token.secret', 'wb') as f:
+                pickle.dump(data, f)
 
             self.__client = spotipy.Spotify(auth=self.__access_token)
 
-            self.__image = 'https://raw.githubusercontent.com/artyshko/smd/telegram/Data/9.png'
+
+        def isLogined(self):
+
+            if self.__getRefreshToken():
+                self.__client = spotipy.Spotify(auth=self.__access_token)
+                return True
+            
+            else:
+                return False
+
 
 
         def __getAccessToken(self):
             #start server
             #handling the code
             webbrowser.open_new(self.__urlCode)
-            Spotify.Server.run()
+            
             self.__code = Spotify.Server.code
 
             self.__body_params = {
@@ -115,14 +163,22 @@ class Spotify(object):
             self.__access_token = response['access_token']
 
         def __getRefreshToken(self):
+
             try:
 
                 with open('.spotify_refresh_token.secret', 'rb') as f:
                     data = pickle.load(f)
                 self.__getAccessTokenByRefreshToken(data['refresh_token'])
 
+                return True
+
             except:
-                self.__getAccessToken()
+
+                if not self.server:
+                    self.__getAccessToken()
+
+                else:
+                    return False
 
         def __getData(self):
             try:
@@ -139,6 +195,16 @@ class Spotify(object):
                 Download: https://github.com/artyshko/smd
                 ''')
                 sys.exit()
+
+        def check(self):
+
+            try:
+                self.__client.me()
+                return True
+            
+            except:
+                return False
+
 
         def getPlaylistTracks(self, playlist_uri):
 
@@ -372,37 +438,45 @@ class Spotify(object):
                 user=id,
                 playlist_id=uri
             )
+            
 
-            return {
-                    'description':playlist['description'],
-                    'uri':playlist['uri'],
-                    'public':playlist['public'],
-                    'followers':playlist['followers']['total'],
-                    'id':playlist['id'],
-                    'name':playlist['name'],
-                    'owner':playlist['owner']['display_name'],
-                    'owner_id':playlist['owner']['id'],
-                    'image':playlist['images'][0]['url'],
-                    'tracks_count':playlist['tracks']['total'],
-                    'tracks':[
-                        {
-                            'trc_name':track['track']['name'],
-                            'trc_uri':track['track']['uri'],
-                            'trc_spotify':track['track']['external_urls']['spotify'],
-                            'trc_id':track['track']['id'],
-                            'alb_name':track['track']['album']['name'],
-                            'alb_uri':track['track']['album']['uri'],
-                            'alb_spotify':track['track']['album']['external_urls']['spotify'],
-                            'alb_id':track['track']['album']['id'],
-                            'alb_image':track['track']['album']['images'][-1]['url'],
-                            'art_name':track['track']['artists'][0]['name'],
-                            'art_uri':track['track']['artists'][0]['uri'],
-                            'art_spotify':track['track']['artists'][0]['external_urls']['spotify'],
-                            'art_id':track['track']['artists'][0]['id']
-                        }
-                     for track in playlist['tracks']['items']
-                    ]
-                }
+            try:
+
+                return {
+                        'description':playlist['description'],
+                        'uri':playlist['uri'],
+                        'public':playlist['public'],
+                        'followers':playlist['followers']['total'],
+                        'id':playlist['id'],
+                        'name':playlist['name'],
+                        'owner':playlist['owner']['display_name'],
+                        'owner_id':playlist['owner']['id'],
+                        'image':playlist['images'][0]['url'],
+                        'tracks_count':playlist['tracks']['total'],
+                        'tracks':[
+                            {
+                                'trc_name':track['track']['name'],
+                                'trc_uri':track['track']['uri'],
+                                'trc_spotify':track['track']['external_urls']['spotify'],
+                                'trc_id':track['track']['id'],
+                                'alb_name':track['track']['album']['name'],
+                                'alb_uri':track['track']['album']['uri'],
+                                'alb_spotify':track['track']['album']['external_urls']['spotify'],
+                                'alb_id':track['track']['album']['id'],
+                                'alb_image':track['track']['album']['images'][-1]['url'],
+                                'art_name':track['track']['artists'][0]['name'],
+                                'art_uri':track['track']['artists'][0]['uri'],
+                                'art_spotify':track['track']['artists'][0]['external_urls']['spotify'],
+                                'art_id':track['track']['artists'][0]['id']
+                            }
+                        for track in playlist['tracks']['items']
+                        ]
+                    }
+                
+            except:
+
+                return {}
+
 
         def getNewReleases(self):
 

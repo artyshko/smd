@@ -86,11 +86,10 @@
               <i class="fab fa-telegram"  style='background:rgb(142, 142, 147);'></i>   Get On Telegram</a>
           <a class="list-group-item list-group-item-action" href="{{ url_for('index')}}">
               <i class="fab fa-github" style='background:rgb(142, 142, 147);'></i>   GitHub</a>
-          <a class="list-group-item list-group-item-action" href="{{ url_for('index')}}">
+          <a class="list-group-item list-group-item-action" href="{{ url_for('logout')}}">
             <i class="fas fa-sign-out-alt" style='background:rgb(142, 142, 147);'></i>   Log Out</a>
         </div>
     </div>
-
     
   </nav>
 
@@ -148,7 +147,7 @@
             
             if(e.which == 10 || e.which == 13) {
   
-              window.location.replace("http://0.0.0.0:8050/search/"+$('#search').val().replace(/ /g,'+'));
+              window.location.replace("http://127.0.0.1:5000/search/"+$('#search').val().replace(/ /g,'+'));
 
             }
 

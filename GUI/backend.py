@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from random import shuffle
 import json
 import spotify
@@ -10,7 +10,7 @@ from os.path import expanduser
 
 
 app = Flask(__name__)
-user = spotify.Spotify.User()
+user = spotify.Spotify.User(server=True)
 lastfm = lastfm.LastFM()
 
 
@@ -173,7 +173,6 @@ def search(q):
 
     query = ' '.join(str(q).split('+'))
 
-
     results = user.search(query)
 
     tracks_res = results['tracks']
@@ -308,9 +307,37 @@ def downloadPlaylist(uri):
 @app.route('/login', methods=['GET','POST'])
 def login():
 
-    return render_template(
-        'login.html'
-    )
+    if request.method == 'POST':
+
+
+        if user.isLogined():
+
+            return json.dumps(
+                {
+                    'status': 'http://127.0.0.1:5000/home'
+                }
+            ) 
+
+        else:
+            return json.dumps(
+                {
+                    'status': user.getURL()
+                }
+            )
+    
+    else:
+
+        return render_template(
+            'login.html'
+        )
+
+@app.route('/logout', methods=['GET','POST'])
+def logout():
+
+    os.remove(f'{os.getcwd()}/.spotify_refresh_token.secret')
+
+    return redirect(url_for('shutdown'))
+
 
 @app.route('/shutdown', methods=['GET','POST'])
 def shutdown():
@@ -320,6 +347,19 @@ def shutdown():
         raise RuntimeError('Not running with the Werkzeug Server')
     func()
 
+    return render_template(
+            'login.html'
+        )
+
+
+@app.route('/', methods=['GET','POST'])
+def getCode():
+
+    code = request.args.get('code')
+    user.serverLogin(code)
+
+    return redirect(url_for('index'))
 
 if __name__ ==  "__main__":
-    app.run(debug=True, host='0.0.0.0', port=8050)
+
+    app.run(debug=True, port=5000)
