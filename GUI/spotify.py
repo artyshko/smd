@@ -268,7 +268,7 @@ class Spotify(object):
             shuffle(artists)
             return artists[:20]
 
-        def getUserTracks(self):
+        def getUserTracksOld(self):
 
             user_top_tracks = self.__client.current_user_saved_tracks(
                 limit=50,
@@ -297,6 +297,48 @@ class Spotify(object):
                 for track in user_top_tracks 
 
             ]
+        
+        def getUserTracks(self):
+
+            it, data = 0, []
+
+            while it <= 500:
+
+                try:
+                    
+                    user_top_tracks = self.__client.current_user_saved_tracks(
+                        limit=50,
+                        offset=it,
+                    )['items']
+
+                    data.extend([
+
+                        {
+                            'trc_name':track['track']['name'],
+                            'trc_uri':track['track']['uri'],
+                            'trc_spotify':track['track']['external_urls']['spotify'],
+                            'trc_id':track['track']['id'],
+                            'alb_name':track['track']['album']['name'],
+                            'alb_uri':track['track']['album']['uri'],
+                            'alb_spotify':track['track']['album']['external_urls']['spotify'],
+                            'alb_id':track['track']['album']['id'],
+                            'alb_image':track['track']['album']['images'][-1]['url'],
+                            'art_name':track['track']['artists'][0]['name'],
+                            'art_uri':track['track']['artists'][0]['uri'],
+                            'art_spotify':track['track']['artists'][0]['external_urls']['spotify'],
+                            'art_id':track['track']['artists'][0]['id']
+                        }
+
+                        for track in user_top_tracks 
+
+                    ])
+
+                except:
+                    pass
+
+                it+= 50
+
+            return data
 
         def getTopTracks(self):
 
