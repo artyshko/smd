@@ -6,7 +6,10 @@
 <p align="center">
   <b><h1>Desktop version GUI<h1></b>
 </p>
- <img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/1.png"> 
+ <img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/1.png"></br>
+  
+ <img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/2.png">
+ 
 <p align="center">
   <b><h1>Desktop version CLI<h1></b>
 </p>
@@ -133,7 +136,7 @@ Example:
 ./main.py -ss "https://open.spotify.com/track/2QoDAlMnML5haTXvYRS86X" -p ~/Desktop/Music/New
 ```
 ## Desktop version GUI
-<img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/2.png"></br>
+<img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/7.png"></br>
 
 <img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/3.png"></br>
 
@@ -142,8 +145,6 @@ Example:
 <img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/5.png"></br>
 
 <img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/6.png"></br>
-
-<img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/7.png"></br>
 
 <img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/8.png"></br>
 
