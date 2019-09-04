@@ -79,6 +79,7 @@
     border: 1px solid rgb(53, 55, 58);
 }
 
+
 .nav-item{
     color: rgb(146, 146, 146);
     margin-top: 5px;
@@ -256,6 +257,25 @@ html {
     
     -webkit-mask-image:-webkit-gradient(linear, right top, right bottom, from(rgba(28,28,30,1)), to(rgba(28,28,30,0))) !important;
     mask-image: linear-gradient(to left, rgba(28,28,30,1), rgba(28,28,30,0));
+    
+}
+
+.image-shadow-conc-rn {
+    width: 80vw;
+    height: 300px;
+    min-width: 300px;
+    min-height: 300px;
+    border-radius: 10px;
+    border: 0px solid rgb(28,28,30);
+    display: block;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: #fff;
+
+    
+    
+   
     
 }
 
