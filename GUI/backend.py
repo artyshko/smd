@@ -4,6 +4,7 @@ import json
 import spotify
 import lastfm
 import genius
+import webbrowser
 
 import subprocess, os, sys
 from os.path import expanduser
@@ -257,6 +258,119 @@ def for_you():
         user_featured_playlists=sp_user_f_pls
     )
 
+@app.route("/other", methods=['GET'])
+def other():
+
+    return render_template(
+        'other.html'
+    )
+
+@app.route("/other_deezer", methods=['GET','POST'])
+def other_deezer():
+
+    if request.method == 'POST':
+
+
+        if request.form['type'] == 'd-track':
+
+            if request.form['data']:
+
+                music = expanduser("~") + '/Music'
+                subprocess.Popen(["python3", f"{os.getcwd()}/main.py", '-ds', request.form['data'],'-p', music])
+
+        elif request.form['type'] == 'd-album':
+
+            if request.form['data']:
+
+                music = expanduser("~") + '/Music'
+                subprocess.Popen(["python3", f"{os.getcwd()}/main.py", '-da', request.form['data'],'-p', music])
+
+        elif request.form['type'] == 'd-pl':
+            
+            if request.form['data']:
+
+                music = expanduser("~") + '/Music'
+                subprocess.Popen(["python3", f"{os.getcwd()}/main.py", '-dp', request.form['data'],'-p', music])
+
+        else:
+            pass
+        
+
+        return json.dumps(
+            {
+                'status': True
+            }
+        )
+
+    return render_template(
+        'other_deezer.html'
+    )
+
+@app.route("/other_ytm", methods=['GET','POST'])
+def other_ytm():
+
+    if request.method == 'POST':
+
+
+        if request.form['type'] == 'y-music':
+
+            if request.form['data']:
+
+                data = str(request.form['data']).split('&')[0]
+
+                music = expanduser("~") + '/Music'
+                subprocess.Popen(["python3", f"{os.getcwd()}/main.py", '-ym', data,'-p', music])
+
+        elif request.form['type'] == 'y-video':
+
+            if request.form['data']:
+
+                data = str(request.form['data']).split('&')[0]
+
+                music = expanduser("~") + '/Music'
+                subprocess.Popen(["python3", f"{os.getcwd()}/main.py", '-yv',data,'-p', music])
+
+        else:
+            pass
+        
+        return json.dumps(
+            {
+                'status': True
+            }
+        )
+
+    return render_template(
+        'other_ytm.html'
+    )
+
+@app.route("/other_apple", methods=['GET','POST'])
+def other_apple():
+
+    if request.method == 'POST':
+
+
+        if request.form['type'] == 'a-music':
+
+            if request.form['data']:
+
+                data = str(request.form['data'])
+
+                music = expanduser("~") + '/Music'
+                subprocess.Popen(["python3", f"{os.getcwd()}/main.py", '-a', data,'-p', music])
+
+        else:
+            pass
+        
+        return json.dumps(
+            {
+                'status': True
+            }
+        )
+
+    return render_template(
+        'other_apple.html'
+    )
+
 @app.route("/downloadSingleSong/<uri>", methods=['GET','POST'])
 def downloadSingleSong(uri):
 
@@ -321,7 +435,7 @@ def login():
         else:
             return json.dumps(
                 {
-                    'status': user.getURL()
+                    'status': True
                 }
             )
     
@@ -330,6 +444,86 @@ def login():
         return render_template(
             'login.html'
         )
+
+@app.route('/linkGitHub', methods=['GET','POST'])
+def linkGitHub():
+
+    if request.method == 'POST':
+
+        webbrowser.open_new('https://github.com/artyshko/smd')
+
+        return json.dumps(
+                {
+                    'status': True
+                }
+            )
+
+
+@app.route('/linkTelegram', methods=['GET','POST'])
+def linkTelegram():
+
+    if request.method == 'POST':
+
+        webbrowser.open_new('https://t.me/SpotifyMusicDownloaderBot')
+
+        return json.dumps(
+                {
+                    'status': True
+                }
+            )
+
+@app.route('/listenOnSpotifySong/<uri>', methods=['GET','POST'])
+def listenOnSpotifySong(uri):
+
+    if request.method == 'POST':
+
+        webbrowser.open_new(f'https://open.spotify.com/track/{uri}')
+
+        return json.dumps(
+                {
+                    'status': True
+                }
+            )
+
+@app.route('/listenOnSpotifyAlbum/<uri>', methods=['GET','POST'])
+def listenOnSpotifyAlbum(uri):
+
+    if request.method == 'POST':
+
+        webbrowser.open_new(f'https://open.spotify.com/album/{uri}')
+
+        return json.dumps(
+                {
+                    'status': True
+                }
+            )
+
+@app.route('/listenOnSpotifyArtist/<uri>', methods=['GET','POST'])
+def listenOnSpotifyArtist(uri):
+
+    if request.method == 'POST':
+
+        webbrowser.open_new(f'https://open.spotify.com/artist/{uri}')
+
+        return json.dumps(
+                {
+                    'status': True
+                }
+            )
+
+@app.route('/listenOnSpotifyPaylist/<uri>', methods=['GET','POST'])
+def listenOnSpotifyPlaylist(uri):
+
+    if request.method == 'POST':
+
+        webbrowser.open_new(f'https://open.spotify.com/playlist/{uri}')
+
+        return json.dumps(
+                {
+                    'status': user.getURL()
+                }
+            )      
+        
 
 @app.route('/logout', methods=['GET','POST'])
 def logout():
