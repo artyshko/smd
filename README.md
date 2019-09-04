@@ -4,9 +4,13 @@
 <img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram/Data/9.png"> 
 
 <p align="center">
-  <b><h1>Desktop version<h1></b>
+  <b><h1>Desktop version GUI<h1></b>
 </p>
-<img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/6.png"> 
+ <img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/1.png"> 
+<p align="center">
+  <b><h1>Desktop version CLI<h1></b>
+</p>
+  <img align="center" src="https://github.com/artyshko/smd/raw/master/Data/11.png">
 <p align="center">
   <h1>Telegram version</h1>
 </p>
@@ -21,7 +25,7 @@
 
 <img align="center" src="https://raw.githubusercontent.com/artyshko/smd/master/Data/5.png"></br>
 
-## Manual (Desktop version)
+## Manual (Desktop version CLI)
 
 ```
 ./main.py [argument][value] - startup with arguments
@@ -55,6 +59,8 @@ git clone https://github.com/artyshko/smd.git
 ### First you have to install all dependencies
 ```
 pip3 install -r requirements.txt
+pip3 install PyQtWebEngine
+sudo apt-get install python3-pyqt5.qtwebengine
 ```
 
 ### Make file executable
@@ -126,3 +132,21 @@ Example:
 
 ./main.py -ss "https://open.spotify.com/track/2QoDAlMnML5haTXvYRS86X" -p ~/Desktop/Music/New
 ```
+## Desktop version GUI
+<img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/2.png"></br>
+
+<img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/3.png"></br>
+
+<img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/4.png"></br>
+
+<img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/5.png"></br>
+
+<img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/6.png"></br>
+
+<img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/7.png"></br>
+
+<img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/8.png"></br>
+
+<img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/9.png"></br>
+
+<img align="center" src="https://github.com/artyshko/smd/raw/master/Data/prev/10.png"></br>
