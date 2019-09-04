@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<p class='title' style='margin-top: 0px; margin-bottom: -10px;'>
+    Categories
+</p>
+
+<div class="flex-wrap">
+        {% for album in user_saved_albums %}
+            <div class="col">
+                <div style="height:250px; border: 0px solid #fff !important;" >
+                        <div scope="row" style='padding: 0px;border: 0px solid #fff !important;'> 
+                            <a class='no-link' href='{{ url_for('category', uri=album.id, name=album.name, image=album.image)}}'>
+                            <div class="image-shadow-prev-cat cursor-pointer-all-obj" style="background-image:url({{album.image}});width:100px;height:100px;" ></div>
+                            </a>
+                        </div>
+                        <div>
+                    <div class='cat-info-list text-left'>
+                        <a class='no-link' href='{{ url_for('category', uri=album.id, name=album.name, image=album.image)}}'>
+                            <p class='cat-name cursor-pointer-all-obj'>{{album.name}}</p>
+                        </a>
+                    </div>
+                </div>               
+                </div>
+            </div>
+        {% endfor %}
+</div>
+
+
+
+
+{% endblock %}

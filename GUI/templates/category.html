@@ -1,0 +1,63 @@
+
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div style='width:100%; height:400px; margin-top:-50px!important; position: relative;'>
+   <div class='albums-slider' style='width:83%; margin-left: 17%;' >
+        <div class="border-last-artist" style='width:100% !important;'>
+          <div class="image-shadow-last-artist" style="background-image:url({{category_image}});filter: blur(10px);
+          -webkit-filter: blur(10px);">
+          </div>
+      </div>
+  </div>
+
+<div class='p-name pagination-centered text-center'>
+   <span class="item-text-12">{{category_name}}</span>><br>
+  </div>
+</div>
+
+<div class="container maxWidth" style='background: rgb(28,28,30);'>
+        <table class="table-album table-dark justify-content space-between">
+            <tbody>
+    
+            {% for album in user_saved_albums %}
+
+              <tr style="height:200px; border: 0px solid #fff !important;" >
+                <th scope="row" style='padding: 0px;border: 0px solid #fff !important; width:20%;'> 
+                  <a class='no-link' href='#'>
+                    <div class="image-shadow-prev-pl cursor-pointer-all-obj" style="background-image:url({{album.image}})" ></div>
+                  </a>
+                </th>
+                <td>
+                  <div class='pl-info-list'>
+                <p class='pl-butt'>
+                    <a class='no-link download-link' href="{{ url_for('listenOnSpotifyPlaylist', uri=album.id)}}">
+
+                      <span class="btn btn-outline-success download-button" style='padding: 2px 2px 2px 2px;border: 0px solid #fff;'>
+                        <i class="fab fa-spotify"></i> Listen on Spotify
+                      </span>
+                    </a>
+                    <a class='no-link  download-link' href="{{ url_for('downloadPlaylist', uri=album.id) }}">
+                      <span class="btn btn-outline-primary download-button" style='padding: 2px 2px 2px 2px;border: 0px solid #fff;'>
+                        <i class="fas fa-arrow-alt-circle-down"></i> Download full playlist
+                      </span>
+                    </a>
+                </p>
+                <a class='no-link' href='{{ url_for('playlist', uri=album.id, us=album.owner_id)}}'>
+                  <p class='art-name cursor-pointer-all-obj'>{{album.name}}</p>
+                  <span class='text-left'>
+                        <p class='art-count cursor-pointer-all-obj'>{{album.owner}}</p>
+                  </span>
+                </a>
+                </div>
+                </td>               
+              </tr>
+    
+              {% endfor %}
+
+            </tbody>
+          </table>
+    </div>
+
+{% endblock %}

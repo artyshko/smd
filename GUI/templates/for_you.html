@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block body %}
+ <p class='title'>
+    For You
+</p>
+
+  <div class='albums-slider lazy' style='width:82%; margin-left: 19%;' >
+    
+    {% for playlist in user_featured_playlists %}
+        <div class="border cursor-pointer-all-obj">
+            <a class='no-link' href='{{ url_for('playlist', uri=playlist.id, us=playlist.owner_id)}}'>
+              <div class="image-shadow" style="background-image:url({{playlist.image}})" ></div>
+              <p class="item-text-3">
+                    {% if playlist.name| length >= 49 %}
+                        {{playlist.name[:46]}}...
+                    {% else %}
+                        {{ playlist.name }}
+                    {% endif %}
+              </p>
+            </a>
+        </div>
+      {% endfor %}
+
+  </div>
+
+<p class='title'>
+    New Releases
+</p>
+
+
+<div class='albums-slider lazy' style='width:82%; margin-left: 19%;' >
+  
+      {% for albums in new %}
+          <div class="border cursor-pointer-all-obj">
+              <a class='no-link' href="{{ url_for('album', uri=albums.alb_id) }}">
+                <div class="image-shadow" style="background-image:url({{albums.alb_image}})" ></div>
+                <p class="item-text-3">
+                        {% if albums.alb_name| length >= 49 %}
+                            {{albums.alb_name[:46]}}...
+                        {% else %}
+                            {{ albums.alb_name }}
+                        {% endif %}
+                </p>
+              </a>
+          </div>
+        {% endfor %}
+  
+</div>
+
+<p class='title'>
+    Based On Your Artists
+</p>
+
+
+<div class='albums-slider lazy' style='width:82%; margin-left: 19%;' >
+  
+      {% for track in rec %}
+          <div class="border cursor-pointer-all-obj">
+              <a class='no-link' href="{{ url_for('album', uri=track.alb_id) }}">
+                <div class="image-shadow" style="background-image:url({{track.alb_image}})" ></div>
+                <p class="item-text-3">
+                    {% if track.alb_name| length >= 50 %}
+                        {{track.alb_name[:47]}}...
+                    {% else %}
+                        {{ track.alb_name }}
+                    {% endif %}
+                </p>
+              </a>
+          </div>
+        {% endfor %}
+  
+</div>
+
+<p class='title'>
+    Based On Your Top Artists
+</p>
+
+
+<div class='albums-slider lazy' style='width:82%; margin-left: 19%;' >
+  
+      {% for track in rec_t_a %}
+          <div class="border cursor-pointer-all-obj">
+              <a class='no-link' href="{{ url_for('album', uri=track.alb_id) }}">
+                <div class="image-shadow" style="background-image:url({{track.alb_image}})" ></div>
+                <p class="item-text-3">
+                        {% if track.alb_name| length >= 49 %}
+                            {{track.alb_name[:46]}}...
+                        {% else %}
+                            {{ track.alb_name }}
+                        {% endif %}
+                </p>
+              </a>
+          </div>
+        {% endfor %}
+  
+</div>
+
+<p class='title'>
+   You Might Like
+</p>
+
+<div class='albums-slider lazy' style='width:82%; margin-left: 19%;' >
+  
+      {% for track in rec_t_t %}
+          <div class="border cursor-pointer-all-obj">
+              <a class='no-link' href="{{ url_for('album', uri=track.alb_id) }}">
+                <div class="image-shadow" style="background-image:url({{track.alb_image}})" ></div>
+                <p class="item-text-3">
+                        {% if track.alb_name| length >= 49 %}
+                            {{track.alb_name[:46]}}...
+                        {% else %}
+                            {{ track.alb_name }}
+                        {% endif %}
+                    </p>
+              </a>
+          </div>
+        {% endfor %}
+  
+</div>
+
+<p class='title'>
+    Based On Your Last Saved
+ </p>
+ 
+ 
+ <div class='albums-slider lazy' style='width:82%; margin-left: 19%;' >
+   
+       {% for track in rec_t_l %}
+           <div class="border cursor-pointer-all-obj">
+               <a class='no-link' href="{{ url_for('album', uri=track.alb_id) }}">
+                 <div class="image-shadow" style="background-image:url({{track.alb_image}})" ></div>
+                 <p class="item-text-3">
+                        {% if track.alb_name| length >= 49 %}
+                            {{track.alb_name[:46]}}...
+                        {% else %}
+                            {{ track.alb_name }}
+                        {% endif %}
+                 </p>
+               </a>
+           </div>
+         {% endfor %}
+   
+ </div>
+
+
+
+{% endblock %}

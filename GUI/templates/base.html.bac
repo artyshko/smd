@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home</title>
+
+  <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://cdn.rawgit.com/mladenplavsic/bootstrap-navbar-sidebar/3bd282bd/docs/navbar-fixed-right.min.css">
+  <link rel="stylesheet" href="https://cdn.rawgit.com/mladenplavsic/bootstrap-navbar-sidebar/3bd282bd/docs/navbar-fixed-left.min.css">
+  <link rel="stylesheet" href="https://cdn.rawgit.com/mladenplavsic/bootstrap-navbar-sidebar/3bd282bd/docs/docs.css">
+  <script src="https://kit.fontawesome.com/cfc27c408f.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='js/slick/slick.css') }}"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='js/slick/slick-theme.css') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css') }}" />
+
+  <link href="https://fonts.googleapis.com/css?family=Paytone+One|Advent+Pro|Roboto|Quicksand|Lato|Roboto|Anton|Archivo+Black&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <link rel="stylesheet" href="https://cdn.plyr.io/3.5.6/plyr.css" />
+</head>
+
+<body>
+    
+  <nav class="navbar  navbar-fixed-left">
+    <div class="container butt-cont">
+        
+      <div id="navbar">
+    
+        <ul class="nav flex-column text-left" style=" color: rgb(255, 255, 255);">
+        <li class="nav-item"><a href="{{ url_for('index')}}"><i class="fas fa-home"></i>   Home</a></li>
+        <li class="nav-item"><a href="#search"><i class="fa fa-search"></i>   Search</a></li>
+        <li class="nav-item"><a href="#"><i class="fas fa-headphones-alt"></i>   Saved</a></li>
+        <li class="nav-item"><a href="{{ url_for('albums')}}"><i class="fas fa-compact-disc"></i>   Albums</a></li>
+        <li class="nav-item"><a href="{{ url_for('artists')}}"><i class="fas fa-guitar"></i>   Artists</a></li>
+        <li class="nav-item"><a href="playlists.html"><i class="fas fa-list"></i>   Playlists</a></li>
+        <li class="nav-item"><a href="#"><i class="fas fa-cog"></i>   Settings</a></li>
+        </ul>
+
+        <p class='nav-header'>Library</p>
+
+        <ul class="nav flex-column text-left" style=" color: rgb(255, 255, 255);">
+          
+            <li class="nav-item"><a href="#"><i class="fas fa-headphones-alt"></i>   Saved</a></li>
+            <li class="nav-item"><a href="{{ url_for('albums')}}"><i class="fas fa-compact-disc"></i>   Albums</a></li>
+            <li class="nav-item"><a href="{{ url_for('artists')}}"><i class="fas fa-guitar"></i>   Artists</a></li>
+           
+        </ul>
+
+      </div>
+    </div>
+  </nav>
+
+  
+  <div id='lazy-container'>
+  {% block body %}
+  {% endblock %}
+  </div>
+
+  <div id="preloader1">
+      <div id="loader1">
+  
+      </div>
+  </div>
+  
+  <script src="https://cdn.plyr.io/3.5.6/plyr.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='js/slick/slick.min.js') }}"></script>    
+<script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
+
+<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js"></script>
+
+<!-- cdnjs -->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js"></script>
+
+<script>
+
+    let song_url = '';
+    let last_elem = '';
+    let last_text = '';
+    let elem_hover_text = '';
+    let is_pause = false;
+    let audio = new Audio(song_url);
+
+    $(".pl-button").hover(function(){
+      $(this).html('<i class="fas fa-play"></i>');
+      
+    }, function(){
+      if (this == last_elem && !audio.paused){
+        $(this).html('<i class="fas fa-pause"></i>');
+      } else {
+        $(this).text($(this).siblings(".pl-button-name").text());
+      }
+    });
+    
+    function play(elem)
+    {
+      
+        url = $(elem).siblings(".button-player").children().attr('src');
+        
+        if (url == song_url && audio.paused) {
+
+          $(elem).html('<i class="fas fa-pause"></i>');
+          audio.play();
+
+        } else if ( url == song_url && !audio.paused){
+
+          $(elem).text(last_text);
+           audio.pause();
+
+        } else {
+
+          $(last_elem).text(last_text);
+          last_text = $(elem).siblings(".pl-button-name").text();          
+          last_elem = elem;
+          $(elem).html('<i class="fas fa-pause"></i>');
+          song_url = url;
+            audio.pause();
+            audio = new Audio(song_url);
+            audio.play();
+
+        }
+
+        audio.addEventListener('ended',function(){
+          $(last_elem).text(last_text);
+        });
+    
+        
+    }
+
+    $(function() {
+      $(".download-link").on("click",function(e) {
+        e.preventDefault(); // cancel the link itself
+
+        $.post(
+          this.href,
+          function(data) {
+            
+        });
+      });
+    });
+
+</script>
+
+
+  
+<script type="text/javascript">
+$('.lazy').lazy({
+                bind: "event",
+                delay: 0
+  });
+  $('.lazy').Lazy({
+        // your configuration goes here
+        scrollDirection: 'vertical',
+        effect: 'fadeIn',
+        visibleOnly: true,
+        onError: function(element) {
+            console.log('error loading ' + element.data('src'));
+        }
+    });
+
+  $(function() {
+      $('#lazy-container .lazy').lazy({
+          appendScroll: $('#lazy-container')
+      });
+  });
+
+  $(document).ready(function(){ 
+  
+    $('.playl-slider').slick({
+      centerPadding: '60px',
+      variableWidth: true,
+      infinite: true,
+      speed: 500,
+      slidesToScroll: 2,
+      autoplay: true,
+      autoplaySpeed: 50000,
+      prevArrow: false,
+      nextArrow: false,
+      pauseOnHover: false
+    });
+    $('.conc-main-slider').slick({
+     
+      infinite: true,
+      
+      speed: 500,
+      slidesToScroll: 1,
+      slidesToShow: 1,
+      autoplay: true,
+      autoplaySpeed: 10000,
+
+      pauseOnHover: false
+    });
+    
+    $('.albums-slider').slick({
+      centerPadding: '60px',
+      variableWidth: true,
+      infinite: true,
+      speed: 500,
+      slidesToScroll: 4,
+      autoplay: true,
+      autoplaySpeed: 50000,
+      prevArrow: false,
+      nextArrow: false,
+      pauseOnHover: false
+    });
+    $('.artists-slider').slick({
+      centerPadding: '60px',
+      variableWidth: true,
+      infinite: true,
+      speed: 500,
+      slidesToScroll: 4,
+      autoplay: true,
+      autoplaySpeed: 50000,
+      prevArrow: false,
+      nextArrow: false,
+      pauseOnHover: false
+    });
+    $('.concert-slider').slick({
+      centerPadding: '60px',
+      variableWidth: true,
+      infinite: true,
+      speed: 500,
+      slidesToScroll: 2,
+      autoplay: true,
+      autoplaySpeed: 60000,
+      prevArrow: false,
+      nextArrow: false,
+    });
+    $('.video-slider').slick({
+      centerPadding: '60px',
+      variableWidth: true,
+      infinite: true,
+      speed: 500,
+      slidesToScroll: 3,
+      autoplay: true,
+      autoplaySpeed: 70000,
+      prevArrow: false,
+      nextArrow: false,
+    });
+  
+    });
+</script>
+
+</body>
+</html>

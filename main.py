@@ -27,6 +27,8 @@ class MusicDownloader(object):
         #finding song on youtube
         self.__youtube.get(name, dur)
 
+        notify.send(f'Downloading from YouTube', downloaded=False)
+
         #downloading video from youtube
         if self.__youtube.download(
             url=self.__youtube.getResult(),
@@ -69,6 +71,10 @@ class MusicDownloader(object):
         info = self.__getSongInfoFromSpotify(uri)
 
         if info:
+            notify.send(f'{info["artist"][0]} - {info["name"]}', downloaded=False)
+
+            info['uri'] = str(info['uri']).split('/')[-1]
+            info['uri'] = str(info['uri']).split('?')[0]
 
             fixed_name = f'{info["artist"][0]} - {info["name"]}'
             fixed_name = fixed_name.replace('.','')
@@ -78,6 +84,8 @@ class MusicDownloader(object):
 
             #finding and download from YouTube and tagging
             if self.__downloadMusicFromYoutube(fixed_name, info['uri'], info['duration_ms']):
+
+                print(info['uri'])
 
                 self.__editor.setTags(
                     data=info
@@ -122,6 +130,8 @@ class MusicDownloader(object):
             info = self.__last.get(query)
 
         if info:
+
+            notify.send(f'{info["artist"][0]} - {info["name"]}', downloaded=False)
 
             fixed_name = f'{info["artist"][0]} - {info["name"]}'
             fixed_name = fixed_name.replace('.','')
@@ -200,6 +210,11 @@ class MusicDownloader(object):
         for info, i in zip(playlist,range(len(playlist))):
 
             print(f'Downloading {i+1} of {len(playlist)}')
+            
+            info['uri'] = str(info['uri']).split('/')[-1]
+            info['uri'] = str(info['uri']).split('?')[0]
+
+            notify.send(f'{info["artist"][0]} - {info["name"]}', downloaded=False)
 
             fixed_name = f'{info["artist"][0]} - {info["name"]}'
             fixed_name = fixed_name.replace('.','')
@@ -246,6 +261,11 @@ class MusicDownloader(object):
         playlist = user.getAlbum(album_uri)
 
         for info, i in zip(playlist['tracks'],range(len(playlist['tracks']))):
+
+            info['uri'] = str(info['uri']).split('/')[-1]
+            info['uri'] = str(info['uri']).split('?')[0]
+
+            notify.send(f'{info["artist"][0]} - {info["name"]}', downloaded=False)
 
             print(f'Downloading {i+1} of {len(playlist["tracks"])}')
 
@@ -297,6 +317,8 @@ class MusicDownloader(object):
 
         if info:
 
+            notify.send(f'{info["artist"][0]} - {info["name"]}', downloaded=False)
+
             fixed_name = f'{info["artist"][0]} - {info["name"]}'
             fixed_name = fixed_name.replace('.','')
             fixed_name = fixed_name.replace(',','')
@@ -305,6 +327,7 @@ class MusicDownloader(object):
 
             #finding and download from YouTube and tagging
             if self.__downloadMusicFromYoutube(fixed_name, info['uri'], info['duration_ms']):
+
 
                 self.__editor.setTags(
                     data=info
@@ -348,6 +371,8 @@ class MusicDownloader(object):
         playlist = self.__deezer.getAlbum(link)
 
         for info, i in zip(playlist['tracks'],range(len(playlist['tracks']))):
+
+            notify.send(f'{info["artist"][0]} - {info["name"]}', downloaded=False)
 
             print(f'Downloading {i+1} of {len(playlist["tracks"])}')
 
@@ -399,6 +424,8 @@ class MusicDownloader(object):
 
         for info, i in zip(playlist['tracks'],range(len(playlist['tracks']))):
 
+            notify.send(f'{info["artist"][0]} - {info["name"]}', downloaded=False)
+
             print(f'Downloading {i+1} of {len(playlist["tracks"])}')
 
             fixed_name = f'{info["artist"][0]} - {info["name"]}'
@@ -445,6 +472,8 @@ class MusicDownloader(object):
         print(info)
 
         uri = info['uri']
+
+        notify.send(f'{info["artist"][0]} - {info["name"]}', downloaded=False)
 
         #downloading video from youtube
         if self.__youtube.download(
@@ -522,7 +551,7 @@ _____/\\\\\\\\\\\\\\\\\\\\\\____/\\\\\\\\____________/\\\\\\\\__/\\\\\\\\\\\\\\\
         CLI.logo()
 
         print('\t\t       Spotify Music Downloader')
-        print('\t\t         version 1.6.5-stable\n')
+        print('\t\t          version  1.7.0-stable\n')
 
         print(' ./main.py [argument][value] - startup with arguments\n')
 
@@ -721,13 +750,13 @@ class notify(object):
         mixer.music.play()
 
     @staticmethod
-    def send(message, error=False):
+    def send(message, error=False, downloaded=True):
         try:
-            ns = notify2.Notification('Spotify Music Downloader', message=message, icon=notify.image)
+            ns = notify2.Notification(f'{"Downloaded" if downloaded else "Start downloading"}', message=message, icon=notify.image)
             # Set the urgency level
             ns.set_urgency(notify2.URGENCY_NORMAL)
             # Set the timeout
-            ns.set_timeout(1000)
+            ns.set_timeout(5000)
             notify.sound(error)
             ns.show()
         except:pass

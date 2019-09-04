@@ -1,0 +1,16 @@
+{% extends 'index.html' %}
+
+{% block body %}
+    <h2><p class="item-text-2">Grandson {{ name }}</p></h2>
+
+    {% if name == 'LOXx' %}
+        Hui
+    {% else %}
+        Not Hui
+    {% endif %}
+
+    {% for i in items %}
+        <h1>{{ i.text }}</h1>
+    {% endfor %}
+
+{% endblock %}

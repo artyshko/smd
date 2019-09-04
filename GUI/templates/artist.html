@@ -1,0 +1,356 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div style='width:100%; height:400px; margin-top:-20px!important; position: relative;'>
+    <div class='albums-slider' style='width:100%; margin-left: 17%;' >
+        <div class="border-last-artist" style='width:100% !important;'>
+            <div class="image-shadow-last-artist"  loading="lazy"  style="background-image:url({{artists_info.image}});">
+              </div>
+            
+        </div>
+    </div>
+  
+    <div class='p-name pagination-centered text-center'>
+        <span class="item-text-12">{{artists_info.name}}</span><br>
+    </div>
+</div>
+  
+  <div class='genres pagination-centered text-center'>
+    {% for genre in artists_info.genres %}
+        <span class="badge badge-danger">{{genre}}</span>
+    {% endfor %}
+  </div>
+  
+  <div class='stat pagination-centered text-center'>
+      <span class="badge b-number">
+          {{artists_info_lf.playcount_display}}<br>
+          <h4>PLAYINGS</h4>
+      </span>
+        <span class="badge b-number">
+            {{artists_info.followers_display}}<br>
+            <h4>FOLLOWERS</h4>
+        </span>
+      <span class="badge b-number">
+            {{artists_info.popularity}}<br>
+            <h4>POPULARITY</h4>
+      </span>
+      
+    </div>
+
+  
+    <p class='bio lazy'>
+        <div class="span4 bio collapse-group">
+            
+              
+              <p>
+                {% if artists_info_lf.bio| length >= 500 %}
+                  {{ artists_info_lf.bio[:500] }}
+                  <span class="collapse" id="viewdetails3"> 
+                    {{ artists_info_lf.bio[500:] }}
+                  </span><a style="color:crimson;" data-toggle="collapse" data-target="#viewdetails3">...</a>
+                {% else %}
+                   {{ artists_info_lf.bio }}
+                {% endif %}
+              </p>
+        </div>
+  </p>
+  
+  
+  
+    </div>
+    <br>
+
+    <div class='conc-main-slider lazy' style='width:82%; margin-left: 18%;' >
+  
+        <div class="border-conc-r">
+            <div class="image-shadow-conc-r" style="background-image:url({{artists_top_tracks[0].alb_image}});">
+            </div>
+            <figcaption class="item-text-16">
+                <h1 class="display-4"><span class="badge badge-danger">{{(artists_top_tracks| length)}}</span></h1>
+                <h2>Songs</h2>
+            </figcaption>
+            
+               
+            </figcaption>
+            <figcaption class="item-text-6">The most popular songs</figcaption>
+        </div>
+  
+    </div>
+
+
+    <div class="container-fluid maxWidth lazy" style='background: rgb(28,28,30); margin-top: -5px;'>
+            <table class="table table-dark justify-content space-between">
+                <tbody>
+    
+                  {% for i in range(artists_top_tracks| length) %}
+    
+                    {% if i == 0 %}
+                      <tr style="height:40px; border: 0px solid #fff !important;" >
+                    {% else %}
+                      <tr style="height:40px;" > 
+                    {% endif %}
+    
+                        {% if i == 0 %}
+                          <th scope="row" style='padding: 0px;border: 0px solid #fff !important;'> 
+                        {% else %}
+                          <th scope="row" style='padding: 0px;'> 
+                        {% endif %}
+    
+                          <a class='no-link' href='artist.html'>
+                            <div class="image-shadow-prev cursor-pointer-all-obj" style="background-image:url({{artists_top_tracks[i].alb_image}})" ></div>
+                          </a>
+                        </th>
+    
+                          {% if i == 0 %}
+                            <td style="border: 0px solid #fff !important;">
+                          {% else %}
+                            <td>
+                          {% endif %}
+                              <a class='no-link' style='color: #fff;' href="{{ url_for('song', uri=artists_top_tracks[i].trc_id) }}">
+                                  {% if artists_top_tracks[i].trc_name|length >= 25 %}
+                                    {{artists_top_tracks[i].trc_name[:23]}}...
+                                  {% else %}
+                                    {{artists_top_tracks[i].trc_name}}
+                                  {% endif %}
+                              </a>
+                           </td>
+    
+                           {% if i == 0 %}
+                            <td style="border: 0px solid #fff !important;">
+                          {% else %}
+                            <td>
+                          {% endif %}
+                              <a class='no-link' style='color: #fff;' href='{{ url_for('artist', uri=artists_top_tracks[i].art_id) }}'>
+                                  {% if artists_top_tracks[i].art_name|length >= 25 %}
+                                    {{artists_top_tracks[i].art_name[:23]}}...
+                                  {% else %}
+                                    {{artists_top_tracks[i].art_name}}
+                                  {% endif %}
+                              </a>
+                            </td>
+    
+                          {% if i == 0 %}
+                              <td style="border: 0px solid #fff !important;">
+                            {% else %}
+                              <td>
+                            {% endif %}
+                              <a class='no-link' style='color: #fff;' href='{{ url_for('album', uri=artists_top_tracks[i].alb_id) }}'>
+                                  {% if artists_top_tracks[i].alb_name|length >= 20 %}
+                                    {{artists_top_tracks[i].alb_name[:17]}}...
+                                  {% else %}
+                                    {{artists_top_tracks[i].alb_name}}
+                                  {% endif %}
+                              </a>
+                            </td>
+                            {% if i == 0 %}
+                              <th class="text-justify text-right" style="border: 0px solid #fff !important;">
+                            {% else %}
+                            <th class="text-justify text-right">
+                            {% endif %}
+                            <a class='no-link download-link' href="{{ url_for('listenOnSpotifySong', uri=artists_top_tracks[i].trc_id)}}">
+                              <span class="badge badge-success download-button">
+                                  <i class="fab fa-spotify"></i> Listen on Spotify
+                              </span>
+                            </a>
+    
+                            <a class='no-link download-link' href="{{ url_for('downloadSingleSong', uri=artists_top_tracks[i].trc_id)}}">
+                              <span class="badge badge-primary download-button">
+                                <i class="fas fa-arrow-alt-circle-down"></i> Download
+                              </span>
+                            </a>
+                        </th>
+    
+                    </tr>
+    
+                  {% endfor %}
+    
+                </tbody>
+              </table>
+    </div>
+  <br>
+
+  {% if artists_albums_full| length %}
+  <a class='no-link download-link' href="{{ url_for('album', uri=artists_albums_full[0].alb_id)}}"></a>
+  <div class='albums-slider' style='width:82%; margin-left: 18%;' >
+        <div class="border-last-r">
+            <div class="image-shadow-last-r" style="background-image:url({{artists_albums_full[0].alb_image}});">
+            </div>
+            <figcaption class="item-text-7">Latest Realease</figcaption>
+            <figcaption class="item-text-6">{{artists_albums_full[0].alb_name}}</figcaption>
+        </div>
+    </div>
+  </a>
+  <br>
+{% endif %}
+
+{% if artists_albums| length %}
+
+  <p class='title'>
+      Albums
+  </p>
+{% endif %}
+  
+  <div class='albums-slider lazy' style='width:80%; margin-left: 18%;' >
+    
+        {% for albums in artists_albums %}
+            <div class="border cursor-pointer-all-obj">
+                <a class='no-link' href="{{ url_for('album', uri=albums.alb_id) }}">
+                  <div class="image-shadow" style="background-image:url({{albums.alb_image}})" ></div>
+                  <p class="item-text-3">{{albums.alb_name}}</p>
+                </a>
+            </div>
+          {% endfor %}
+    
+      </div>
+
+
+{% for album in artists_albums_full %}
+  <p class='title'>
+    {{album.year}}
+  </p>
+  <div class="container maxWidth alb-cont-border lazy">
+    <div class='row'>
+      <div class="border-alb-v">
+          <div class="image-shadow-alb-v" style="background-image:url({{album.alb_image}});" ></div>
+          <div class=alb-info>
+            <p class="item-text-8"> {{album.alb_name}}</p>
+            <p class="item-text-3">{{album.total_tracks}} songs</p>
+            <a class='no-link download-link' href="{{ url_for('listenOnSpotifyAlbum', uri=album.alb_id)}}">
+              <span class="badge badge-success download-button">
+                  <i class="fab fa-spotify"></i> Listen on Spotify
+              </span>
+            </a>
+          </br>
+            <a class='no-link download-link' href="{{ url_for('downloadAlbum', uri=album.alb_id)}}">
+            <span class="badge badge-primary download-button">
+                <i class="fas fa-arrow-alt-circle-down"></i> Download Full Album
+            </span>
+            </a>
+            <p></p>
+        </div>
+      </div>
+      <div class='alb-songs justify-content'>
+          <table class="table table-dark justify-content space-between">
+              <tbody>
+
+                    {% for i in range(album.tracks| length) %}
+
+                    {% if i == 0 %}
+                      <tr style="height:40px; border: 0px solid #fff !important;" >
+                    {% else %}
+                      <tr style="height:40px;" > 
+                    {% endif %}
+                        {% if i == 0 %}
+                          <td scope="row" style='padding: auto;padding-left:0px;width:20px;border: 0px solid #fff !important;'> 
+                        {% else %}
+                          <td scope="row" style='padding: auto;padding-left:0px;width:20px;'> 
+                        {% endif %}
+                        <div class="player">
+                            <audio class="button-player">
+                              <source src="{{album.tracks[i].trc_preview}}">
+                            </audio>
+                            <button onClick="play(this)" class='pl-button' style='background-color: rgba(73, 73, 73, 0)!important;'>{{i+1}}</button>
+                            <p class='pl-button-name'>{{i+1}}</p>  
+                          </div>
+                        </td>
+                          </td>
+    
+                          {% if i == 0 %}
+                            <td style="border: 0px solid #fff !important;">
+                          {% else %}
+                            <td>
+                          {% endif %}
+                              <a class='no-link' style='color: #fff;' href="{{ url_for('song', uri=album.tracks[i].trc_id) }}">
+                                  {% if album.tracks[i].trc_name|length >= 60 %}
+                                    {{album.tracks[i].trc_name[:57]}}...
+                                  {% else %}
+                                    {{album.tracks[i].trc_name}}
+                                  {% endif %}
+                              </a>
+                           </td>
+    
+                          {% if i == 0 %}
+                              <td style="border: 0px solid #fff !important;">
+                            {% else %}
+                              <td>
+                            {% endif %}
+                              <a class='no-link' style='color: #fff;' href='artist.html'>
+                                  {% if album.tracks[i].alb_name|length >= 20 %}
+                                    {{album.tracks[i].alb_name[:17]}}...
+                                  {% else %}
+                                    {{album.tracks[i].alb_name}}
+                                  {% endif %}
+                              </a>
+                            </td>
+                            {% if i == 0 %}
+                              <th class="text-justify text-right" style="border: 0px solid #fff !important;">
+                            {% else %}
+                            <th class="text-justify text-right">
+                            {% endif %}
+                            
+    
+                            <a class='no-link download-link' href="{{ url_for('downloadSingleSong', uri=album.tracks[i].trc_id)}}">
+                              <span class="badge badge-primary download-button">
+                                <i class="fas fa-arrow-alt-circle-down"></i> Download
+                              </span>
+                            </a>
+                        </th>
+    
+                    </tr>
+    
+                  {% endfor %}
+                  
+              </tbody>
+            </table>
+      </div>
+      <p class='item-text-10 text-center'>
+        {{album.copyrights}}
+      </p>
+    </div>
+      
+  </div>
+  {% endfor %}
+  
+{% if artists_appears_on| length %}
+  <p class='title'>
+      Discovered on
+  </p>
+{% endif %}
+  
+  <div class='albums-slider lazy' style='width:80%; margin-left: 18%;' >
+        {% for album in artists_appears_on %}
+          <div class="border-playlist cursor-pointer-all-obj">
+              <a class='no-link' href='{{ url_for('album', uri=album.alb_id)}}'>
+                <div class="image-shadow-playlist" style="background-image:url({{album.alb_image}})" ></div>
+                <p class="item-text-5">{{ album.alb_name }}</p>
+              </a>
+          </div>
+        {% endfor %} 
+      </div>
+  
+
+{% if artists_related| length %}
+<p class='title'>
+    Fans also like
+</p>
+{% endif %}
+
+  <div class='artists-slider lazy' style='width:80%; margin-left: 18%;' >
+
+        {% for artist in artists_related %}
+    
+          <div class="border cursor-pointer-all-obj">
+              <a class='no-link' href='{{ url_for('artist', uri=artist.id)}}'>
+                <div class="image-shadow-circ" style="background-image:url({{artist.image}})" ></div>
+                <p class="item-text-3">{{ artist.name }}</p>
+              </a>
+          </div>
+    
+        {% endfor %}
+    
+      </div>
+  <br>
+    
+
+{% endblock %}

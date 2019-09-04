@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+
+<div class='conc-main-slider lazy' style='width:105%; margin-left: 18%;' >
+
+    <div class="border-conc-r">
+        <div class="image-shadow-conc-rn" style="background-image:url( {{url_for('static', filename='images/other3.jpg')}} )"></div>
+    </div>
+</div>
+
+<div>
+    <p class='title' style='margin-top: 0px; margin-bottom: 10px;'>
+        Music
+    </p>
+
+    <div class="input-group" style=' margin-left: 19%; width:79%'>
+        <input type="text" id='a-music' class="form-control"  placeholder="Track link" aria-describedby="basic-addon1"  style='width:79%'>
+        <a href="{{ url_for('other_apple')}}"  class='no-link' onClick="down(this)">
+        <span class="badge badge-success download-button-song"style=' margin-left: 10px; height:23px' >
+                <i class="fas fa-arrow-alt-circle-down"></i> Download
+        </span>
+        </a>
+    </div>
+
+</div>
+{% endblock %}

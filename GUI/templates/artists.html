@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<p class='title' style='margin-top: 0px; margin-bottom: -10px;'>
+    Artists
+</p>
+
+
+<div class="container maxWidth" style='background: rgb(28,28,30);'>
+    <table class="table-album table-dark justify-content space-between">
+        <tbody>
+
+          {% for artist in user_saved_artists %}
+              <tr style="height:200px; border: 0px solid #fff !important;" >
+                <th scope="row" style='padding: 0px;border: 0px solid #fff !important; width:20%;'> 
+                  <a class='no-link' href='{{ url_for('artist', uri=artist.id)}}'>
+                    <div class="image-shadow-prev-artist cursor-pointer-all-obj" style="background-image:url({{artist.image}})" ></div>
+                  </a>
+                </th>
+                <td>
+                  <div class='art-info-list'>
+                <p class='pl-butt'>
+                    <a class='no-link download-link' href="{{ url_for('listenOnSpotifyArtist', uri=artist.id)}}">
+                    <span class="btn btn-outline-success download-button" style='padding: 2px 2px 2px 2px;border: 0px solid #fff;'>
+                      <i class="fab fa-spotify"></i> Listen on Spotify
+                    </span>
+                  </a>
+                </p>
+                <a class='no-link' href='{{ url_for('artist', uri=artist.id)}}'>
+                  <p class='art-name cursor-pointer-all-obj'>{{artist.name}}</p>
+                
+                  <span class='text-left'>
+                        <p class='art-count cursor-pointer-all-obj'>{{artist.followers_comma}}</p>
+                        <p class='art-count-text'>FOLLOWERS</p>
+                  </span>
+                </a>
+                </div>
+                </td>               
+              </tr>
+            {% endfor %}
+              
+        
+
+        </tbody>
+      </table>
+</div>
+
+<br>
+
+{% endblock %}
