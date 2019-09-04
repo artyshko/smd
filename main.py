@@ -27,6 +27,8 @@ class MusicDownloader(object):
         #finding song on youtube
         self.__youtube.get(name, dur)
 
+        notify.send(f'Downloading from YouTube', downloaded=False)
+
         #downloading video from youtube
         if self.__youtube.download(
             url=self.__youtube.getResult(),
@@ -128,6 +130,8 @@ class MusicDownloader(object):
             info = self.__last.get(query)
 
         if info:
+
+            notify.send(f'{info["artist"][0]} - {info["name"]}', downloaded=False)
 
             fixed_name = f'{info["artist"][0]} - {info["name"]}'
             fixed_name = fixed_name.replace('.','')
@@ -313,6 +317,8 @@ class MusicDownloader(object):
 
         if info:
 
+            notify.send(f'{info["artist"][0]} - {info["name"]}', downloaded=False)
+
             fixed_name = f'{info["artist"][0]} - {info["name"]}'
             fixed_name = fixed_name.replace('.','')
             fixed_name = fixed_name.replace(',','')
@@ -366,6 +372,8 @@ class MusicDownloader(object):
 
         for info, i in zip(playlist['tracks'],range(len(playlist['tracks']))):
 
+            notify.send(f'{info["artist"][0]} - {info["name"]}', downloaded=False)
+
             print(f'Downloading {i+1} of {len(playlist["tracks"])}')
 
             fixed_name = f'{info["artist"][0]} - {info["name"]}'
@@ -416,6 +424,8 @@ class MusicDownloader(object):
 
         for info, i in zip(playlist['tracks'],range(len(playlist['tracks']))):
 
+            notify.send(f'{info["artist"][0]} - {info["name"]}', downloaded=False)
+
             print(f'Downloading {i+1} of {len(playlist["tracks"])}')
 
             fixed_name = f'{info["artist"][0]} - {info["name"]}'
@@ -462,6 +472,8 @@ class MusicDownloader(object):
         print(info)
 
         uri = info['uri']
+
+        notify.send(f'{info["artist"][0]} - {info["name"]}', downloaded=False)
 
         #downloading video from youtube
         if self.__youtube.download(
@@ -539,7 +551,7 @@ _____/\\\\\\\\\\\\\\\\\\\\\\____/\\\\\\\\____________/\\\\\\\\__/\\\\\\\\\\\\\\\
         CLI.logo()
 
         print('\t\t       Spotify Music Downloader')
-        print('\t\t          version  1.6.8-dev\n')
+        print('\t\t          version  1.7.0-stable\n')
 
         print(' ./main.py [argument][value] - startup with arguments\n')
 
