@@ -1,0 +1,30 @@
+
+{% extends 'base.html' %}
+
+{% block body %}
+
+
+<div class='conc-main-slider lazy' style='width:105%; margin-left: 18%;' >
+    <a class='no-link'href="{{ url_for('other_deezer')}}">
+        <div class="border-conc-r">
+            <div class="image-shadow-conc-rn" style="background-image:url( {{url_for('static', filename='images/other1.jpg')}} );"></div>
+        </div>
+    </a>
+</div>
+
+<div class='conc-main-slider lazy'  style='width:105%; margin-left: 18%;'  >
+        <a class='no-link'href="{{ url_for('other_ytm')}}">
+    <div class="border-conc-r">
+        <div class="image-shadow-conc-rn" style="background-image:url( {{url_for('static', filename='images/other2.jpg')}} );"></div>
+    </div>
+    </a>
+</div>
+<div class='conc-main-slider lazy'  style='width:105%; margin-left: 18%;'  >
+    <a class='no-link'href="{{ url_for('other_apple')}}">
+    <div class="border-conc-r">
+        <div class="image-shadow-conc-rn" style="background-image:url( {{url_for('static', filename='images/other3.jpg')}} );"></div>
+    </div>
+    </a>
+</div>
+
+{% endblock %}

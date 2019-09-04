@@ -77,7 +77,7 @@
                         {% else %}
                         <th class="text-justify text-right">
                         {% endif %}
-                        <a class='no-link' href='#'>
+                        <a class='no-link download-link' href="{{ url_for('listenOnSpotifySong', uri=artists_top_tracks[i].trc_id)}}">
                           <span class="badge badge-success download-button">
                               <i class="fab fa-spotify"></i> Listen on Spotify
                           </span>

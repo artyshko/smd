@@ -23,9 +23,11 @@
 <div class='genres pagination-centered text-center'>
         <a class='no-link'href="{{ url_for('artist', uri=info.art_id)}}"><p class='song-time'>{{info.art_name}}</p></a>
 
+        <a class='no-link download-link' href="{{ url_for('listenOnSpotifySong', uri=info.trc_id)}}">
         <span class="badge badge-success download-button-song">
               <i class="fab fa-spotify"></i> Listen on Spotify
         </span>
+       </a>
         <a class='no-link download-link' href="{{ url_for('downloadAlbum', uri=info.alb_id)}}">
         <span class="badge badge-primary download-button-song">
           <i class="fas fa-arrow-alt-circle-down"></i> Download
@@ -79,7 +81,7 @@
           <div class=alb-info>
             <p class="item-text-8"> {{album.alb_name}}</p>
             <p class="item-text-3">{{album.total_tracks}} songs</p>
-            <a class='no-link' href='#'>
+            <a class='no-link download-link' href="{{ url_for('listenOnSpotifyAlbum', uri=album.alb_id)}}">
                     <span class="badge badge-success download-button">
                         <i class="fab fa-spotify"></i> Listen on Spotify
                     </span>

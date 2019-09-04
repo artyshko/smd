@@ -18,10 +18,11 @@
 </div>
 <div class='genres pagination-centered text-center'>
         <a class='no-link'href="#"><p class='song-time'>{{info.owner}}</p></a>
-
+        <a class='no-link download-link' href="{{ url_for('listenOnSpotifyPlaylist', uri=info.id)}}">
         <span class="badge badge-success download-button-song">
               <i class="fab fa-spotify"></i> Listen on Spotify
         </span>
+      </a>
         <a class='no-link download-link' href="{{ url_for('downloadPlaylist', uri=info.id)}}">
         <span class="badge badge-primary download-button-song">
           <i class="fas fa-arrow-alt-circle-down"></i> Download
@@ -111,7 +112,7 @@
                         {% else %}
                         <th class="text-justify text-right">
                         {% endif %}
-                        <a class='no-link' href='#'>
+                        <a class='no-link download-link' href="{{ url_for('listenOnSpotifySong', uri=artists_top_tracks[i].trc_id)}}">
                           <span class="badge badge-success download-button">
                               <i class="fab fa-spotify"></i> Listen on Spotify
                           </span>
