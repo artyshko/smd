@@ -435,7 +435,7 @@ def login():
         else:
             return json.dumps(
                 {
-                    'status': True
+                    'status': user.getURL()
                 }
             )
     
