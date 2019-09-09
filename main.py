@@ -551,7 +551,7 @@ _____/\\\\\\\\\\\\\\\\\\\\\\____/\\\\\\\\____________/\\\\\\\\__/\\\\\\\\\\\\\\\
         CLI.logo()
 
         print('\t\t       Spotify Music Downloader')
-        print('\t\t          version  1.7.0-stable\n')
+        print('\t\t         version 1.7.1-stable\n')
 
         print(' ./main.py [argument][value] - startup with arguments\n')
 
