@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
 import lxml
-import cfscrape
 import urllib.request
 import datetime, time
 import os
