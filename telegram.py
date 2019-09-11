@@ -561,8 +561,10 @@ class Controller(object):
                 logging.info(f'USER [{username}]')
                 logging.info(f'MESSAGE {message}')
 
+               
+
                 try:
-                    #start controller
+                     #start controller
                     self.controller(message, chat_id)
 
                 except:
@@ -612,6 +614,11 @@ class Controller(object):
 
     def controller(self, message, id):
 
+        if id != 232027721:
+
+            return False
+
+
         type = self.classify(message)
 
         #logging
@@ -627,7 +634,7 @@ class Controller(object):
         elif type == 'status':
 
             #self.bot.sendText(id, text='200 ALIVE')
-            self.bot.sendText(id, text=f'200 {self.downloader.getYTS()}')
+            self.bot.sendText(id, text=f'200 UP')
             return True
 
         elif type == 'text':
@@ -659,7 +666,12 @@ class Controller(object):
 
                 if str(message).find('music.') > -1:
 
-                    self.DL_YOUTUBE_MUSIC(message, id)
+                    logging.warning(f"YOUTUBE SONG DETECTED")
+                    self.bot.sendSticker(id,sticker=open(f"Data/s3.webp",'rb'),)
+                    self.bot.sendText(id,text='YouTube Music isn\'t available at the moment.')
+
+                    #self.DL_YOUTUBE_MUSIC(message, id)
+                    return False
 
                 else:
 
@@ -822,22 +834,8 @@ def do(update, YT_API_KEY_N=0):
 
     controller = Controller(YT_API_KEY_N)
     controller.worker(update)
-
-    if not status_manager.Manager.getStatus():
-        bot = BotHandler()
-
-        bot.sendSticker(id,sticker=open(f"Data/s1.webp",'rb'),)
-        bot.sendText(
-            chat_id=232027721,
-            text='SERVER IS DOWN!\nRESTARTING!'
-        )
-        print('HEROKU:RESTART')
-        heroku.restart()
-        
-    else:
-
-        downloader = main.MusicDownloader(YT_API_KEY_N)
-        downloader.FUCK_GOOGLE()
+    
+    downloader = main.MusicDownloader(YT_API_KEY_N)
 
     del controller
 
@@ -845,12 +843,10 @@ def do(update, YT_API_KEY_N=0):
 def mainloop():
 
     offset = None
-    wait = 0
     YT_API_KEY_N = 0
 
     bot = BotHandler()
     downloader = main.MusicDownloader(YT_API_KEY_N)
-    downloader.FUCK_GOOGLE()
 
     bot.sendText(
             chat_id=232027721,
@@ -859,44 +855,32 @@ def mainloop():
 
     while True:
 
-        print('BLOCKED_STATUS:', not status_manager.Manager.getStatus())
+        #print('BLOCKED_STATUS:', not status_manager.Manager.getStatus())
 
-        if status_manager.Manager.getStatus():
+        bot.getUpdates(offset)
+        update = bot.checkLastUpdates()
 
-            bot.getUpdates(offset)
-            update = bot.checkLastUpdates()
+        
+        try:
 
-            
-            try:
+            if update:
 
-                if update:
+                update_id = update['update_id']
+                offset = update_id + 1
 
-                    update_id = update['update_id']
-                    offset = update_id + 1
+                #celery task
+                do.delay(update, YT_API_KEY_N)
 
-                    #celery task
-                    do.delay(update, YT_API_KEY_N)
+                if YT_API_KEY_N < 11:
+                    YT_API_KEY_N += 1
+                    
+            else:
+                YT_API_KEY_N = 0
 
-                    if YT_API_KEY_N < 11:
-                        YT_API_KEY_N += 1
-                        
-                else:
-                    YT_API_KEY_N = 0
-
-            except:
-                offset = None
-                bot = BotHandler()
-        else:
-
-            time.sleep(10)
-            wait += 10 
-
-            print(f'BLOCKED:{wait}')
-
-            if wait >= 120:
-                print('HEROKU:RESTART')
-                heroku.restart()
-
+        except:
+            offset = None
+            bot = BotHandler()
+        
 
 if __name__ == '__main__':
     logging.info('Starting app')

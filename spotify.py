@@ -296,4 +296,4 @@ class Spotify(object):
 
 if __name__ == '__main__':
     s = Spotify()
-    s.getAlbum('0nW0w37lrQ87k7PLZvC4qJ')
+    print(s.getSongInfo('1MQTmpYOZ6fcMQc56Hdo7T'))

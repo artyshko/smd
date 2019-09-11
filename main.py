@@ -1,11 +1,14 @@
 #!/usr/bin/python3
 from spotify import Spotify
-from youtube import Youtube
+#from youtube import Youtube
 from editor import TagEditor
 from lastfm import LastFM
 from deezer import Deezer
 import sys, getopt, shutil
 import os
+
+from core import s0
+from core import s1
 
 
 import logging
@@ -19,38 +22,56 @@ class MusicDownloader(object):
 
 
     def __init__(self, YT_API_KEY_N):
-        self.__youtube = Youtube(YT_API_KEY_N)
+        #self.__youtube = Youtube(YT_API_KEY_N)
         self.__spotify = Spotify()
         self.__editor = TagEditor()
         self.__last = LastFM()
         self.__deezer = Deezer()
 
+        self.s0 = s0.Client()
+        self.s1 = s1.Client()
+
     def getYTS(self):
 
-        return self.__youtube.getGoogleAPIStatus()
+        return False #self.__youtube.getGoogleAPIStatus()
 
     def FUCK_GOOGLE(self):
 
-        self.__youtube.testYT_D()
+        #self.__youtube.testYT_D()
+        pass
 
     def __downloadMusicFromYoutube(self, name, uri, dur):
 
-        #finding song on youtube
-        self.__youtube.get(name, dur)
+        result = -1
+        url = None
 
-        #downloading video from youtube
-        if self.__youtube.download(
-            url=self.__youtube.getResult(),
-            path=uri,
-            filename=uri
-        ):
-            #converting video to mp3 file
-            self.__youtube.convertVideoToMusic(
-                uri=uri
-            )
-            return True
-        else:
+        results = []
+
+        results.append(self.s1.search(name, dur))
+        results.append(self.s0.search(name, dur))
+
+        for res in results:
+
+            diff = dur - res['time']
+            diff = diff * -1 if diff < 0 else diff
+
+            if (result == -1 or diff < result):
+                    result, url = diff, res
+        
+        print(url)
+
+        if url['s'] == 1: self.s1.download(url, uri)
+        
+        else: self.s0.download(url, uri)
+
+        return True
+
+        try:
+            pass
+
+        except:
             return False
+
 
     def __getSongInfoFromSpotify(self, uri):
 

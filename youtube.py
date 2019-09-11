@@ -18,6 +18,7 @@ import logging
 import proxy
 import status_manager
 import heroku
+import s1
 
 
 #fix
@@ -49,6 +50,7 @@ class Youtube(object):
         self.__result = []
         self.YT_API_KEY_N = YT_API_KEY_N
 
+        self.s1 = s1.Client()
         GoogleAPI.loadData()
         logging.error(f"YT_API_KEY_{self.YT_API_KEY_N}")
         GoogleAPI.setKey(self.YT_API_KEY_N)
@@ -71,20 +73,17 @@ class Youtube(object):
 
         text = str(text).replace('&','')
 
-        # data1 = self.getVideoFromYoutube(text)
-        # data2 = self.getVideoFromYoutube(text + ' Audio')
         try:
             data1 = self.getVideoFromYoutube(text)
             data2 = self.getVideoFromYoutube(text + ' Audio')
+            s1 = self.s1.search(text, dur)
+
         except:
             pass
-            #data1 = GoogleAPI.search(text)
-            #data2 = GoogleAPI.search(text + ' Audio')
 
+        self.__result, status = self.classify(data1, data2, s1, dur)
 
-        self.__result = self.classify(data1, data2, dur)
-
-        return self.__result
+        return self.__result, status
 
 
     def getVideoFromYoutube(self,text):
@@ -234,7 +233,9 @@ class Youtube(object):
         return None
 
 
-    def classify(self, data1, data2, duration=229486):
+    def classify(self, data1, data2, s1, duration=229486):
+
+        print('DURATION:',duration)
        
         data1 = data1[:2] if len(data1) >= 2 else data1
         data2 = data2[:2] if len(data2) >= 2 else data2
@@ -246,6 +247,7 @@ class Youtube(object):
 
         result = -1
         link = None
+        status = False
 
 
         for item in research:
@@ -295,13 +297,26 @@ class Youtube(object):
                     status_manager.Manager.setStatus(False)
 
                     logging.error(status_manager.Manager.getStatus())
- 
-        if link:
+
+        
+        logging.error(f"1:{_result},")
+        try:
+
+            item_duration = s1['duration']*2
+            diff = duration - item_duration
+            diff = diff * -1 if diff < 0 else diff
+
+            if (result == -1 or diff < result):
+                result, link = s1['link'], None
+                status = True
+        except:
+
+            if link:
             _result = [link] + data1 + data2
         else:
             _result = data1 + data2
 
-        return _result
+        return _result, status
 
     def getNameFromYoutube(self, url):
 
@@ -345,7 +360,6 @@ class Youtube(object):
             return f'SERVER IS UP\nDEV[DL:TRUE-W:{self.YT_API_KEY_N}-API:{rep1}{rep2}]'
         except:
             return 'ALIVE'
-
 
     def testYT_D(self):
         #https://www.youtube.com/watch?v=Wch3gJG2GJ4
