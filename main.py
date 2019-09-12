@@ -42,7 +42,7 @@ class MusicDownloader(object):
 
     def __downloadMusicFromYoutube(self, name, uri, dur):
 
-        result = -1
+        '''result = -1
         url = None
 
         results = []
@@ -62,8 +62,10 @@ class MusicDownloader(object):
 
         if url['s'] == 1: self.s1.download(url, uri)
         
-        else: self.s0.download(url, uri)
+        else: self.s0.download(url, uri)'''
 
+        result = self.s0.search(name, dur)
+        self.s0.download(result, uri)
         return True
 
         try:

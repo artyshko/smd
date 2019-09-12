@@ -111,11 +111,7 @@ class Client(object):
             #logging
             logging.error(f"S1:os.makedirs(fullpath)")
         
-        opener = urllib.request.build_opener()
-        opener.addheaders = [
-            ('User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:45.0) Gecko/20100101 Firefox/45.0')
-        ]
-        urllib.request.install_opener(opener)        
+          
         urllib.request.urlretrieve(url['link'], f'{fullpath}{uri}.mp3')
 
         logging.info(f"DOWNLOADING:S1:DONE")
