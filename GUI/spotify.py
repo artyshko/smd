@@ -48,7 +48,7 @@ class Spotify(object):
 
     class User(object):
 
-        def __init__(self, server):
+        def __init__(self, server=None):
 
             self.__grant_type = 'authorization_code'
             self.__scope = '''

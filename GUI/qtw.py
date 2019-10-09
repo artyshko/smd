@@ -15,7 +15,8 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__(*args, **kwargs)
 
         self.browser = QWebEngineView()
-        self.url = QUrl('https://accounts.spotify.com/en/login') 
+        self.url = QUrl('https://accounts.spotify.com/en/login')
+        self.urlbar = QLineEdit()
         self.browser.page().profile().setCachePath(f'{os.getcwd()}/cache')
         self.browser.page().profile().setPersistentCookiesPolicy( self.browser.page().profile().NoPersistentCookies)
         self.browser.page().profile().clearHttpCache()
