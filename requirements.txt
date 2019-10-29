@@ -9,7 +9,7 @@ imageio==2.3.0
 humanize==0.5.1
 pygame==1.9.6
 youtube_dl==2019.7.30
-Flask==0.12.2
+Flask==1.0
 pytube==9.5.1
 PyQt5==5.13.0
 beautifulsoup4==4.8.0
