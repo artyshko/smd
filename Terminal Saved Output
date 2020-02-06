@@ -1,0 +1,32 @@
+Last login: Wed Feb  5 17:34:00 on ttys000
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+Gurleens-MacBook-Pro:~ user$ https://github.com/artyshko/smd.git
+-bash: https://github.com/artyshko/smd.git: No such file or directory
+Gurleens-MacBook-Pro:~ user$ pip3 install -r requirements.txt
+Could not open requirements file: [Errno 2] No such file or directory: 'requirements.txt'
+You are using pip version 19.0.3, however version 20.0.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+Gurleens-MacBook-Pro:~ user$ pip3 install PyQtWebEngine
+Collecting PyQtWebEngine
+  Using cached https://files.pythonhosted.org/packages/9d/0b/2d72a0dfe9913f4ad1401311da68f83ce55c134050560b8ed6074be7e93b/PyQtWebEngine-5.14.0-5.14.1-cp35.cp36.cp37.cp38-abi3-macosx_10_6_intel.whl
+Collecting PyQt5-sip<13,>=12.7 (from PyQtWebEngine)
+  Using cached https://files.pythonhosted.org/packages/a6/0c/7dcf5360e9226f54163c50bff3e0def8ac6c074ec3da807d06e8aef33135/PyQt5_sip-12.7.1-cp37-cp37m-macosx_10_9_x86_64.whl
+Collecting PyQt5>=5.14 (from PyQtWebEngine)
+  Using cached https://files.pythonhosted.org/packages/d2/3f/b59a34cd20055456c9f8bd82e69921b88fb6a12dbd2db8a6ad68ec8de7f4/PyQt5-5.14.1-5.14.1-cp35.cp36.cp37.cp38-abi3-macosx_10_6_intel.whl
+Installing collected packages: PyQt5-sip, PyQt5, PyQtWebEngine
+Could not install packages due to an EnvironmentError: [Errno 13] Permission denied: '/Library/Python/3.7'
+Consider using the `--user` option or check the permissions.
+
+You are using pip version 19.0.3, however version 20.0.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+Gurleens-MacBook-Pro:~ user$ sudo apt-get install python3-pyqt5.qtwebenginechmod +x main.py
+Password:
+Sorry, try again.
+Password:
+sudo: apt-get: command not found
+Gurleens-MacBook-Pro:~ user$ ./main.py -sp "https://open.spotify.com/playlist/37i9dQZF1DXcRXFNfZr7Tp?si=Yd3IJQ9ATWOdFulNa7ax5g"
+-bash: ./main.py: No such file or directory
+Gurleens-MacBook-Pro:~ user$ ./main.py -ss "https://open.spotify.com/track/2QoDAlMnML5haTXvYRS86X?si=eMGX4dlwQd-7dyiG6OmUHQ"
