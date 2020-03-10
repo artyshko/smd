@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from spotify import Spotify
-from youtube import Youtube
+from pytube import YouTube
 from editor import TagEditor
 from lastfm import LastFM
 from apple import AppleMusic
