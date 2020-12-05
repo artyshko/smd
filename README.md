@@ -5,7 +5,12 @@
 <img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram/Data/9.png"> 
 
 <p align="center">
-  <b><h1>This is a dev version.</b>
+  <b><h1> This is a dev version. (Unstable)</b>
 </p>
 
-Clone it. Install requirements. Change /kernel/config/congig line DEFAULT_DOWNLOADING_PATH = "" to your path.
+## Clone it. 
+## Install requirements. 
+## Change /kernel/config/config -> DEFAULT_DOWNLOADING_PATH = "" to your path.
+```
+python3 main.py "link to spotify track"
+```
