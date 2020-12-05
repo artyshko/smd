@@ -14,3 +14,7 @@
 ```
 python3 main.py "link to spotify track"
 ```
+In case you've faced a Permission Error you might have to run it with sudo.
+```
+sudo python3 main.py "link to spotify track"
+```
