@@ -1,0 +1,19 @@
+#
+# SMD CONFIG FILE
+#
+
+# SETTINGS
+DEFAULT_DOWNLOADING_PATH = "/home/eve/"
+MOVE = True
+STARTPOINT = 'cli'
+
+CLI = 'cli'
+GUI = 'gui'
+
+# GUI
+DEFAULT_SERVER_PORT = 5000
+
+# MODULES/ADDONS
+smd_genius = 'genius'
+smd_lastfm = 'lastfm'
+smd_spotify = 'spotify'
