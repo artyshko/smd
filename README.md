@@ -4,10 +4,7 @@
 
 <img align="center" src="https://raw.githubusercontent.com/artyshko/smd/telegram/Data/9.png"> 
 
-<p align="center">
-  <b><h1> This is a dev version. (Unstable)</b>
-</p>
-
+# DISCLAIMER: This is a dev version and it can be unstable, remember it while using the app! This version is barely a 50% of the whole project!
 ## Clone it. 
 ## Install requirements. 
 ## Change /kernel/config/config -> DEFAULT_DOWNLOADING_PATH = "" to your path.
