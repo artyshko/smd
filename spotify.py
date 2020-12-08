@@ -150,7 +150,7 @@ class Spotify(object):
                     offset = i*100
                 )
 
-                for j, item in enumerate(playlist['items']):
+                for j, item in enumerate(playlist['tracks']['items']):
                     data = item['track']
                     tracks.append({
                         'uri' : str(data['uri'].split(':')[-1]),
