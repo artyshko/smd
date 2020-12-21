@@ -17,7 +17,7 @@ with contextlib.redirect_stdout(None):
     import moviepy.editor as mp
 
 import imageio
-imageio.plugins.ffmpeg.download()
+os.system("pip install imageio-ffmpeg")
 from moviepy.editor import *
 import moviepy.editor as mp
 
