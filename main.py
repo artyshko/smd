@@ -222,6 +222,9 @@ class MusicDownloader(object):
             fixed_name = fixed_name.replace("'",'')
             fixed_name = fixed_name.replace("/","")
 
+            #tracknumber tag
+            info['tracknumber']=i+1
+
             #finding and download from YouTube and tagging
             self.__downloadMusicFromYoutube(fixed_name, info['uri'], info['duration_ms'])
 
@@ -275,6 +278,8 @@ class MusicDownloader(object):
             fixed_name = fixed_name.replace("'",'')
             fixed_name = fixed_name.replace("/","")
 
+            #tracknumber tag
+            info['tracknumber']=i+1
             #finding and downloading from YouTube and tagging
             self.__downloadMusicFromYoutube(fixed_name, info['uri'], info['duration_ms'])
 
@@ -381,6 +386,9 @@ class MusicDownloader(object):
             fixed_name = fixed_name.replace(',','')
             fixed_name = fixed_name.replace("'",'')
             fixed_name = fixed_name.replace("/","")
+            
+            #tracknumber tag
+            info['tracknumber']=i+1
 
             #finding and downloading from YouTube and tagging
             self.__downloadMusicFromYoutube(fixed_name, info['uri'], info['duration_ms'])
@@ -433,6 +441,9 @@ class MusicDownloader(object):
             fixed_name = fixed_name.replace(',','')
             fixed_name = fixed_name.replace("'",'')
             fixed_name = fixed_name.replace("/","")
+            
+            #tracknumber tag
+            info['tracknumber']=i+1
 
             #finding and download from YouTube and tagging
             self.__downloadMusicFromYoutube(fixed_name, info['uri'], info['duration_ms'])
