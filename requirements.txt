@@ -1,7 +1,7 @@
 notify2==0.3.1
 spotipy==2.4.4
 lyricsgenius==1.4.0
-lxml==4.3.3
+lxml==4.6.5
 mutagen==1.41.0
 requests==2.21.0
 moviepy==0.2.3.5
